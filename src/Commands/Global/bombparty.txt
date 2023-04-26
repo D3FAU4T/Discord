@@ -1,0 +1,174 @@
+import axios from 'axios';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { Command } from '../../structures/Command';
+
+export default new Command(runner());
+
+function runner() {
+  let something = new SlashCommandBuilder()
+    .setName("bombparty")
+    .setDescription("An explosive words game")
+    .addSubcommandGroup((group) =>
+      group
+        .setName("service")
+        .setDescription("Select whether the bot should join an existing room or create a new room for you")
+        .addSubcommand((SubCommand) =>
+          SubCommand
+            .setName("join_room")
+            .setDescription("Join an existing room")
+            .addStringOption((Option) =>
+              Option
+                .setName("room_code")
+                .setDescription("Type the 4 letter room code here")
+                .setRequired(true)
+                .setMaxLength(4)
+                .setMinLength(4)
+            )
+        )
+        .addSubcommand((SubCommand) =>
+          SubCommand
+            .setName("create_room")
+            .setDescription("Create a new room")
+            .addStringOption((Option) =>
+              Option
+                .setName("room_name")
+                .setDescription(`Choose a name for your room. Default: "d3fau4tbot's room"`)
+                .setRequired(false)
+            )
+            .addStringOption((Option) =>
+              Option
+                .setName("room_privacy")
+                .setDescription(`Choose whether you want the room to be public or private. Default: Private`)
+                .setRequired(false)
+                .setChoices(
+                  { name: "Public", value: "true" },
+                  { name: "Private", value: "false" }
+                )
+            )
+        )
+    ).toJSON();
+  something['run'] = async ({ interaction, client }) => {
+    if (interaction.options.getSubcommand() === 'join_room') {
+      let code: string = interaction.options.get("room_code", true).value as string;
+
+      interface joinRoom {
+        message: string,
+        roomCode: string,
+        language: "PT-BR" | "EN" | "IT" | "ES" | "FR",
+        playerCount: number | "How the hell should I know? o_O"
+      }
+
+      await interaction.editReply({
+        content: "TEST",
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Connecting to d3fau4tbot BombParty Service")
+            .setDescription("Please wait while the connection is resolved, It usually takes around couple of seconds")
+            .setColor("Green")
+        ]
+      });
+
+      axios.post(`https://bombparty.lampadati-hurrican.repl.co/d3fau4tbot/joinRoom?roomCode=${code.toUpperCase()}`)
+        .then(async res => {
+          const data: joinRoom = res.data;
+          const dictionaries = {
+            "PT-BR": "Português Brasileiro",
+            "FR": "Français",
+            "EN": "English",
+            "ES": "Español",
+            "IT": "Italiano"
+          };
+
+          if (data.message === "There's no such room") {
+            await interaction.editReply({
+              embeds: [
+                new EmbedBuilder()
+                  .setTitle("Error")
+                  .setDescription("The room I tried to join doesn't exist, check typos or if the room got expired [o_O]")
+                  .setColor("Red")
+              ]
+            })
+          } else {
+            await interaction.editReply({
+              embeds: [
+                new EmbedBuilder()
+                  .setTitle("BombParty: Explosive word game")
+                  .setDescription("Type a word that contains the prompt. Be quick! If the bomb explodes during your turn, you lose a life.\nUse all the bonus letters to earn a life back.")
+                  .setURL(`https://jklm.fun/${data.roomCode}`)
+                  .setAuthor({ name: "JKLM.FUN: Party Games", iconURL: "https://cdn.discordapp.com/attachments/993276383591665796/1035782917546332240/favicon-2.png" })
+                  .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
+                  .setTimestamp()
+                  .setThumbnail(client.user?.avatarURL() as string)
+                  .setColor("DarkPurple")
+                  .addFields(
+                    { name: "Room Code", value: `${data.roomCode}`, inline: true },
+                    { name: "Language", value: `${dictionaries[data.language]}`, inline: true },
+                    { name: "Players", value: `${data.playerCount}`, inline: true },
+                    { name: "Connection Status", value: `${data.message}`, inline: false },
+                  )
+              ]
+            })
+          }
+        })
+        .catch(async err => {
+          console.error(err)
+          await interaction.editReply({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Error")
+                .setDescription("There was an error while communicating with d3fau4tbot's bombparty services")
+                .setColor("Red")
+            ]
+          });
+        });
+    } else if (interaction.options.getSubcommand() === 'create_room') {
+      let roomPrivacy = false;
+      let roomName: string = '';
+
+      for (let element of interaction.options.data) {
+        if (element.name === 'room_name') roomName = element.value as string ?? "d3fau4tbot's room";
+        if (element.name === 'room_privacy') {
+          if (element.value === 'true') roomPrivacy = true;
+          else if (element.value === 'false') roomPrivacy = false;
+        }
+      }
+
+      axios.post(`https://bombparty.lampadati-hurrican.repl.co/d3fau4tbot/createRoom?roomPrivacy=${roomPrivacy}&roomName=${roomName}`)
+        .then(async res => {
+          const linque = res.data;
+
+          await interaction.editReply({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("BombParty: Explosive word game")
+                .setDescription("Type a word that contains the prompt. Be quick! If the bomb explodes during your turn, you lose a life.\nUse all the bonus letters to earn a life back.")
+                .setURL(linque.Link)
+                .setAuthor({ name: "JKLM.FUN: Party Games", iconURL: "https://cdn.discordapp.com/attachments/993276383591665796/1035782917546332240/favicon-2.png" })
+                .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
+                .setTimestamp()
+                .setThumbnail(client.user?.avatarURL() as string)
+                .setFields(
+                  { name: "Room Name", value: `${linque.RoomName}`, inline: true },
+                  { name: "Server", value: `${linque.Server}`, inline: true },
+                  { name: "Room Privacy", value: `${linque.RoomPrivacy}`, inline: true },
+                  { name: "Room Link", value: `${linque.Link}`, inline: false }
+                )
+            ]
+          })
+        })
+        .catch(async err => {
+          console.error(err);
+          await interaction.editReply({
+            content: "Error",
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Error")
+                .setDescription("There was an error while communicating with d3fau4tbot's bombparty services")
+                .setColor("Red")
+            ]
+          });
+        });
+    }
+  }
+  return something;
+}

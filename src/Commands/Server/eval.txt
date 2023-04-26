@@ -1,0 +1,106 @@
+const fs = require('fs');
+const { codeBlock } = require('@discordjs/builders');
+const { PythonShell } = require('python-shell');
+const { Console } = require("console");
+var childProcess = require('child_process');
+
+const myErrLogger = new Console({
+  stdout: fs.createWriteStream("./spamPrevention/Output.txt"),
+  stderr: fs.createWriteStream("./spamPrevention/Error.txt"),
+});
+
+function runScript(scriptPath, callback) {
+
+  // keep track of whether callback has been invoked to prevent multiple invocations
+  var invoked = false;
+
+  var process = childProcess.fork(scriptPath);
+
+  // listen for errors as they may prevent the exit event from firing
+  process.on('error', function(err) {
+    if (invoked) return;
+    invoked = true;
+    callback(err);
+  });
+
+  // execute the callback once the process has finished running
+  process.on('exit', function(code) {
+    if (invoked) return;
+    invoked = true;
+    var err = code === 0 ? null : new Error('exit code ' + code);
+    callback(err);
+  });
+
+}
+
+module.exports.run = (client, message, args) => {
+  if (message.content.toLowerCase().startsWith('.eval ```js')) {
+    var script = message.content.slice(11).slice(0, -3).trim()
+    script = script.replaceAll('console.log', 'myLogger.log')
+    script = script.replaceAll('console.error', 'myLogger.error')
+    script = `const { Console } = require("console");
+const fs = require("fs");
+const myLogger = new Console({
+  stdout: fs.createWriteStream("./spamPrevention/Output.txt"),
+  stderr: fs.createWriteStream("./spamPrevention/Error.txt"),
+});
+
+` + script
+
+    fs.writeFile('./spamPrevention/terminal.js', script, err => {
+      if (err) {
+        console.error(err)
+        return
+      }
+    })
+
+    runScript('./spamPrevention/terminal.js', function(err) {
+      if (err) {
+        myErrLogger.error(err)
+
+        setTimeout(function() {
+          fs.readFile('./spamPrevention/Error.txt', 'utf8', (err, Data) => {
+            if (err) throw err;
+            message.channel.send(`Terminal: ${codeBlock("noidea", Data)}`)
+          });
+        }, 100);
+      } else {
+        setTimeout(function() {
+          fs.readFile('./spamPrevention/Output.txt', 'utf8', (err, Data) => {
+            if (err) throw err;
+            if (!Data.length) {
+              fs.readFile('./spamPrevention/Error.txt', 'utf8', (err, errData) => {
+                if (err) throw err;
+                message.channel.send(`Terminal: ${codeBlock("noidea", errData)}`)
+              })
+            } else {
+              message.channel.send(`Terminal: ${codeBlock("noidea", Data)}`)
+            }
+          })
+        }, 100);
+      };
+      console.log('finished running terminal.js');
+    });
+  } else if (message.content.toLowerCase().startsWith('.eval ```py')) {
+    var script = message.content.slice(11).slice(0, -3).trim()
+    fs.writeFile('./spamPrevention/terminal.py', script, err => {
+      if (err) {
+        console.error(err)
+        return
+      }
+    })
+
+    const pyOptions = {
+      scriptPath: "./spamPrevention"
+    }
+    PythonShell.run("./terminal.py", pyOptions, (err, res) => {
+      if (err) {
+        message.channel.send("Terminal:" + codeBlock("noidea", err.toString()))
+      } else if (res) {
+        message.channel.send("Terminal:" + codeBlock("noidea", res.join('\n')))
+      }
+    });
+  }
+}
+
+module.exports.name = "eval"
