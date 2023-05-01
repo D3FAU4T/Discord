@@ -6,7 +6,7 @@ import { remove } from 'remove-accents';
 import { promisify } from 'util';
 import { commandsInterface } from '../Typings/commands.js';
 import { Event, MusicEvent } from '../Typings/event.js';
-import { dictionaryAPI } from '../Typings/definitions.js';
+import { MerriamWebsterAPI, dictionaryAPI } from '../Typings/definitions.js';
 import { GetRandom, axiosHandler, parser, fetchCheaters, numberAssign, between } from './functions.js';
 import { Demantle } from '../Demantle/Demantle.js';
 import {
@@ -168,10 +168,19 @@ export class D3_discord extends Client {
       }
     } catch (err: any) {
       if (language === 'en') {
-        summary = `An unknown error occurred, check console`;
-      } else {
-        summary = 'Desculpe, não encontrei essa palavra no meu dicionário';
-      }
+        try {
+          let definitions: string[] = [];
+          const { data }: { data: MerriamWebsterAPI[] } = await axios.get(`https://www.dictionaryapi.com/api/v3/references/sd4/json/${word}?key=${process.env['merriamKey']}`);
+          data[0].def.forEach((item, index) => {
+            const definition: string = item.sseq[0][0][1].dt[0][1];
+            definitions.push(`${index + 1}. ${definition}`);
+          });
+          summary = definitions.join('\n');
+        } catch (err) {
+          summary = `An unknown error occurred, check console`;
+          console.error(err)
+        }
+      } else summary = 'Desculpe, não encontrei essa palavra no meu dicionário';
     }
     return summary;
   }
