@@ -21,6 +21,12 @@ app.get('/', (_req, res) => {
     res.send(`Connected Clients: ${data.length}\nList of Clients:\n${data.join('\n')}`);
 });
 
+app.get('/getusername/:userid', async (req, res) => {
+  const userId = req.params.userid;
+  const { username } = await client.users.fetch(userId);
+  res.send(username);
+});
+
 const d3socket = new WebSocket.Server({ server: botServer });
 
 d3socket.on('connection', (ws) => {
