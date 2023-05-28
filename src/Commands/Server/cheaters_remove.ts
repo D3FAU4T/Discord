@@ -27,7 +27,7 @@ export default new Command({
     let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as string[];
     if (!cheaters.includes(person)) return await interaction.reply({ embeds: [notFound] });
     cheaters = cheaters.filter(username => username !== person);
-    writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
+    writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters.sort(), null, 2));
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
