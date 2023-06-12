@@ -45,7 +45,7 @@ interface pages {
 }
 
 const pageCreator = (): pages[] => {
-  const cheaters = Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8'))) as string[];
+  const cheaters = Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[];
   const itemsPerPage = 10;
   const numberOfPages = Math.ceil(cheaters.length / itemsPerPage);
   return [...Array(numberOfPages)].map((_, i) => ({
