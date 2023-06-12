@@ -27,14 +27,14 @@
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.1.0",
     "glob": "^7.2.0",
+    "play-dl": "^1.9.6",
     "prettytable.js": "^1.0.1",
     "pug": "^3.0.2",
     "remove-accents": "^0.4.4",
     "translate-google": "^1.5.0",
     "tslib": "^2.5.0",
     "word2vec": "^1.1.5",
-    "ws": "^8.13.0",
-    "ytdl-core": "^4.9.1"
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13"
