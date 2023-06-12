@@ -1,6 +1,8 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { getTwitchData } from '../../Core/functions.js';
+import { twitchDataFailureResponse } from '../../Typings/functions.js';
 
 export default new Command({
     name: 'cheaters_add',
@@ -25,10 +27,21 @@ export default new Command({
             .setDescription(`The username ${person} is already on the list and will not be added twice.`)
             .setColor("Red");
 
-        let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as string[];
-        if (cheaters.includes(person)) return await interaction.reply({ embeds: [duplicate] });
-        cheaters.push(person);
-        writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters.sort(), null, 2));
+        const userData = await getTwitchData(person);
+
+        if ('error' in userData) return await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle("Error: f() getTwitchData")
+                    .setDescription(`Either the user ${person} is not a valid Twitch username or the user is banned from Twitch`)
+                    .setColor("Red")
+            ]
+        });
+
+        let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
+        if (Object.keys(cheaters).includes(userData.id)) return await interaction.reply({ embeds: [duplicate] });
+        cheaters[userData.id] = userData.displayName;
+        writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
@@ -40,8 +53,8 @@ export default new Command({
                     .setAuthor({ name: "Words on Stream", iconURL: "https://cdn.discordapp.com/attachments/992562774649610372/993274540966809621/1f09655df10d184b07c9e5930063497a.jpg" })
                     .setThumbnail(`https://cdn.discordapp.com/attachments/933971458496004156/1005590805756530718/Checkmark-green-tick-isolated-on-transparent-background-PNG.png`)
                     .addFields(
-                        { name: "Cheater", value: person, inline: true },
-                        { name: "List count", value: cheaters.length.toString(), inline: true }
+                        { name: "Cheater", value: userData.displayName, inline: true },
+                        { name: "List count", value: Object.keys(cheaters).length.toString(), inline: true }
                     ),
             ]
         })

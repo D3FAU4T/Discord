@@ -45,7 +45,7 @@ interface pages {
 }
 
 const pageCreator = (): pages[] => {
-  const cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as string[];
+  const cheaters = Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8'))) as string[];
   const itemsPerPage = 10;
   const numberOfPages = Math.ceil(cheaters.length / itemsPerPage);
   return [...Array(numberOfPages)].map((_, i) => ({
@@ -80,7 +80,7 @@ export default new Command({
     await interaction.deferReply();
 
     let page = 1;
-    let cheaters = (JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as string[]).sort();
+    let cheaters = (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[]).sort();
 
     if (interaction.options.get('cheater_name') === null) {
       let embedPages = pageCreator();
@@ -127,7 +127,7 @@ export default new Command({
 
     } else {
 
-      const toFind = interaction.options.get('cheater_name', true).value as string;
+      const toFind = (interaction.options.get('cheater_name', true).value as string).toLowerCase();
       const found = cheaters.includes(toFind) ? 'Yep that MF is a cheater' : 'Nope never heard of this guy';
 
       await interaction.editReply({
