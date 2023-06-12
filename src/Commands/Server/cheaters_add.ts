@@ -2,7 +2,6 @@ import { writeFileSync, readFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 import { getTwitchData } from '../../Core/functions.js';
-import { twitchDataFailureResponse } from '../../Typings/functions.js';
 
 export default new Command({
     name: 'cheaters_add',
