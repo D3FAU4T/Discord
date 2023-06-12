@@ -43,9 +43,9 @@ export const axiosHandler = async (url: string, method: axiosMethods, headers?: 
 }
 
 export const fetchCheaters = (startingIndex = 0, endingIndex = Number.MAX_SAFE_INTEGER): string[] =>
-    JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8'))
+    (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[])
         .sort()
-        .map((person: string) => person.includes("_") ? `\`${person}\`` : person)
+        .map((person) => person.includes("_") ? `\`${person}\`` : person)
         .slice(startingIndex, endingIndex);
 
 
@@ -68,22 +68,6 @@ export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Rand
 }
 
 export const getTwitchData = async (username: string): Promise<twitchDataSuccessResponse | twitchDataFailureResponse> => {
-    const twitchData = await fetch(`https://api.twitchinsights.net/v1/user/status/${username}`, {
-        "headers": {
-            "accept": "*/*",
-            "accept-language": "en-US,en;q=0.9",
-            "sec-ch-ua": "\"Not/A)Brand\";v=\"99\", \"Microsoft Edge\";v=\"115\", \"Chromium\";v=\"115\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-site",
-            "Referer": "https://twitchinsights.net/",
-            "Referrer-Policy": "strict-origin-when-cross-origin"
-        },
-        "body": null,
-        "method": "GET"
-    });
-
-    return twitchData.json();
+    const { data } = await axios.get(`https://api.twitchinsights.net/v1/user/status/${username}`)
+    return data;
 }
