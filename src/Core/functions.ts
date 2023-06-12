@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { codeBlock } from 'discord.js';
 import { readFileSync } from 'fs'
-import { parseOpts, axiosMethods } from '../Typings/functions.js';
+import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
 import WebSocket from 'ws';
 
@@ -65,4 +65,25 @@ export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Rand
     }
 
     else ws.send(`{ "Server": ["D3_guess", { "guessArr": ${JSON.stringify(res.guesses)} , "indexes": ${JSON.stringify(res.indexes)} , "gameType": "${gameType}" }] }`);
+}
+
+export const getTwitchData = async (username: string): Promise<twitchDataSuccessResponse | twitchDataFailureResponse> => {
+    const twitchData = await fetch(`https://api.twitchinsights.net/v1/user/status/${username}`, {
+        "headers": {
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "sec-ch-ua": "\"Not/A)Brand\";v=\"99\", \"Microsoft Edge\";v=\"115\", \"Chromium\";v=\"115\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-site",
+            "Referer": "https://twitchinsights.net/",
+            "Referrer-Policy": "strict-origin-when-cross-origin"
+        },
+        "body": null,
+        "method": "GET"
+    });
+
+    return twitchData.json();
 }
