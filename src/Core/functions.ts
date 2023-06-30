@@ -71,3 +71,10 @@ export const getTwitchData = async (username: string): Promise<twitchDataSuccess
     const { data } = await axios.get(`https://api.twitchinsights.net/v1/user/status/${username}`)
     return data;
 }
+
+export const searchGarticAnswer = (query: string) => {
+    const array = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase()) as string[];
+    query = query.replace(/\s/g, "");
+    const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
+    return array.filter(item => regex.test(item));
+}
