@@ -8,6 +8,8 @@ export default new Command({
     description: "Set the bot in maintenance mode",
     emote: false,
     data: new SlashCommandBuilder()
+        .setName('maintenance')
+        .setDescription('This command group contains couple of maintenance commands for the bot')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('update_cheater_names')
@@ -26,9 +28,9 @@ export default new Command({
             const message = await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
-                    .setTitle(`Updating cheater names...`)
-                    .setDescription(`Please wait while the cheaters list gets updated. This may take a while`)
-                    .setColor("Yellow")
+                        .setTitle(`Updating cheater names...`)
+                        .setDescription(`Please wait while the cheaters list gets updated. This may take a while`)
+                        .setColor("Yellow")
                 ]
             });
 
@@ -37,9 +39,9 @@ export default new Command({
             await message.edit({
                 embeds: [
                     new EmbedBuilder()
-                    .setTitle(`Cheater names updated ✅`)
-                    .setDescription(`Successfully updated the cheater names with their current usernames`)
-                    .setColor("Green")
+                        .setTitle(`Cheater names updated ✅`)
+                        .setDescription(`Successfully updated the cheater names with their current usernames`)
+                        .setColor("Green")
                 ]
             });
         }
@@ -49,9 +51,9 @@ export default new Command({
             const message = await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
-                    .setTitle(`Updating levelbank...`)
-                    .setDescription(`Please wait while the levelbank gets updated. This may take a while depending on the total amount of levels`)
-                    .setColor("Yellow")
+                        .setTitle(`Updating levelbank...`)
+                        .setDescription(`Please wait while the levelbank gets updated. This may take a while depending on the total amount of levels`)
+                        .setColor("Yellow")
                 ]
             });
 
@@ -59,12 +61,12 @@ export default new Command({
                 const updatedList = await updateWOSLevels();
                 const { data } = await axios.post<{ status: "ok" }>('https://wos-level-editor.d3fau4tbot.repl.co/updatefromdiscord', updatedList);
             } catch (err) {
-                await message.edit({
+                return await message.edit({
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle(`Error while updating levelbank ❌`)
-                        .setDescription(`An error occured while updating the levelbank.\n\n\`\`\`${err}\`\`\``)
-                        .setColor("Red")
+                            .setTitle(`Error while updating levelbank ❌`)
+                            .setDescription(`An error occured while updating the levelbank.\n\n\`\`\`${err}\`\`\``)
+                            .setColor("Red")
                     ]
                 });
             }
@@ -72,11 +74,11 @@ export default new Command({
             await message.edit({
                 embeds: [
                     new EmbedBuilder()
-                    .setTitle(`Levelbank updated ✅`)
-                    .setDescription(`Successfully updated the levelbank with the newest levels`)
-                    .setColor("Green")
+                        .setTitle(`Levelbank updated ✅`)
+                        .setDescription(`Successfully updated the levelbank with the newest levels`)
+                        .setColor("Green")
                 ]
-            });            
+            });
         }
     }
 })
