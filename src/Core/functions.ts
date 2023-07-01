@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
 import { WOSLevel, WOSboard } from '../Typings/WOS.js';
+import { TwitchUser, TwitchUserData } from '../Typings/Twitch API.js';
 
 export const between = (min: number, max: number) => Math.floor(min + (Date.now() % (max - min + 1)));
 
@@ -73,22 +74,61 @@ export const getTwitchData = async (username: string): Promise<twitchDataSuccess
     return data;
 }
 
-export const searchGarticAnswer = (query: string): string[] => {
-    const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
-    query = query.replace(/\s/g, "");
-    const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
-    return array.filter(item => regex.test(item));
+const chunkArray = <T>(array: T[], chunkSize: number) => {
+    const chunkedArray = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        const chunk = array.slice(i, i + chunkSize);
+        chunkedArray.push(chunk);
+    }
+    return chunkedArray;
+}
+
+export const getTwitchDataFromId = async (arrOfIds: string[]) => {
+    let dataArr: TwitchUserData[] = [];
+    if (arrOfIds.length > 100) {
+
+        const chunkedArray = chunkArray(arrOfIds, 100)
+        
+        for (const chunk of chunkedArray) {
+            try {
+                const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${chunk.join('&id=')}`, {
+                    headers: {
+                        Authorization: `Bearer ${process.env['TwitchAuth']}`,
+                        'Client-Id': process.env['TwitchClientId'],
+                        "Content-Type": "application/json"
+                    }
+                });
+                dataArr.push(...data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        return dataArr;
+    }
+
+    else {
+        try {
+            const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${arrOfIds.join('&id=')}`, {
+                headers: {
+                    Authorization: `Bearer ${process.env['TwitchAuth']}`,
+                    'Client-Id': process.env['TwitchClientId'],
+                    "Content-Type": "application/json"
+                }
+            });
+            dataArr.push(...data.data);
+        } catch (error) {
+            console.error(error);
+        }
+        return dataArr;
+    }
 }
 
 export const updateCheaterNames = async () => {
     const cheaters: { [twitchId: string]: string } = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase());
+    const cheaterData = await getTwitchDataFromId(Object.keys(cheaters));
     const updatedCheatersList: { [twitchId: string]: string } = {};
-    for (const twitchId of Object.keys(cheaters)) {
-        const twitchData = await getTwitchData(twitchId);
-        if ('error' in twitchData) continue;
-        updatedCheatersList[twitchId] = twitchData.displayName;
-    }
-
+    cheaterData.forEach(user => updatedCheatersList[user.id] = user.display_name);
     writeFileSync('./src/Config/cheaters.json', JSON.stringify(updatedCheatersList, null, 2));
 }
 
@@ -138,3 +178,10 @@ export const updateWOSLevels = async (): Promise<Record<string, WOSboard[]>> => 
 
     return format;
 };
+
+export const searchGarticAnswer = (query: string): string[] => {
+    const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
+    query = query.replace(/\s/g, "");
+    const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
+    return array.filter(item => regex.test(item));
+}
