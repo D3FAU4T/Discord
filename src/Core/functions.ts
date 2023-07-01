@@ -1,9 +1,10 @@
 import axios from 'axios';
+import WebSocket from 'ws';
 import { codeBlock } from 'discord.js';
-import { readFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
-import WebSocket from 'ws';
+import { WOSLevel, WOSboard } from '../Typings/WOS.js';
 
 export const between = (min: number, max: number) => Math.floor(min + (Date.now() % (max - min + 1)));
 
@@ -49,9 +50,9 @@ export const fetchCheaters = (startingIndex = 0, endingIndex = Number.MAX_SAFE_I
         .slice(startingIndex, endingIndex);
 
 
-export const numberAssign = <T>(arr: T[], startingIndex: number) => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
+export const numberAssign = <T>(arr: T[], startingIndex: number): string[] => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
 
-export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Random" | "Today" | "Connect") => {
+export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Random" | "Today" | "Connect"): void => {
     if (res.reason === ResponseType.Found) {
         ws.send(`{ "Server": [ "D3_found", { "guessArr": ${JSON.stringify(res.guesses)} , "indexes": ${JSON.stringify(res.indexes)} , "gameType": "${gameType}", "word": "${res.word}" } ] }`)
     }
@@ -68,13 +69,72 @@ export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Rand
 }
 
 export const getTwitchData = async (username: string): Promise<twitchDataSuccessResponse | twitchDataFailureResponse> => {
-    const { data } = await axios.get(`https://api.twitchinsights.net/v1/user/status/${username}`)
+    const { data } = await axios.get<twitchDataSuccessResponse | twitchDataFailureResponse>(`https://api.twitchinsights.net/v1/user/status/${username}`)
     return data;
 }
 
-export const searchGarticAnswer = (query: string) => {
-    const array = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase()) as string[];
+export const searchGarticAnswer = (query: string): string[] => {
+    const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
     query = query.replace(/\s/g, "");
     const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
     return array.filter(item => regex.test(item));
 }
+
+export const updateCheaterNames = async () => {
+    const cheaters: { [twitchId: string]: string } = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase());
+    const updatedCheatersList: { [twitchId: string]: string } = {};
+    for (const twitchId of Object.keys(cheaters)) {
+        const twitchData = await getTwitchData(twitchId);
+        if ('error' in twitchData) continue;
+        updatedCheatersList[twitchId] = twitchData.displayName;
+    }
+
+    writeFileSync('./src/Config/cheaters.json', JSON.stringify(updatedCheatersList, null, 2));
+}
+
+const convertToPlayableWOSLevel = (obj: WOSLevel, parentFormat: WOSboard): WOSboard => {
+
+    for (const col of ['column1', 'column2', 'column3'] as const) {
+        parentFormat[col] = obj[col].map(slot => {
+            return {
+                word: slot.word,
+                username: "",
+                locked: false,
+                index: slot.index
+            }
+        });
+    }
+
+    parentFormat.lang = obj.Language;
+    parentFormat.timebar.locks.total = 5;
+    parentFormat.timebar.locks.expired = 0;
+
+    return parentFormat;
+}
+
+export const updateWOSLevels = async (): Promise<Record<string, WOSboard[]>> => {
+    const boardFormat: WOSboard = JSON.parse(readFileSync('./src/Config/WOSboard.json', 'utf8'));
+    const format: Record<string, WOSboard[]> = {
+        set1: [],
+        set2: [],
+        set3: [],
+        set4: [],
+        set5: [],
+        set6: [],
+        set7: [],
+    };
+
+    const { data } = await axios.get<{ [DiscordId: string]: WOSLevel[] }>('https://wos-level-editor.d3fau4tbot.repl.co/d3fau4tbot/levels');
+
+    for (const levels of Object.values(data)) {
+        for (const level of levels) {
+            const board = convertToPlayableWOSLevel(level, boardFormat);
+            const wordLength = board.column1[0].word.length;
+
+            if (wordLength >= 4 && wordLength <= 9) format[`set${wordLength - 3}`].push(board);
+            else format.set7.push(board);
+        }
+    }
+
+    return format;
+};
