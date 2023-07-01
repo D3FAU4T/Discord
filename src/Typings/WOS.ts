@@ -17,6 +17,24 @@ export interface WOSLevel {
     column3: WOScolumn[];
 }
 
+export interface WOSboard {
+    lang: string;
+    fakeLetters: string;
+    hiddenLetters: string;
+    reveal: boolean;
+    level: string;
+    timebar: {
+        timerPercentage: number;
+        locks: {
+            total: number;
+            expired: number;
+        }
+    },
+    column1: WOScolumn[];
+    column2: WOScolumn[];
+    column3: WOScolumn[];
+}
+
 interface WOScolumn {
     word: string;
     username: string;
