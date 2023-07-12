@@ -179,6 +179,34 @@ export const updateWOSLevels = async (): Promise<Record<string, WOSboard[]>> => 
     return format;
 };
 
+export const calculateLevels = (targetPoints: number): number => {
+    let levels = 0;
+    let points = 0;
+    let bonusPoints = 0;
+    while ((points + bonusPoints) < targetPoints) {
+        levels++;
+        points++;
+        if (levels % 15 == 0) {
+            bonusPoints += Math.floor(levels / 15) * 5;
+        }
+    }
+    return levels;
+}
+
+export const calculatePoints = (targetLevel: number): number => {
+    let levels = 0;
+    let points = 0;
+    let bonusPoints = 0;
+    while (levels < targetLevel) {
+        levels++;
+        points++;
+        if (levels % 15 == 0) {
+            bonusPoints += Math.floor(levels / 15) * 5;
+        }
+    }
+    return points + bonusPoints;
+}
+
 export const searchGarticAnswer = (query: string): string[] => {
     const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
     query = query.replace(/\s/g, "");
