@@ -45,7 +45,7 @@ export default new Command({
     setTimeout(async () => {
       const emote = await client.importFile(`./.build/src/Emotes/${emoteName}.js`) as commandsInterface;
       client.emotes.set(emoteName, emote)
-    }, 3000);
+    }, 5000);
     await interaction?.reply({
       embeds: [
         new EmbedBuilder()

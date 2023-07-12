@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
 import { WOSLevel, WOSboard } from '../Typings/WOS.js';
-import { TwitchUser, TwitchUserData } from '../Typings/Twitch API.js';
+import { TwitchUser, TwitchUserData } from '../Typings/TwitchAPI.js';
 
 export const between = (min: number, max: number) => Math.floor(min + (Date.now() % (max - min + 1)));
 
@@ -179,37 +179,9 @@ export const updateWOSLevels = async (): Promise<Record<string, WOSboard[]>> => 
     return format;
 };
 
-export const calculateLevels = (targetPoints: number): number => {
-    let levels = 0;
-    let points = 0;
-    let bonusPoints = 0;
-    while ((points + bonusPoints) < targetPoints) {
-        levels++;
-        points++;
-        if (levels % 15 == 0) {
-            bonusPoints += Math.floor(levels / 15) * 5;
-        }
-    }
-    return levels;
-}
-
-export const calculatePoints = (targetLevel: number): number => {
-    let levels = 0;
-    let points = 0;
-    let bonusPoints = 0;
-    while (levels < targetLevel) {
-        levels++;
-        points++;
-        if (levels % 15 == 0) {
-            bonusPoints += Math.floor(levels / 15) * 5;
-        }
-    }
-    return points + bonusPoints;
-}
-
 export const searchGarticAnswer = (query: string): string[] => {
     const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
     query = query.replace(/\s/g, "");
     const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
-    return array.filter(item => regex.test(item));
+    return array.filter(item => regex.test(item)).sort();
 }
