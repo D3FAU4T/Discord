@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Event } from "../Typings/event.js";
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
 import { EmbedBuilder } from 'discord.js';
+import { Desafiantes } from '../Typings/desafiantes.js';
 
 const converse = async (prompt: string, name: string) => {
     const uploadingData = JSON.stringify({
@@ -29,6 +30,118 @@ export default new Event("messageCreate", async message => {
     // Message handling
     const argumentes = message.content.toLowerCase().split(' ');
     const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
+
+    if (message.content.toLowerCase().startsWith('-ds') && message.channel.id === "1133396329163407560") {
+        let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
+        const desafiante = message.content.split(' ')[1];
+
+        if (argumentes[0] === "-ds1") {
+
+            if (desafiantes.desafio2.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
+                desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.todos.push(desafiante);
+                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+                await message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                            .setDescription(`Parabéns ${desafiante}, você completou todos os desafios!`)
+                            .setColor("Green")
+                    ]
+                });
+                return;
+            }
+
+            desafiantes.desafio1.push(desafiante);
+            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+            await message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                        .setDescription(`Parabéns ${desafiante}, obrigado pela sua contribuição!`)
+                        .setColor("Green")
+                ]
+            });
+            return;
+        }
+
+        else if (argumentes[0] === "-ds2") {
+
+            if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
+                desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.todos.push(desafiante);
+                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+                await message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                            .setDescription(`Parabéns ${desafiante}, você completou todos os desafios!`)
+                            .setColor("Green")
+                    ]
+                });
+                return;
+            }
+
+            desafiantes.desafio2.push(desafiante);
+            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+            await message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                        .setDescription(`Parabéns ${desafiante}, obrigado pela sua contribuição!`)
+                        .setColor("Green")
+                ]
+            });            
+            return;
+        }
+
+        else if (argumentes[0] === "-ds3") {
+
+            if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio2.includes(desafiante)) {
+                desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
+                desafiantes.todos.push(desafiante);
+                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+                await message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                            .setDescription(`Parabéns ${desafiante}, você completou todos os desafios!`)
+                            .setColor("Green")
+                    ]
+                });
+                return;
+            }
+
+            desafiantes.desafio3.push(desafiante);
+            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+            await message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                        .setDescription(`Parabéns ${desafiante}, obrigado pela sua contribuição!`)
+                        .setColor("Green")
+                ]
+            });            
+            return;
+        }
+
+        else if (argumentes[0] === "-ds") {
+            desafiantes.todos.push(desafiante);
+            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+            await message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                        .setDescription(`Parabéns ${desafiante}, você completou todos os desafios!`)
+                        .setColor("Green")
+                ]
+            });            
+            return;
+        }
+    }
 
     // Emote Handling
     const matches = argumentes.filter(word => emoteList.includes(word));
