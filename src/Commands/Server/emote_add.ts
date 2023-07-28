@@ -19,6 +19,7 @@ export default new Command({
   name: "emote_add",
   description: "Add an emote to d3fau4tbot's Emote database",
   emote: false,
+  guildId: ["1021508735165808641", "1053990732958023720", "1005194560303013920", "976169594085572679"],
   data: new SlashCommandBuilder()
   .setName("emote_add")
   .setDescription("Add an emote to d3fau4tbot's Emote database")

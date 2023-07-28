@@ -56,18 +56,19 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
-    let translateFrom: keyof languages = 'auto';
-    let translateTo: keyof languages = 'en';
-
-    interaction.options.data.forEach(element => {
-      if (element.name === 'from_language') translateFrom = element.value as keyof languages;
-      else if (element.name === 'to_language') translateTo = element.value as keyof languages;
-    });
-
-    const sentence = interaction.options.get("query", true).value as string;
-    const res = await translate(sentence, { from: translateFrom, to: translateTo });
 
     try {
+      let translateFrom: keyof languages = 'auto';
+      let translateTo: keyof languages = 'en';
+
+      interaction.options.data.forEach(element => {
+        if (element.name === 'from_language') translateFrom = element.value as keyof languages;
+        else if (element.name === 'to_language') translateTo = element.value as keyof languages;
+      });
+
+      const sentence = interaction.options.get("query", true).value as string;
+      const res = await translate(sentence, { from: translateFrom, to: translateTo });
+
       await interaction.reply({
         embeds: [
           new EmbedBuilder()
@@ -92,6 +93,6 @@ export default new Command({
         ]
       })
     }
-    
+
   }
 });

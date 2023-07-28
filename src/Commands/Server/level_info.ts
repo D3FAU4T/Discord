@@ -7,6 +7,7 @@ export default new Command({
     name: "level_info",
     description: "Get information about a level in custom WOS",
     emote: false,
+    guildId: ["976169594085572679", "1053990732958023720"],
     data: new SlashCommandBuilder()
         .setName('level_info')
         .setDescription("Get information about a level in custom WOS")

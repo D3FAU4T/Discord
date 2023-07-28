@@ -32,10 +32,10 @@ export default new Command({
         if (interaction === undefined) return;
         await interaction.deferReply();
 
-        const word = interaction.options.get("query", true).value as string;
+        let word = interaction.options.get("query", true).value as string;
 
         try {
-        
+        if (word[word.length - 1] === " ") word = word.slice(0, -1);
         const answers = searchGarticAnswer(word);
         const list: string[] = [];
         answers.forEach((answer, index) => {

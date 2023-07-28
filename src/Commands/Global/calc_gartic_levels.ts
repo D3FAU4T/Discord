@@ -65,7 +65,7 @@ export default new Command({
                     .setDescription(`:dart: ${locales[currentLocale][1] || locales["en-US"][1]}: ${tPoints}\n:100: ${locales[currentLocale][2] || locales["en-US"][2]}: ${requiredLevels}\n:rocket: **${locales[currentLocale][3] || locales["en-US"][3]}**`)
                     .setColor("Blue")
                     .setAuthor({ name: "GarticBOT", url: "https://garticbot.gg", iconURL: "https://media.discordapp.net/attachments/993276383591665796/1050448830455349289/favicon.png" })
-                    .setFooter({ text: "Embed auto created by d3fau4t", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
+                    .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
             ]
         })
     }
