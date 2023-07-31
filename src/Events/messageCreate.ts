@@ -33,9 +33,9 @@ const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, s
     else if (success === 'one') await message.channel.send({
         embeds: [
             new EmbedBuilder()
-                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
-                .setColor("Red")
+                .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
+                .setColor("Green")
         ]
     })
 
