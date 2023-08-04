@@ -4,3 +4,5 @@
 .config
 replit.nix
 node_modules
+/src/Config/desafiantes.json
+/src/Config/cheaters.json
