@@ -20,7 +20,7 @@ const converse = async (prompt: string, name: string) => {
     return (data.response as string).replace('OpenAI', 'D3FAU4T').replace('ChatGPT', 'd3fau4tbot').replace(/^(\,)+/g, '')
 }
 
-const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, success: "one" | "all" | "fail") => {
+const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, success: "one" | "all" | "fail" | "done") => {
     if (success === 'all') await message.channel.send({
         embeds: [
             new EmbedBuilder()
@@ -37,6 +37,15 @@ const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, s
                 .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
                 .setColor("Green")
         ]
+    })
+
+    else if (success === 'done') await message.channel.send({
+      embeds: [
+        new EmbedBuilder()
+        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+        .setDescription("Este cara já completou todos os desafios")
+        .setColor("Red")
+      ]
     })
 
     else await message.channel.send({
@@ -66,6 +75,8 @@ export default new Event("messageCreate", async message => {
 
         if (argumentes[0] === "-ds1") {
 
+            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
+
             if (desafiantes.desafio2.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
                 desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
@@ -84,6 +95,8 @@ export default new Event("messageCreate", async message => {
 
         else if (argumentes[0] === "-ds2") {
 
+            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
+
             if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
@@ -101,6 +114,8 @@ export default new Event("messageCreate", async message => {
         }
 
         else if (argumentes[0] === "-ds3") {
+
+            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
 
             if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio2.includes(desafiante)) {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
