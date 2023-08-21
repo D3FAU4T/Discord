@@ -69,6 +69,8 @@ export default new Event("messageCreate", async message => {
     const argumentes = message.content.toLowerCase().split(' ');
     const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
 
+    client.musical.handleQuestion(message);
+
     if (message.content.toLowerCase().startsWith('-ds') && message.channel.id === "1133396329163407560") {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];

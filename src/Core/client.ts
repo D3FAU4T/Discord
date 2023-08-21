@@ -21,6 +21,7 @@ import {
   TextBasedChannel
 } from "discord.js";
 import { SimulatorRadioCombined, icons } from '../Typings/music.js';
+import { Musical } from '../Gartic/Musical.js';
 
 const globPromise = promisify(glob);
 
@@ -28,6 +29,7 @@ export class D3_discord extends Client {
 
   public commands: Collection<string, commandsInterface> = new Collection();
   public emotes: Collection<string, commandsInterface> = new Collection();
+  public musical = new Musical('1142691243609038959');
   public functions = {
     getRandom: GetRandom,
     getBetween: between,
