@@ -49,7 +49,7 @@ export default new Command({
                         { name: locale === "pt-BR" ? "Desafio 1" : "Challenge 1", value: desafiantes.desafio1.length > 0 ? desafiantes.desafio1.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
                         { name: locale === "pt-BR" ? "Desafio 2" : "Challenge 2", value: desafiantes.desafio2.length > 0 ? desafiantes.desafio2.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
                         { name: locale === "pt-BR" ? "Desafio 3" : "Challenge 3", value: desafiantes.desafio3.length > 0 ? desafiantes.desafio3.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
-                        { name: locale === "pt-BR" ? "Desafiantes" : "Challengers", value: desafiantes.todos.length > 0 ? desafiantes.todos.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
+                        { name: locale === "pt-BR" ? "Gartiqueiros" : "Gartic-ers", value: desafiantes.todos.length > 0 ? desafiantes.todos.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
                     ])
                     .setColor("Purple")
             ],
