@@ -1,6 +1,6 @@
 import axios from 'axios';
 import WebSocket from 'ws';
-import { codeBlock } from 'discord.js';
+import { codeBlock, EmbedBuilder, Message } from 'discord.js';
 import { readFileSync, writeFileSync } from 'fs'
 import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
@@ -212,4 +212,42 @@ export const searchGarticAnswer = (query: string): string[] => {
     query = query.replace(/\s/g, "");
     const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
     return array.filter(item => regex.test(item)).sort();
+}
+
+export const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, success: "one" | "all" | "fail" | "done") => {
+    if (success === 'all') await message.channel.send({
+        embeds: [
+            new EmbedBuilder()
+                .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                .setDescription(`Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
+                .setColor("Green")
+        ]
+    });
+
+    else if (success === 'one') await message.channel.send({
+        embeds: [
+            new EmbedBuilder()
+                .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
+                .setColor("Green")
+        ]
+    })
+
+    else if (success === 'done') await message.channel.send({
+      embeds: [
+        new EmbedBuilder()
+        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+        .setDescription("Este cara já completou todos os desafios")
+        .setColor("Red")
+      ]
+    })
+
+    else await message.channel.send({
+        embeds: [
+            new EmbedBuilder()
+                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
+                .setColor("Red")
+        ]
+    });
 }
