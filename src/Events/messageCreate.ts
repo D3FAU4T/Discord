@@ -1,64 +1,15 @@
-import axios from 'axios';
 import { Event } from "../Typings/event.js";
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
-import { EmbedBuilder, Message } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { Desafiantes } from '../Typings/desafiantes.js';
-
-const converse = async (prompt: string, name: string) => {
-    const uploadingData = JSON.stringify({
-        "key": process.env['OPENAI_API_KEY'],
-        "prompt": `${name}: ${prompt}\nd3fau4tbot: `,
-        "id": "default",
-        "options": {
-            "instructions": 'Pretend that you\'re d3fau4tbot, an AI created by "D3FAU4T" in the year 2020. You\'re helpful, creative, clever and very friendly and you\'re currently in a discord channel with friends of your creator "D3FAU4T".'
-        }
-    });
-
-    const { data } = await axios.post(process.env['AIendpoint'] as string, uploadingData, { headers: { 'Content-Type': 'application/json' } });
-    return (data.response as string).replace('OpenAI', 'D3FAU4T').replace('ChatGPT', 'd3fau4tbot').replace(/^(\,)+/g, '')
-}
-
-const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, success: "one" | "all" | "fail" | "done") => {
-    if (success === 'all') await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                .setDescription(`Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
-                .setColor("Green")
-        ]
-    });
-
-    else if (success === 'one') await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
-                .setColor("Green")
-        ]
-    })
-
-    else if (success === 'done') await message.channel.send({
-      embeds: [
-        new EmbedBuilder()
-        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-        .setDescription("Este cara já completou todos os desafios")
-        .setColor("Red")
-      ]
-    })
-
-    else await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
-                .setColor("Red")
-        ]
-    });
-}
+import { dsfMessage } from '../Core/functions.js';
 
 export default new Event("messageCreate", async message => {
+
+    client.musical.handleQuestion(message);
+
     if (message.author.bot) return;
 
     // Printing to console
@@ -69,11 +20,18 @@ export default new Event("messageCreate", async message => {
     const argumentes = message.content.toLowerCase().split(' ');
     const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
 
-    client.musical.handleQuestion(message);
-
     if (message.content.toLowerCase().startsWith('-ds') && message.channel.id === "1133396329163407560") {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];
+
+        if (!desafiante.includes('<@') && !desafiante.includes('>')) return message.channel.send({
+            embeds: [
+                new EmbedBuilder()
+                    .setAuthor({ name: "Eita", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
+                    .setDescription(`Você não mencionou ninguém para adicionar na lista de desafiantes\n\n**Exemplo:**\`\`\`\n-ds1 @user\n-ds2 @user\n-ds3 @user\n\`\`\``)
+                    .setColor("Yellow")
+            ]
+        });
 
         if (argumentes[0] === "-ds1") {
 
@@ -134,14 +92,75 @@ export default new Event("messageCreate", async message => {
             await dsfMessage(desafiante, message, 'one');
             return;
         }
+    }
 
-        else if (argumentes[0] === "-ds") {
-            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'fail');
-            desafiantes.todos.push(desafiante);
-            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            await dsfMessage(desafiante, message, 'all');
-            return;
+    else if (message.content.toLowerCase() === '-resetar' && message.channel.id === "1133396329163407560") {
+        let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
+
+        if (message.member?.roles.cache.has("1135979193155469342")) {
+            const msg = await message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                    .setAuthor({ name: "Deseja redefinir a lista?", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
+                    .setDescription("Pressione o botão de confirmação abaixo para redefinir. Lembrando que essa ação é irreversível após pressionar o botão redefinir.")
+                    .setColor("Yellow")
+                    .setFooter({ text: "Você tem 5 minutos para responder", iconURL: "https://media.discordapp.net/attachments/1111174841161220169/1134961239387287612/gtc_catAviso.png" })
+                ],
+                components: [
+                    new ActionRowBuilder<ButtonBuilder>().addComponents(
+                        new ButtonBuilder()
+                        .setCustomId("btn_reset")
+                        .setEmoji("✅")
+                        .setLabel("Confirmar")
+                        .setStyle(ButtonStyle.Success)
+                    )
+                ]
+            });
+
+            const collector = msg.createMessageComponentCollector({ time: 300000, filter: (i) => i.user.id === message.author.id });
+
+            collector.on("collect", async (i) => {
+                if (i.customId === "btn_reset") {
+                    desafiantes.desafio1 = [];
+                    desafiantes.desafio2 = [];
+                    desafiantes.desafio3 = [];
+                    desafiantes.todos = [];
+                    writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
+
+                    await i.update({
+                        embeds: [
+                            new EmbedBuilder()
+                            .setAuthor({ name: "Lista redefinida!", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                            .setDescription("A lista de desafiantes foi redefinida com sucesso!")
+                            .setColor("Green")
+                        ],
+                        components: []
+                    });
+                }
+            });
+
+            collector.on("ignore", async (i) => {
+                await i.followUp({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                        .setDescription("Somente a pessoa que usou o comando pode interagir com os botões")
+                        .setColor("Red")
+                    ],
+                    ephemeral: true
+                });
+            });
+
         }
+
+        else message.channel.send({
+            embeds: [
+                new EmbedBuilder()
+                .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                .setDescription("Você não tem permissão para usar esse comando. Só pessoas com cargo <@&1135979193155469342> podem usar")
+                .setColor("Red")
+            ]
+        });
     }
 
     // Emote Handling
@@ -151,20 +170,6 @@ export default new Event("messageCreate", async message => {
         if (!emote || !emote.emote) return;
         emote.run({ message: message, client: client });
     });
-
-    // AI Response
-    // if (message.channel.id == "1043421639683096586" && message.attachments.size < 1) {
-    //     const res = await converse(message.content, message.author.username.normalize("NFKC"));
-    //     await message.channel.sendTyping();
-    //     if (res.length > 2000) {
-    //         const firstChunk = res.slice(0, 1900);
-    //         await message.reply(firstChunk)
-    //         const rest = res.slice(1900);
-    //         await message.channel.send(rest)
-    //     } else {
-    //         await message.reply(res);
-    //     }
-    // }
 
     // D3mantle checker
     if (Object.keys(client.semantle).includes(message.channel.id)) {
