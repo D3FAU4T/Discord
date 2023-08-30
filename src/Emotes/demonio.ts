@@ -5,6 +5,6 @@ export default new Command({
     description: "Sends a demonio emote as a pic/gif",
     emote: true,
     run: ({ message }) => {
-        message?.channel.send("https://media.discordapp.net/attachments/1014498244270768138/1044545923965014088/Demonio.jpg");
+        message?.channel.send("https://cdn.discordapp.com/attachments/1097538516436660355/1146346495612829726/Dominio.png");
     }
 })
