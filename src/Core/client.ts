@@ -7,8 +7,9 @@ import { promisify } from 'util';
 import { commandsInterface } from '../Typings/commands.js';
 import { Event, MusicEvent } from '../Typings/event.js';
 import { MerriamWebsterAPI, dictionaryAPI } from '../Typings/definitions.js';
-import { GetRandom, axiosHandler, parser, fetchCheaters, numberAssign, between } from './functions.js';
 import { Demantle } from '../Demantle/Demantle.js';
+import { SimulatorRadioCombined, icons } from '../Typings/music.js';
+import { Musical } from '../Gartic/Musical.js';
 import {
   ApplicationCommandDataResolvable,
   Client,
@@ -20,8 +21,24 @@ import {
   Partials,
   TextBasedChannel
 } from "discord.js";
-import { SimulatorRadioCombined, icons } from '../Typings/music.js';
-import { Musical } from '../Gartic/Musical.js';
+import {
+  GetRandom,
+  axiosHandler,
+  parser,
+  fetchCheaters,
+  numberAssign,
+  between,
+  calculateLevels,
+  calculatePoints,
+  dsfMessage,
+  getTwitchData,
+  getTwitchDataFromId,
+  makeErrorEmbed,
+  handleSocketReply,
+  searchGarticAnswer,
+  updateCheaterNames,
+  updateWOSLevels
+} from './functions.js';
 
 const globPromise = promisify(glob);
 
@@ -30,23 +47,36 @@ export class D3_discord extends Client {
   public commands: Collection<string, commandsInterface> = new Collection();
   public emotes: Collection<string, commandsInterface> = new Collection();
   public musical = new Musical('1142691243609038959');
+  public semantle: { [channelId: string]: Demantle } = {}
+  public DiscordPlayer = new Player(this);
+  public RadioChannels: TextBasedChannel[] = [];
+  public tempEmotes: { [emoteName: string]: string } = {};
+
   public functions = {
     getRandom: GetRandom,
     getBetween: between,
     textFormatter: parser,
     getCheaters: fetchCheaters,
     makeList: numberAssign,
-    axiosHandler
+    axiosHandler,
+    calculateLevels,
+    calculatePoints,
+    dsfMessage,
+    getTwitchData,
+    getTwitchDataFromId,
+    makeErrorEmbed,
+    handleSocketReply,
+    searchGarticAnswer,
+    updateCheaterNames,
+    updateWOSLevels
   }
 
-  public semantle: { [channelId: string]: Demantle } = {}
-  public DiscordPlayer = new Player(this);
   public RadioData: SimulatorRadioCombined = {
     now_playing: {
       title: ''
     }
   } as SimulatorRadioCombined;
-  public RadioChannels: TextBasedChannel[] = [];
+  
 
   constructor() {
     super({
@@ -166,7 +196,7 @@ export class D3_discord extends Client {
           }
         });
         if (meanings.length > 0) return meanings.join('\n');
-        else throw 'Definição não encontrada';
+        else throw new Error('Definição não encontrada');
       }
     } catch (err: any) {
       if (language === 'en') {
@@ -219,7 +249,7 @@ export class D3_discord extends Client {
         });
       }
     } catch (err) {
-
+      console.error(err);
     }
   }
 }
