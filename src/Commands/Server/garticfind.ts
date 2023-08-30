@@ -1,6 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageComponentInteraction, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
-import { searchGarticAnswer } from '../../Core/functions.js';
 
 const buttonComponents = [
     new ButtonBuilder().setLabel("Compact View").setStyle(ButtonStyle.Primary),
@@ -14,11 +13,17 @@ const actionComponent = new ActionRowBuilder<ButtonBuilder>().addComponents(
     })
 );
 
+const createEmbed = (query: string, answers: string[], listView: boolean) => new EmbedBuilder()
+    .setTitle(`Possible answers for the query:\n \`${query}\``)
+    .setDescription(listView ? answers.join('\n') : answers.join(',  '))
+    .setColor("Blue")
+    .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
+
 export default new Command({
     name: "garticfind",
     description: "Get the gartic answer for a query if exists in gos dictionary",
     emote: false,
-    guildId: [ "1053990732958023720", "976169594085572679" ],
+    guildId: ["1053990732958023720", "976169594085572679"],
     data: new SlashCommandBuilder()
         .setName("garticfind")
         .setDescription("Get the gartic answer for a query if exists in gos dictionary")
@@ -35,56 +40,39 @@ export default new Command({
         let word = interaction.options.get("query", true).value as string;
 
         try {
-        if (word[word.length - 1] === " ") word = word.slice(0, -1);
-        const answers = searchGarticAnswer(word);
-        const list: string[] = [];
-        answers.forEach((answer, index) => {
-            list.push(`${index + 1}. ${answer}`)
-        });
-        await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle(`Possible answers for the query:\n \`${word}\``)
-                    .setDescription(answers.join(',  '))
-                    .setColor("Blue")
-            ],
-            components: [actionComponent]
-        })
-            .then(message => {
-                const filter = (button: { user: { id: string; }; }) => button.user.id === interaction.user.id;
-                const collector = message.createMessageComponentCollector({ filter, time: 5 * 60 * 1000 });
-
-                collector.on("collect", async (i: MessageComponentInteraction) => {
-                    if (i.customId === `garticfind_0`) await i.update({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setTitle(`Possible answers for the query:\n \`${word}\``)
-                                .setDescription(answers.join(',  '))
-                                .setColor("Blue")
-                        ],
-                        components: [actionComponent]
-                    })
-
-                    else await i.update({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setTitle(`Possible answers for the query:\n \`${word}\``)
-                                .setDescription(list.join('\n'))
-                                .setColor("Blue")
-                        ],
-                        components: [actionComponent]
-                    });
-                })
+            if (word[word.length - 1] === " ") word = word.slice(0, -1);
+            const answers = client.functions.searchGarticAnswer(word);
+            const list: string[] = [];
+            answers.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
+            const msg = await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle(`Possible answers for the query:\n \`${word}\``)
+                        .setDescription(answers.join(',  '))
+                        .setColor("Blue")
+                ],
+                components: [actionComponent]
             });
-        } catch (err) {
-          await interaction.editReply({
-            embeds: [
-              new EmbedBuilder()
-              .setTitle(`Error finding the query:\n \`${word}\``)
-              .setDescription(`${err}`)
-              .setColor("Red")
-            ]
-          })
+
+            const filter = (button: { user: { id: string; }; }) => button.user.id === interaction.user.id;
+            const collector = msg.createMessageComponentCollector({ filter, time: 5 * 60 * 1000 });
+
+            collector.on("collect", async (i: MessageComponentInteraction) => {
+                if (i.customId === `garticfind_0`) await i.update({
+                    embeds: [createEmbed(word, answers, false)],
+                    components: [actionComponent]
+                })
+
+                else await i.update({
+                    embeds: [createEmbed(word, answers, true)],
+                    components: [actionComponent]
+                });
+            });
+        } catch (error) {
+            const err = error as Error;
+            await interaction.editReply({
+                embeds: [client.functions.makeErrorEmbed(err, `[${err.name}] Error finding the query:\n \`${word}\``)]
+            });
         }
     }
 });

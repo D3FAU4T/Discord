@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { chessComRating } from '../../Typings/chessRating.js';
 
 export default new Command({
   name: 'rating',
@@ -8,22 +9,24 @@ export default new Command({
   emote: false,
   guildId: ["976169594085572679"],
   data: new SlashCommandBuilder()
-  .setName("rating")
-  .setDescription("Gives you chess.com ratings of a player using chess.com API")
-  .addStringOption(Option =>
-    Option
-      .setName("player_name")
-      .setDescription("Enter the username of the player (check typos)")
-      .setRequired(true)
-  ),
+    .setName("rating")
+    .setDescription("Gives you chess.com ratings of a player using chess.com API")
+    .addStringOption(Option =>
+      Option
+        .setName("player_name")
+        .setDescription("Enter the username of the player (check typos)")
+        .setRequired(true)
+    ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
-    axios.get(`https://api.chess.com/pub/player/${interaction.options.get("player_name", true).value}/stats`)
-    .then(async ({ data }) => {
 
-      const getRating = (ratingType: string) => {
+    try {
+      const playerName = interaction.options.getString("player_name", true);
+      const { data } = await axios.get<chessComRating>(`https://api.chess.com/pub/player/${playerName}/stats`);
+
+      const getRating = (ratingType: "chess_rapid" | "chess_blitz" | "chess_bullet") => {
         const { last, best } = data[ratingType] || {};
-        return last && best ? `${last.rating}/${best.rating}` : "Undefined";
+        return (last && best) ? `${last.rating}/${best.rating}` : "Undefined";
       }
 
       const chessRapid = getRating("chess_rapid");
@@ -42,24 +45,29 @@ export default new Command({
             .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
             .setThumbnail("https://cdn.discordapp.com/attachments/957277493948219422/1030679308538228766/unknown.png")
             .addFields(
-              { name: "Player", value: interaction.options.get("player_name", true).value as string, inline: true },
+              { name: "Player", value: playerName, inline: true },
               { name: "Rapid rating", value: chessRapid, inline: true },
               { name: "Blitz rating", value: chessBlitz, inline: true },
               { name: "Bullet rating", value: chessBullet, inline: true },
             )
         ]
       });
-
-    })
-    .catch(async err => {
-      if (axios.isAxiosError(err)) await interaction.editReply({
+    } catch (error) {
+      if (axios.isAxiosError(error)) await interaction.editReply({
         embeds: [
           new EmbedBuilder()
-            .setTitle("Error")
-            .setDescription(err.response?.data.message)
+            .setAuthor({ name: "Error", iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146354645107748925/Error.png" })
+            .setDescription(error.response?.data.message)
             .setColor("Red")
         ]
       })
-    })
+
+      else {
+        const err = error as Error;
+        await interaction.editReply({
+          embeds: [client.functions.makeErrorEmbed(err)]
+        });
+      }
+    }
   }
 });

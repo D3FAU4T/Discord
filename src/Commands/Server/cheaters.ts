@@ -1,6 +1,5 @@
 import { Command } from '../../Core/command.js';
 import { readFileSync } from 'fs';
-import { client } from '../../../index.js';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -44,23 +43,6 @@ interface pages {
   components: ActionRowBuilder<ButtonBuilder>;
 }
 
-const pageCreator = (): pages[] => {
-  const cheaters = Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[];
-  const itemsPerPage = 10;
-  const numberOfPages = Math.ceil(cheaters.length / itemsPerPage);
-  return [...Array(numberOfPages)].map((_, i) => ({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle(`Showing ${i * itemsPerPage + 1}-${i * itemsPerPage + itemsPerPage} cheaters saved into my memory (${cheaters.length} in total)`)
-        .setDescription(client.functions.makeList(client.functions.getCheaters(i * itemsPerPage, i * itemsPerPage + itemsPerPage), i * itemsPerPage).join("\n"))
-        .setColor("Red")
-        .setAuthor({ name: "Courtesy of D3FAU4T", iconURL: "https://cdn.discordapp.com/avatars/867522091490607134/aed8cac1742d4dbdba79d5de17700592.webp?size=256", url: "https://twitch.tv/d3fau4t" })
-        .setFooter({ text: `Page ${i + 1} of ${numberOfPages} 🤖 Note: Buttons are valid for 5 mins after creation and can only be controlled by whoever initiated the Slash Command` })
-    ],
-    components: (i === 0) ? componentPrevDisabled : (i === numberOfPages - 1) ? componentNextDisabled : componentNormal
-  }));
-}
-
 export default new Command({
   name: 'cheaters',
   description: 'Get a list of cheaters or search for a specific cheater',
@@ -79,18 +61,36 @@ export default new Command({
     if (interaction === undefined) return;
     await interaction.deferReply();
 
-    let page = 1;
-    let cheaters = (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[]).sort();
+    try {
+      const pageCreator = (): pages[] => {
+        const cheaters = Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[];
+        const itemsPerPage = 10;
+        const numberOfPages = Math.ceil(cheaters.length / itemsPerPage);
+        return [...Array(numberOfPages)].map((_, i) => ({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle(`Showing ${i * itemsPerPage + 1}-${i * itemsPerPage + itemsPerPage} cheaters saved into my memory (${cheaters.length} in total)`)
+              .setDescription(client.functions.makeList(client.functions.getCheaters(i * itemsPerPage, i * itemsPerPage + itemsPerPage), i * itemsPerPage).join("\n"))
+              .setColor("Red")
+              .setAuthor({ name: "Courtesy of D3FAU4T", iconURL: "https://cdn.discordapp.com/avatars/867522091490607134/aed8cac1742d4dbdba79d5de17700592.webp?size=256", url: "https://twitch.tv/d3fau4t" })
+              .setFooter({ text: `Page ${i + 1} of ${numberOfPages} 🤖 Note: Buttons are valid for 5 mins after creation and can only be controlled by whoever initiated the Slash Command` })
+          ],
+          components: (i === 0) ? componentPrevDisabled : (i === numberOfPages - 1) ? componentNextDisabled : componentNormal
+        }));
+      }
 
-    if (interaction.options.get('cheater_name') === null) {
-      let embedPages = pageCreator();
-      await interaction.editReply({
-        embeds: embedPages[0].embeds,
-        components: [embedPages[0].components]
-      })
-      .then(message => {
+      let page = 1;
+      let cheaters = (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[]).sort();
+
+      if (interaction.options.getString('cheater_name', false) === null) {
+        let embedPages = pageCreator();
+        const msg = await interaction.editReply({
+          embeds: embedPages[0].embeds,
+          components: [embedPages[0].components]
+        });
+
         const filter = (button: { user: { id: string; }; }) => button.user.id === interaction.user.id;
-        const collector = message.createMessageComponentCollector({ filter, time: 5 * 60 * 1000 });
+        const collector = msg.createMessageComponentCollector({ filter, time: 5 * 60 * 1000 });
 
         collector.on("collect", async (i: MessageComponentInteraction) => {
           if (i.customId === 'cheaters_2') {
@@ -109,7 +109,7 @@ export default new Command({
                 components: [embedPages[j].components]
               });
             }
-          } else if (i.customId === 'cheaters_1') {
+          } else {
             await i.update({
               embeds: [
                 new EmbedBuilder()
@@ -122,29 +122,32 @@ export default new Command({
             });
           }
         });
-      });
 
+      } else {
+        const toFind = interaction.options.getString('cheater_name', true).toLowerCase();
+        const found = cheaters.includes(toFind) ? 'Yep that MF is a cheater' : 'Nope never heard of this guy';
 
-    } else {
+        await interaction.editReply({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Query Search Result")
+              .setDescription("Search through the whole list if the username is present or not\nNote: Typos will lead to incorrect results. Make sure to query the username correctly and capitalization does not matter.")
+              .setColor("DarkGreen")
+              .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(`${interaction.guildId}`)?.iconURL()?.toString() })
+              .setTimestamp()
+              .addFields(
+                { name: "Cheater Name", value: toFind, inline: true },
+                { name: "Is it there?", value: found, inline: true },
+              )
+          ],
+        });
 
-      const toFind = (interaction.options.get('cheater_name', true).value as string).toLowerCase();
-      const found = cheaters.includes(toFind) ? 'Yep that MF is a cheater' : 'Nope never heard of this guy';
-
+      }
+    } catch (error) {
+      const err = error as Error;
       await interaction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Query Search Result")
-            .setDescription("Search through the whole list if the username is present or not\nNote: Typos will lead to incorrect results. Make sure to query the username correctly and capitalization does not matter.")
-            .setColor("DarkGreen")
-            .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
-            .setTimestamp()
-            .addFields(
-              { name: "Cheater Name", value: toFind, inline: true },
-              { name: "Is it there?", value: found, inline: true },
-            )
-        ],
+        embeds: [client.functions.makeErrorEmbed(err)]
       });
-
     }
   }
 });

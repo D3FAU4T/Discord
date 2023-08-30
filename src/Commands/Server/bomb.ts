@@ -1,9 +1,11 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 
-// OUR PHRASES
-// @bomber = interaction.user.username
-// @person = interaction.options.get('person').value
+/*
+  OUR PHRASES
+   @bomber = <@${interaction.user.id}>
+   @person = <@${interaction.options.getUser('person', true).value}>
+*/
 
 const phrases = [
   "@bomber has murdered @person in cold blood 💀",
@@ -50,18 +52,25 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
-    const bomber = interaction.user.username.toLowerCase();
-    const phrase = client.functions.getRandom(phrases);    
-    const person = (await client.users.fetch(interaction.options.get('person', true).value as string)).username;
-    const replacedPhrase = phrase.replace(/\@bomber/g, bomber).replace(/\@person/g, person);
+    try {
+      const bomber = interaction.user.id;
+      const phrase = client.functions.getRandom(phrases);
+      const person = interaction.options.getUser('person', true);
+      const replacedPhrase = phrase.replace(/\@bomber/g, `<@${bomber}>`).replace(/\@person/g, `<@${person.id}>`);
 
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-        .setTitle("Bomb")
-        .setDescription(replacedPhrase)
-        .setColor("Red")
-      ]
-    })
+      await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setAuthor({ name: "Bomb", iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146349112581705748/Bomb.png" })
+            .setDescription(replacedPhrase)
+            .setColor("Red")
+        ]
+      });
+    } catch (error) {
+      const err = error as Error;
+      await interaction.reply({
+        embeds: [client.functions.makeErrorEmbed(err)]
+      });
+    }
   }
 });

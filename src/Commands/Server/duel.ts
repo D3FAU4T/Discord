@@ -5,7 +5,7 @@ import { Command } from '../../Core/command.js';
 
 interface paragraphs {
   stories: {
-      messages: string[];
+    messages: string[];
   }[];
 }
 
@@ -73,26 +73,38 @@ export default new Command({
   data: new SlashCommandBuilder()
     .setName("duel")
     .setDescription("Duel with a person in discord")
-    .addUserOption(option => option.setName("person").setDescription("The person you want to duel with").setRequired(true)),
+    .addUserOption(option =>
+      option
+        .setName("person")
+        .setDescription("The person you want to duel with")
+        .setRequired(true)
+    ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
 
-    const story = client.functions.getRandom(Paragraph.stories).messages;
-    const players = [`<@${interaction.user.id}>`, `<@${interaction.options.get("person", true).value}>`];
-    const winner = client.functions.getRandom(players);
-    const timeouts = [3000, 6000, 9000];
-    const colors: ColorResolvable[] = ["Red", "Yellow", "Green", "Purple"]
-    for (let i = 0; i < story.length; i++) {
-      const desc = story[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${interaction.options.get("person", true).value}>`).replace(/@winner/g, winner);
+    try {
+      const story = client.functions.getRandom(Paragraph.stories).messages;
+      const players = [`<@${interaction.user.id}>`, `<@${interaction.options.getUser("person", true).id}>`];
+      const winner = client.functions.getRandom(players);
+      const timeouts = [3000, 6000, 9000];
+      const colors: ColorResolvable[] = ["Red", "Yellow", "Green", "Purple"];
+      for (let i = 0; i < story.length; i++) {
+        const desc = story[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${interaction.options.getUser("person", true).id}>`).replace(/@winner/g, winner);
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setAuthor({ name: "Duel", iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146369722896621629/Angry.png" })
+              .setDescription(desc)
+              .setColor(colors[i])
+          ]
+        });
+        if (timeouts[i]) await wait(timeouts[i]);
+      }
+    } catch (error) {
+      const err = error as Error;
       await interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Duel")
-            .setDescription(desc)
-            .setColor(colors[i])
-        ]
+        embeds: [client.functions.makeErrorEmbed(err)]
       });
-      if (timeouts[i]) await wait(timeouts[i])
     }
   }
 });

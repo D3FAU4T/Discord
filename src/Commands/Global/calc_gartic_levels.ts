@@ -5,9 +5,8 @@ import { calculateLevels } from '../../Core/functions.js';
 type Locale = "en-US" | "en-GB" | "pt-BR";
 
 export default new Command({
-    // @ts-ignore
     name: "calc_gartic_levels",
-  description: "Get the amount of points you need to do in a row to get your desired amount of garticos",
+    description: "Get the amount of points you need to do in a row to get your desired amount of garticos",
     emote: false,
     data: new SlashCommandBuilder()
         .setName("calc_gartic_levels")
@@ -15,7 +14,7 @@ export default new Command({
         .setDescriptionLocalizations({
             "en-US": "Get the amount of points you need to do in a row to get your desired amount of garticos",
             "en-GB": "Get the amount of points you need to do in a row to get your desired amount of garticos",
-          "pt-BR": "Obtenha à quantidade de pontos que você precisa fazer para ganhar os garticos na mesma partida"
+            "pt-BR": "Obtenha à quantidade de pontos que você precisa fazer para ganhar os garticos na mesma partida"
         })
         .addStringOption((Option) =>
             Option

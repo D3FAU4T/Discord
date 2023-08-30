@@ -1,7 +1,6 @@
 import { writeFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
-import { commandsInterface } from '../../Typings/commands.js';
 
 const emoteTemplate = 
 `import { Command } from "../Core/command.js";
@@ -36,17 +35,19 @@ export default new Command({
       .setRequired(true)
   ),
   run: async ({ interaction, client }) => {
-    const emoteName = (interaction?.options.get("emote_name", true).value as string).toLowerCase();
-    const emoteLink = interaction?.options.get("emote_url", true).value as string;
+    if (interaction === undefined) return;
+
+    const emoteName = interaction.options.getString("emote_name", true).toLowerCase();
+    const emoteLink = interaction.options.getString("emote_url", true);
+
     let emoteFileBody = emoteTemplate.replace('EmoteNameHere', emoteName)
     .replace('EmoteDescHere', `Sends a ${emoteName} emote as a pic/gif`)
     .replace('EmoteLinkHere', emoteLink);
+
     writeFileSync(`./src/Emotes/${emoteName}.ts`, emoteFileBody);
-    writeFileSync(`./.build/src/Emotes/${emoteName}.js`, emoteFileBody.replace('?', ''));
-    setTimeout(async () => {
-      const emote = await client.importFile(`./.build/src/Emotes/${emoteName}.js`) as commandsInterface;
-      client.emotes.set(emoteName, emote)
-    }, 5000);
+
+    client.tempEmotes[emoteName] = emoteLink;
+
     await interaction?.reply({
       embeds: [
         new EmbedBuilder()
@@ -58,6 +59,6 @@ export default new Command({
           .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
           .setTimestamp()
       ]
-    })
+    });
   }
 });

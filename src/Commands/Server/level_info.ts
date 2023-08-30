@@ -35,13 +35,64 @@ export default new Command({
     run: async ({ interaction, client }) => {
         if (interaction === undefined) return;
 
-        if (interaction.options.get('level_author') === null) {
+        try {
+            if (interaction.options.getString('level_author') === null) {
 
-            const query = interaction.options.get('level_name', true).value as string;
-            const { data }: { data: WOSCorrectResponse | WOSErrorResponse } = await axios.get(`https://wos-level-editor.d3fau4tbot.repl.co/levelinfo/${query.toLowerCase()}`);
+                const query = interaction.options.getString('level_name', true);
+                const { data } = await axios.get<WOSCorrectResponse | WOSErrorResponse>(`https://wos-level-editor.d3fau4tbot.repl.co/levelinfo/${query.toLowerCase()}`);
 
-            if ('error' in data) {
-                if (data.error === 'Level not found') return interaction.reply({
+                if ('error' in data) {
+                    if (data.error === 'Level not found') return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setTitle(`WOS Level search: ${query}`)
+                                .setDescription('Error: Level not found')
+                                .setColor('Red')
+                        ]
+                    })
+
+                    else return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setTitle(`WOS Level search: ${query}`)
+                                .setDescription('Error: An unexpected server error occurred')
+                                .setColor('Red')
+                        ]
+                    });
+                }
+
+                else if ('level' in data) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setTitle(`WOS Level search: ${query}`)
+                            .setDescription(`Level name: ${data.level}\nCreated by: <@${data.id}>\nTotal words: ${data.totalWords}`)
+                            .setColor('Purple')
+                    ]
+                });
+            }
+
+            else {
+
+                const query = interaction.options.getString('level_name', true);
+                const user = interaction.options.getString('level_author', false);
+                const { data } = await axios.get<WOSLevel[]>(`https://wos-level-editor.d3fau4tbot.repl.co/d3fau4tbot/getlevels/${user}`);
+
+                let levelFound = false;
+                data.forEach(level => {
+                    if (level.Level.toLowerCase() === query.toLowerCase()) {
+                        levelFound = true;
+                        return interaction.reply({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setTitle(`WOS Level search: ${query}`)
+                                    .setDescription(`Level name: ${level.Level}\nCreated by: <@${user}>\nTotal words: ${level.column1.length + level.column2.length + level.column3.length}`)
+                                    .setColor('Purple')
+                            ]
+                        })
+                    }
+                });
+
+                if (!levelFound) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle(`WOS Level search: ${query}`)
@@ -50,56 +101,12 @@ export default new Command({
                     ]
                 })
 
-                else return interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setTitle(`WOS Level search: ${query}`)
-                            .setDescription('Error: An unexpected server error occurred')
-                            .setColor('Red')
-                    ]
-                });
             }
-
-            else if ('level' in data) return interaction.reply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setTitle(`WOS Level search: ${query}`)
-                        .setDescription(`Level name: ${data.level}\nCreated by: <@${data.id}>\nTotal words: ${data.totalWords}`)
-                        .setColor('Purple')
-                ]
+        } catch (error) {
+            const err = error as Error;
+            await interaction.reply({
+                embeds: [client.functions.makeErrorEmbed(err)]
             });
-        }
-
-        else {
-
-            const query = interaction.options.get('level_name', true).value as string;
-            const user = interaction.options.get('level_author', false)?.value as string;
-            const { data }: { data: WOSLevel[] } = await axios.get(`https://wos-level-editor.d3fau4tbot.repl.co/d3fau4tbot/getlevels/${user}`);
-
-            let levelFound = false;
-            data.forEach(level => {
-                if (level.Level.toLowerCase() === query.toLowerCase()) {
-                    levelFound = true;
-                    return interaction.reply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setTitle(`WOS Level search: ${query}`)
-                                .setDescription(`Level name: ${level.Level}\nCreated by: <@${user}>\nTotal words: ${level.column1.length + level.column2.length + level.column3.length}`)
-                                .setColor('Purple')
-                        ]
-                    })
-                }
-            });
-
-            if (!levelFound) return interaction.reply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setTitle(`WOS Level search: ${query}`)
-                        .setDescription('Error: Level not found')
-                        .setColor('Red')
-                ]
-            })
-            
         }
     }
 })

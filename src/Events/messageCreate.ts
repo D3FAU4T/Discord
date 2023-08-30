@@ -20,6 +20,24 @@ export default new Event("messageCreate", async message => {
     const argumentes = message.content.toLowerCase().split(' ');
     const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
 
+    // Emote Handling
+    const matches = argumentes.filter(word => emoteList.includes(word));
+    if (matches.length > 0) matches.forEach(emoteName => {
+        const emote = client.emotes.get(emoteName.toLowerCase());
+        if (!emote || !emote.emote) return;
+        emote.run({ message: message, client: client });
+    });
+
+    try {
+        const tempMatches = argumentes.filter(word => Object.keys(client.tempEmotes).includes(word));
+        if (tempMatches.length > 0) tempMatches.forEach(emoteName => {
+            const emote = client.tempEmotes[emoteName.toLowerCase()];
+            if (!emote) return;
+            message.channel.send(emote);
+        });
+    } catch (err) {}
+
+    // Desafiantes
     if (message.content.toLowerCase().startsWith('-ds') && message.channel.id === "1133396329163407560") {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];
@@ -101,18 +119,18 @@ export default new Event("messageCreate", async message => {
             const msg = await message.channel.send({
                 embeds: [
                     new EmbedBuilder()
-                    .setAuthor({ name: "Deseja redefinir a lista?", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
-                    .setDescription("Pressione o botão de confirmação abaixo para redefinir. Lembrando que essa ação é irreversível após pressionar o botão redefinir.")
-                    .setColor("Yellow")
-                    .setFooter({ text: "Você tem 5 minutos para responder", iconURL: "https://media.discordapp.net/attachments/1111174841161220169/1134961239387287612/gtc_catAviso.png" })
+                        .setAuthor({ name: "Deseja redefinir a lista?", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
+                        .setDescription("Pressione o botão de confirmação abaixo para redefinir. Lembrando que essa ação é irreversível após pressionar o botão redefinir.")
+                        .setColor("Yellow")
+                        .setFooter({ text: "Você tem 5 minutos para responder", iconURL: "https://media.discordapp.net/attachments/1111174841161220169/1134961239387287612/gtc_catAviso.png" })
                 ],
                 components: [
                     new ActionRowBuilder<ButtonBuilder>().addComponents(
                         new ButtonBuilder()
-                        .setCustomId("btn_reset")
-                        .setEmoji("✅")
-                        .setLabel("Confirmar")
-                        .setStyle(ButtonStyle.Success)
+                            .setCustomId("btn_reset")
+                            .setEmoji("✅")
+                            .setLabel("Confirmar")
+                            .setStyle(ButtonStyle.Success)
                     )
                 ]
             });
@@ -130,9 +148,9 @@ export default new Event("messageCreate", async message => {
                     await i.update({
                         embeds: [
                             new EmbedBuilder()
-                            .setAuthor({ name: "Lista redefinida!", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                            .setDescription("A lista de desafiantes foi redefinida com sucesso!")
-                            .setColor("Green")
+                                .setAuthor({ name: "Lista redefinida!", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+                                .setDescription("A lista de desafiantes foi redefinida com sucesso!")
+                                .setColor("Green")
                         ],
                         components: []
                     });
@@ -143,9 +161,9 @@ export default new Event("messageCreate", async message => {
                 await i.followUp({
                     embeds: [
                         new EmbedBuilder()
-                        .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                        .setDescription("Somente a pessoa que usou o comando pode interagir com os botões")
-                        .setColor("Red")
+                            .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                            .setDescription("Somente a pessoa que usou o comando pode interagir com os botões")
+                            .setColor("Red")
                     ],
                     ephemeral: true
                 });
@@ -156,20 +174,12 @@ export default new Event("messageCreate", async message => {
         else message.channel.send({
             embeds: [
                 new EmbedBuilder()
-                .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                .setDescription("Você não tem permissão para usar esse comando. Só pessoas com cargo <@&1135979193155469342> podem usar")
-                .setColor("Red")
+                    .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                    .setDescription("Você não tem permissão para usar esse comando. Só pessoas com cargo <@&1135979193155469342> podem usar")
+                    .setColor("Red")
             ]
         });
     }
-
-    // Emote Handling
-    const matches = argumentes.filter(word => emoteList.includes(word));
-    if (matches.length > 0) matches.forEach(emoteName => {
-        const emote = client.emotes.get(emoteName.toLowerCase());
-        if (!emote || !emote.emote) return;
-        emote.run({ message: message, client: client });
-    });
 
     // D3mantle checker
     if (Object.keys(client.semantle).includes(message.channel.id)) {

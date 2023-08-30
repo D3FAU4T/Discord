@@ -1,7 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
-import { getTwitchData } from '../../Core/functions.js';
 
 export default new Command({
   name: 'cheaters_remove',
@@ -19,42 +18,51 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
-    const person = (interaction.options.get('person_name', true).value as string).toLowerCase();
-    const notFound = new EmbedBuilder()
-      .setTitle("Entry not found")
-      .setDescription(`Username ${person} not found in the cheaters list. Please check the spelling or the existence of the user ☠️`)
-      .setColor("Red");
 
-    const userData = await getTwitchData(person);
+    try {
+      const person = interaction.options.getString('person_name', true).toLowerCase();
+      const notFound = new EmbedBuilder()
+        .setTitle("Entry not found")
+        .setDescription(`Username ${person} not found in the cheaters list. Please check the spelling or the existence of the user ☠️`)
+        .setColor("Red");
 
-    if ('error' in userData) return await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Error: f() getTwitchData")
-          .setDescription(`Either the user ${person} is not a valid Twitch username or the user is banned from Twitch`)
-          .setColor("Red")
-      ]
-    });
+      const userData = await client.functions.getTwitchData(person);
 
-    let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
-    if (!Object.keys(cheaters).includes(userData.id)) return await interaction.reply({ embeds: [notFound] });
-    delete cheaters[userData.id];
-    writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Person removed")
-          .setDescription(`Successfully removed the person from the cheaters list`)
-          .setColor("Random")
-          .setTimestamp()
-          .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
-          .setAuthor({ name: "Words on Stream", iconURL: "https://cdn.discordapp.com/attachments/992562774649610372/993274540966809621/1f09655df10d184b07c9e5930063497a.jpg" })
-          .setThumbnail(`https://cdn.discordapp.com/attachments/933971458496004156/1005590805756530718/Checkmark-green-tick-isolated-on-transparent-background-PNG.png`)
-          .addFields(
-            { name: "Person removed", value: userData.displayName, inline: true },
-            { name: "List count", value: Object.keys(cheaters).length.toString(), inline: true }
-          )
-      ]
-    })
+      if ('error' in userData) return await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Error: f() getTwitchData")
+            .setDescription(`Either the user ${person} is not a valid Twitch username or the user is banned from Twitch`)
+            .setColor("Red")
+        ]
+      });
+
+      let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
+      const cheaterIds = Object.keys(cheaters);
+      if (!cheaterIds.includes(userData.id)) return await interaction.reply({ embeds: [notFound] });
+      delete cheaters[userData.id];
+      writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
+      await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Person removed")
+            .setDescription(`Successfully removed the person from the cheaters list`)
+            .setColor("Random")
+            .setTimestamp()
+            .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: `${client.guilds.cache.get(`${interaction.guildId}`)?.iconURL()}` })
+            .setAuthor({ name: "Words on Stream", iconURL: "https://cdn.discordapp.com/attachments/992562774649610372/993274540966809621/1f09655df10d184b07c9e5930063497a.jpg" })
+            .setThumbnail(`https://cdn.discordapp.com/attachments/933971458496004156/1005590805756530718/Checkmark-green-tick-isolated-on-transparent-background-PNG.png`)
+            .addFields(
+              { name: "Person removed", value: userData.displayName, inline: true },
+              { name: "List count", value: cheaterIds.length.toString(), inline: true }
+            )
+        ]
+      });
+    } catch (error) {
+      const err = error as Error;
+      await interaction.reply({
+        embeds: [client.functions.makeErrorEmbed(err)]
+      });
+    }
   }
 });

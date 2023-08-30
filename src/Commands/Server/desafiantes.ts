@@ -15,7 +15,7 @@ export default new Command({
             "en-US": "Show the challengers of the Courage group",
             "en-GB": "Show the challengers of the Courage group",
             "pt-BR": "Mostra os desafiantes do grupo Courage"
-        }),        
+        }),
     run: async ({ client, interaction }) => {
         if (interaction === undefined) return;
         await interaction.deferReply();
@@ -35,32 +35,39 @@ export default new Command({
             ]
         }
 
-        let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
+        try {
+            let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
 
-        const locale = interaction.locale;
+            const locale = interaction.locale;
 
-        await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setAuthor({ name: "COURAGE", iconURL: "https://cdn.discordapp.com/attachments/1133396329163407560/1134517749230620763/Courage.png" })
-                    .setTitle(locale === "pt-BR" ? translations[locale][0] : translations["en-US"][0])
-                    .setDescription(locale === "pt-BR" ? translations[locale][1] : translations["en-US"][1])
-                    .setFields([
-                        { name: locale === "pt-BR" ? "Desafio 1" : "Challenge 1", value: desafiantes.desafio1.length > 0 ? desafiantes.desafio1.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
-                        { name: locale === "pt-BR" ? "Desafio 2" : "Challenge 2", value: desafiantes.desafio2.length > 0 ? desafiantes.desafio2.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
-                        { name: locale === "pt-BR" ? "Desafio 3" : "Challenge 3", value: desafiantes.desafio3.length > 0 ? desafiantes.desafio3.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
-                        { name: locale === "pt-BR" ? "Gartiqueiros" : "Gartic-ers", value: desafiantes.todos.length > 0 ? desafiantes.todos.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
-                    ])
-                    .setColor("Purple")
-            ],
-            components: [
-                new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder()
-                    .setLabel(locale === "pt-BR" ? "Desafios" : "Challenges")
-                    .setStyle(ButtonStyle.Link)
-                    .setURL("https://discord.com/channels/456915295307694111/745046180374773860")
-                )
-            ]
-        });
+            await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "COURAGE", iconURL: "https://cdn.discordapp.com/attachments/1133396329163407560/1134517749230620763/Courage.png" })
+                        .setTitle(locale === "pt-BR" ? translations[locale][0] : translations["en-US"][0])
+                        .setDescription(locale === "pt-BR" ? translations[locale][1] : translations["en-US"][1])
+                        .setFields([
+                            { name: locale === "pt-BR" ? "Desafio 1" : "Challenge 1", value: desafiantes.desafio1.length > 0 ? desafiantes.desafio1.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
+                            { name: locale === "pt-BR" ? "Desafio 2" : "Challenge 2", value: desafiantes.desafio2.length > 0 ? desafiantes.desafio2.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
+                            { name: locale === "pt-BR" ? "Desafio 3" : "Challenge 3", value: desafiantes.desafio3.length > 0 ? desafiantes.desafio3.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
+                            { name: locale === "pt-BR" ? "Gartiqueiros" : "Gartic-ers", value: desafiantes.todos.length > 0 ? desafiantes.todos.join(', ') : locale === "pt-BR" ? "Nenhum" : "None", inline: false },
+                        ])
+                        .setColor("Purple")
+                ],
+                components: [
+                    new ActionRowBuilder<ButtonBuilder>().addComponents(
+                        new ButtonBuilder()
+                            .setLabel(locale === "pt-BR" ? "Desafios" : "Challenges")
+                            .setStyle(ButtonStyle.Link)
+                            .setURL("https://discord.com/channels/456915295307694111/745046180374773860")
+                    )
+                ]
+            });
+        } catch (error) {
+            const err = error as Error;
+            await interaction.editReply({
+                embeds: [client.functions.makeErrorEmbed(err)]
+            });
+        }
     }
 })
