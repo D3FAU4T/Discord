@@ -87,8 +87,8 @@ export const getTwitchDataFromId = async (arrOfIds: string[]) => {
     let dataArr: TwitchUserData[] = [];
     if (arrOfIds.length > 100) {
 
-        const chunkedArray = chunkArray(arrOfIds, 100)
-        
+        const chunkedArray = chunkArray(arrOfIds, 100);
+
         for (const chunk of chunkedArray) {
             try {
                 const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${chunk.join('&id=')}`, {
@@ -234,12 +234,12 @@ export const dsfMessage = async (nomeDoDesafiante: string, message: Message<bool
     })
 
     else if (success === 'done') await message.channel.send({
-      embeds: [
-        new EmbedBuilder()
-        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-        .setDescription("Este cara já completou todos os desafios")
-        .setColor("Red")
-      ]
+        embeds: [
+            new EmbedBuilder()
+                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+                .setDescription("Este cara já completou todos os desafios")
+                .setColor("Red")
+        ]
     })
 
     else await message.channel.send({
@@ -251,3 +251,9 @@ export const dsfMessage = async (nomeDoDesafiante: string, message: Message<bool
         ]
     });
 }
+
+export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()
+    .setAuthor({ name: message || err.name, iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146354645107748925/Error.png" })
+    .setTitle(err.message)
+    .setDescription(`\`\`\`ts\n${err.stack}\n\`\`\``)
+    .setColor("Red");
