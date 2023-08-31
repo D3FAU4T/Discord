@@ -18,6 +18,7 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
+    await interaction.deferReply();
 
     try {
       const person = interaction.options.getString('person_name', true).toLowerCase();
@@ -28,7 +29,7 @@ export default new Command({
 
       const userData = await client.functions.getTwitchData(person);
 
-      if ('error' in userData) return await interaction.reply({
+      if ('error' in userData) return await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error: f() getTwitchData")
@@ -39,10 +40,10 @@ export default new Command({
 
       let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
       const cheaterIds = Object.keys(cheaters);
-      if (!cheaterIds.includes(userData.id)) return await interaction.reply({ embeds: [notFound] });
+      if (!cheaterIds.includes(userData.id)) return await interaction.editReply({ embeds: [notFound] });
       delete cheaters[userData.id];
       writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Person removed")
@@ -60,7 +61,7 @@ export default new Command({
       });
     } catch (error) {
       const err = error as Error;
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [client.functions.makeErrorEmbed(err)]
       });
     }

@@ -81,16 +81,17 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
+    await interaction.deferReply();
 
     try {
-      const story = client.functions.getRandom(Paragraph.stories).messages;
+      const stories = client.functions.getRandom(Paragraph.stories).messages;
       const players = [`<@${interaction.user.id}>`, `<@${interaction.options.getUser("person", true).id}>`];
       const winner = client.functions.getRandom(players);
       const timeouts = [3000, 6000, 9000];
       const colors: ColorResolvable[] = ["Red", "Yellow", "Green", "Purple"];
-      for (let i = 0; i < story.length; i++) {
-        const desc = story[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${interaction.options.getUser("person", true).id}>`).replace(/@winner/g, winner);
-        await interaction.reply({
+      for (let i = 0; i < stories.length; i++) {
+        const desc = stories[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${interaction.options.getUser("person", true).id}>`).replace(/@winner/g, winner);
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setAuthor({ name: "Duel", iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146369722896621629/Angry.png" })
@@ -102,7 +103,7 @@ export default new Command({
       }
     } catch (error) {
       const err = error as Error;
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [client.functions.makeErrorEmbed(err)]
       });
     }

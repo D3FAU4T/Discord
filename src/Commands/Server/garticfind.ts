@@ -47,6 +47,7 @@ export default new Command({
             const msg = await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
+                        .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
                         .setTitle(`Possible answers for the query:\n \`${word}\``)
                         .setDescription(answers.join(',  '))
                         .setColor("Blue")

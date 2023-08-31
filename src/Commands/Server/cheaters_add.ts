@@ -18,6 +18,7 @@ export default new Command({
         ),
     run: async ({ interaction, client }) => {
         if (interaction === undefined) return;
+        await interaction.deferReply();
 
         try {
             const person = interaction.options.getString('cheater_name', true).toLowerCase();
@@ -28,7 +29,7 @@ export default new Command({
 
             const userData = await client.functions.getTwitchData(person);
 
-            if ('error' in userData) return await interaction.reply({
+            if ('error' in userData) return await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setTitle("Error: f() getTwitchData")
@@ -38,10 +39,10 @@ export default new Command({
             });
 
             let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
-            if (Object.keys(cheaters).includes(userData.id)) return await interaction.reply({ embeds: [duplicate] });
+            if (Object.keys(cheaters).includes(userData.id)) return await interaction.editReply({ embeds: [duplicate] });
             cheaters[userData.id] = userData.displayName;
             writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setTitle("Cheater added")
@@ -59,7 +60,7 @@ export default new Command({
             });
         } catch (error) {
             const err = error as Error;
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [client.functions.makeErrorEmbed(err)]
             });
         }

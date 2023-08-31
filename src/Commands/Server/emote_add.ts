@@ -48,7 +48,7 @@ export default new Command({
 
     client.tempEmotes[emoteName] = emoteLink;
 
-    await interaction?.reply({
+    await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setTitle("Emote Added")

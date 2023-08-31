@@ -34,6 +34,7 @@ export default new Command({
         ),
     run: async ({ interaction, client }) => {
         if (interaction === undefined) return;
+        await interaction.deferReply();
 
         try {
             if (interaction.options.getString('level_author') === null) {
@@ -42,7 +43,7 @@ export default new Command({
                 const { data } = await axios.get<WOSCorrectResponse | WOSErrorResponse>(`https://wos-level-editor.d3fau4tbot.repl.co/levelinfo/${query.toLowerCase()}`);
 
                 if ('error' in data) {
-                    if (data.error === 'Level not found') return interaction.reply({
+                    if (data.error === 'Level not found') return interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
                                 .setTitle(`WOS Level search: ${query}`)
@@ -51,7 +52,7 @@ export default new Command({
                         ]
                     })
 
-                    else return interaction.reply({
+                    else return interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
                                 .setTitle(`WOS Level search: ${query}`)
@@ -61,7 +62,7 @@ export default new Command({
                     });
                 }
 
-                else if ('level' in data) return interaction.reply({
+                else if ('level' in data) return interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle(`WOS Level search: ${query}`)
@@ -81,7 +82,7 @@ export default new Command({
                 data.forEach(level => {
                     if (level.Level.toLowerCase() === query.toLowerCase()) {
                         levelFound = true;
-                        return interaction.reply({
+                        return interaction.editReply({
                             embeds: [
                                 new EmbedBuilder()
                                     .setTitle(`WOS Level search: ${query}`)
@@ -92,7 +93,7 @@ export default new Command({
                     }
                 });
 
-                if (!levelFound) return interaction.reply({
+                if (!levelFound) return interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle(`WOS Level search: ${query}`)
@@ -104,7 +105,7 @@ export default new Command({
             }
         } catch (error) {
             const err = error as Error;
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [client.functions.makeErrorEmbed(err)]
             });
         }

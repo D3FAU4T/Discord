@@ -19,6 +19,7 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
+    await interaction.deferReply();
 
     try {
       const playerName = interaction.options.getString("player_name", true);
