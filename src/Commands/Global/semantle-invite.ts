@@ -1,6 +1,7 @@
 import { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, UserContextMenuCommandInteraction, CacheType } from "discord.js";
 import { D3_discord } from "../../Core/client.js";
 import { Command } from "../../Core/command.js";
+import { appendFileSync } from "fs";
 
 interface opts {
     interaction: UserContextMenuCommandInteraction<CacheType>,
@@ -47,6 +48,7 @@ export default new Command({
         } catch (err: Error | any) {
             console.error("Error generated, check logs")
             console.log(err)
+            appendFileSync("./src/Core/Error.log", err + "\n\n");
         }
     }
 });

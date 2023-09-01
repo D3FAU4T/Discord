@@ -9,11 +9,12 @@ export default new Command({
     guildId: ["976169594085572679"],
     run: async ({ interaction, client }) => {
         if (interaction === undefined) return;
+        await interaction.deferReply();
 
         try {
             const { data } = await axios.get<{ a: string; q: string; }[]>("https://zenquotes.io/api/quotes");
             const randomQuote = client.functions.getRandom(data);
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setTitle("Inspirational Quote")
@@ -32,7 +33,7 @@ export default new Command({
             });
         } catch (error) {
             const err = error as Error;
-            await interaction.reply({
+            await interaction.editReply({
                 embeds: [client.functions.makeErrorEmbed(err)]
             });
         }

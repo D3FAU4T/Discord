@@ -6,41 +6,50 @@ export default new Command({
   description: "Resume any paused music",
   emote: false,
   data: new SlashCommandBuilder()
-  .setName("music_resume")
-  .setDescription("Resume any paused music"),
+    .setName("music_resume")
+    .setDescription("Resume any paused music"),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
-    const queue = client.DiscordPlayer.queues.get(interaction.guildId as string);
-    if (!queue) return await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Error: Music module")
-          .setDescription(`There is nothing in the queue right now!`)
-          .setColor("Red")
-      ]
-    });
+    await interaction.deferReply();
 
-    if (queue.node.isPaused()) {
-      queue.node.resume();
-      return await interaction.reply({
+    try {
+      const queue = client.DiscordPlayer.queues.get(interaction.guildId as string);
+      if (!queue) return await interaction.editReply({
         embeds: [
           new EmbedBuilder()
-            .setTitle("Music: Resume")
-            .setDescription(`Resumed the song!`)
-            .setColor("Blue")
-        ]
-      })
-    }
-
-    else {
-      return await interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Music: Resume")
-            .setDescription(`The song is not paused!`)
+            .setTitle("Error: Music module")
+            .setDescription(`There is nothing in the queue right now!`)
             .setColor("Red")
         ]
-      })
+      });
+
+      if (queue.node.isPaused()) {
+        queue.node.resume();
+        return await interaction.editReply({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Music: Resume")
+              .setDescription(`Resumed the song!`)
+              .setColor("Blue")
+          ]
+        })
+      }
+
+      else {
+        return await interaction.editReply({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Music: Resume")
+              .setDescription(`The song is not paused!`)
+              .setColor("Red")
+          ]
+        })
+      }
+    } catch (error) {
+      const err = error as Error;
+      await interaction.editReply({
+        embeds: [client.functions.makeErrorEmbed(err)]
+      });
     }
   }
 });

@@ -12,57 +12,64 @@ export default new Command({
         if (interaction === undefined) return;
         await interaction.deferReply();
 
-        const voiceChannel = (interaction.member as GuildMember).voice.channel;
-        if (!voiceChannel) return await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle("Error: Music module")
-                    .setDescription("You must be in a voice channel!")
-                    .setColor("Red")
-            ]
-        });
+        try {
+            const voiceChannel = (interaction.member as GuildMember).voice.channel;
+            if (!voiceChannel) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription("You must be in a voice channel!")
+                        .setColor("Red")
+                ]
+            });
 
-        const permissions = voiceChannel.permissionsFor(interaction.client.user);
+            const permissions = voiceChannel.permissionsFor(interaction.client.user);
 
-        if (!permissions?.has("Connect")) return await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle("Error: Music module")
-                    .setDescription(`I don't have the "Connect" permission to join the Voice channel`)
-                    .setColor("Red")
-            ]
-        });
+            if (!permissions?.has("Connect")) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription(`I don't have the "Connect" permission to join the Voice channel`)
+                        .setColor("Red")
+                ]
+            });
 
-        if (!permissions.has("Speak")) return await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle("Error: Music module")
-                    .setDescription(`I don't have the "Speak" permission to join the Voice channel`)
-                    .setColor("Red")
-            ]
-        });
+            if (!permissions.has("Speak")) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription(`I don't have the "Speak" permission to join the Voice channel`)
+                        .setColor("Red")
+                ]
+            });
 
-        const { track } = await client.DiscordPlayer.play(voiceChannel, process.env["ms"] as string, {
-            nodeOptions: {
-                metadata: {
-                    interaction: interaction,
-                    isRadio: true,
-                    client: client
+            const { track } = await client.DiscordPlayer.play(voiceChannel, process.env["ms"] as string, {
+                nodeOptions: {
+                    metadata: {
+                        interaction: interaction,
+                        isRadio: true,
+                        client: client
+                    },
+                    leaveOnEnd: false,
+                    leaveOnStop: false,
+                    leaveOnEmpty: false
                 },
-                leaveOnEnd: false,
-                leaveOnStop: false,
-                leaveOnEmpty: false
-            },
-            requestedBy: interaction.user
-        });
+                requestedBy: interaction.user
+            });
 
-        await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle("Radio module")
-                    .setDescription(`24/7 Radio mode turned on`)
-                    .setColor("Green")
-            ]
-        });
+            await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Radio module")
+                        .setDescription(`24/7 Radio mode turned on`)
+                        .setColor("Green")
+                ]
+            });
+        } catch (error) {
+            const err = error as Error;
+            await interaction.editReply({
+                embeds: [client.functions.makeErrorEmbed(err)]
+            });
+        }
     }
 })

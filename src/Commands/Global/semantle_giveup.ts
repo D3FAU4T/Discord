@@ -1,5 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { appendFileSync } from 'fs';
 
 export default new Command({
     name: 'semantle_giveup',
@@ -47,6 +48,7 @@ export default new Command({
         } catch (err: Error | any) {
             console.error("Error generated, check logs")
             console.error(err);
+            appendFileSync("./src/Core/Error.log", err + "\n\n");
         }
     }
 });

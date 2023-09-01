@@ -1,5 +1,4 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { client } from '../../../index.js';
 import { Command } from '../../Core/command.js';
 
 export default new Command({
@@ -15,16 +14,26 @@ export default new Command({
         .setDescription("Digite a palavra para a qual deseja definição")
         .setRequired(true)
     ),
-  run: async ({ interaction }) => {
-    const palavra = interaction?.options.get("palavra", true).value as string
-    const significado = await client.getWordDefinition(palavra, 'pt');
-    await interaction?.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle(`Definição da palavra: ${palavra}`)
-          .setDescription(significado)
-          .setColor("Random")
-      ]
-    })
+  run: async ({ interaction, client }) => {
+    if (interaction === undefined) return;
+    await interaction.deferReply();
+
+    try {
+      const palavra = interaction.options.getString("palavra", true);
+      const significado = await client.getWordDefinition(palavra, 'pt');
+      await interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle(`Definição da palavra: ${palavra}`)
+            .setDescription(significado)
+            .setColor("Random")
+        ]
+      });
+    } catch (error) {
+      const err = error as Error;
+      await interaction.editReply({
+        embeds: [client.functions.makeErrorEmbed(err)]
+      });
+    }
   }
 });

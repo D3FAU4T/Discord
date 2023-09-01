@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import translate, { languages } from "translate-google";
 import { Command } from "../../Core/command.js";
+// @ts-ignore
+import translate, { languages } from "translate-google";
 
 export default new Command({
   name: "translate",
@@ -56,20 +57,16 @@ export default new Command({
     ),
   run: async ({ interaction, client }) => {
     if (interaction === undefined) return;
+    await interaction.deferReply();
 
     try {
-      let translateFrom: keyof languages = 'auto';
-      let translateTo: keyof languages = 'en';
+      const translateFrom = interaction.options.getString('from_language', false) as keyof languages || 'auto';
+      const translateTo = interaction.options.getString('to_language', false) as keyof languages || 'en';
 
-      interaction.options.data.forEach(element => {
-        if (element.name === 'from_language') translateFrom = element.value as keyof languages;
-        else if (element.name === 'to_language') translateTo = element.value as keyof languages;
-      });
-
-      const sentence = interaction.options.get("query", true).value as string;
+      const sentence = interaction.options.getString("query", true);
       const res = await translate(sentence, { from: translateFrom, to: translateTo });
 
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Translation")
@@ -77,21 +74,18 @@ export default new Command({
             .setColor("Blue")
             .addFields(
               { name: 'Query', value: sentence },
-              { name: 'Translation', value: res }
+              { name: 'Translation', value: res },
+              { name: 'From', value: languages[translateFrom] }
             )
             .setFooter({ text: "Embed auto created by d3fau4tbot", iconURL: client.guilds.cache.get(interaction.guildId as string)?.iconURL() as string })
             .setTimestamp()
         ]
       });
-    } catch (err) {
-      await interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Error!")
-            .setDescription('Something went wrong!')
-            .setColor("Red")
-        ]
-      })
+    } catch (error) {
+      const err = error as Error;
+      await interaction.editReply({
+        embeds: [client.functions.makeErrorEmbed(err)]
+      });
     }
 
   }

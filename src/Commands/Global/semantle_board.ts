@@ -1,5 +1,6 @@
 import { EmbedBuilder, PartialTextBasedChannelFields, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { appendFileSync } from 'fs';
 
 export default new Command({
     name: 'semantle_board',
@@ -33,6 +34,7 @@ export default new Command({
         } catch (err: Error | any) {
             console.error("Error generated, check logs")
             console.log(err);
+            appendFileSync("./src/Core/Error.log", err + "\n\n");
         }
     }
 });
