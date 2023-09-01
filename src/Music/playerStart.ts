@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, VoiceBasedChannel } from "discord.js";
 import { MusicEvent } from "../Typings/event.js";
 import { MusicMetadata, icons } from "../Typings/music.js";
 
@@ -6,7 +6,7 @@ export default new MusicEvent("playerStart", (queue, track) => {
   const metadata = queue.metadata as MusicMetadata;
 
   if (metadata.isRadio) {
-    if (metadata.interaction.channel !== null) metadata.client.RadioChannels.push(metadata.interaction.channel);
+    if (metadata.interaction.channel !== null) metadata.client.RadioChannels.push(metadata.interaction.channel as VoiceBasedChannel);
     return metadata.interaction.channel?.send({
       embeds: [
         new EmbedBuilder()
