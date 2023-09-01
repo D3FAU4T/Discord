@@ -19,7 +19,7 @@ import {
   Events,
   GatewayIntentBits,
   Partials,
-  TextBasedChannel
+  VoiceBasedChannel
 } from "discord.js";
 import {
   GetRandom,
@@ -49,7 +49,7 @@ export class D3_discord extends Client {
   public musical = new Musical('1142691243609038959');
   public semantle: { [channelId: string]: Demantle } = {}
   public DiscordPlayer = new Player(this);
-  public RadioChannels: TextBasedChannel[] = [];
+  public RadioChannels: VoiceBasedChannel[] = [];
   public tempEmotes: { [emoteName: string]: string } = {};
 
   public functions = {
