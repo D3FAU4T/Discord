@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import WebSocket from 'ws';
 import { codeBlock, EmbedBuilder, Message } from 'discord.js';
 import { readFileSync, writeFileSync } from 'fs'
@@ -30,17 +30,17 @@ export const parser = (response: any, response_parser: parseOpts) => {
     }
 }
 
-export const axiosHandler = async (url: string, method: axiosMethods, headers?: object, data?: any) => {
+export const axiosHandler = async (url: string, method: axiosMethods, headers?: object, data?: any): Promise<AxiosResponse<any, any> | AxiosError<any, any> | Error> => {
     try {
         return await axios({
             method: method,
             url: url,
             headers: headers,
             data: data
-        })
+        });
     } catch (error) {
-        if (axios.isAxiosError(error)) return error.response?.data;
-        else return error;
+        if (axios.isAxiosError(error)) return error;
+        else return error as Error;
     }
 }
 
