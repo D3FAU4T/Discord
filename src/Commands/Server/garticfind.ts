@@ -37,10 +37,19 @@ export default new Command({
         if (interaction === undefined) return;
         await interaction.deferReply();
 
-        let word = interaction.options.get("query", true).value as string;
+        let word = interaction.options.getString("query", true)
+            .replace('​\n:point_right: ', '')
+            .replace('\n​', '')
+            .replace(/\\/g, '')
+            .replace(/\n/g, '')
+            .replace('👉 ', '')
+            .replace(/\\/g, '');
+
+        const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
         try {
-            if (word[word.length - 1] === " ") word = word.slice(0, -1);
+            while (word[word.length - 1] !== "_") word = word.slice(0, -1);
+            while (!alphabet.includes(word[0])) word = word.slice(1);
             const answers = client.functions.searchGarticAnswer(word);
             const list: string[] = [];
             answers.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
