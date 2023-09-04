@@ -14,19 +14,19 @@ export const GetRandom = <T>(array: T[]): T => array[between(0, array.length)];
 export const parser = (response: any, response_parser: parseOpts) => {
     switch (response_parser) {
         case 'json':
-            return codeBlock('json', JSON.stringify(response.data, null, 2));
+            return codeBlock('json', response);
         case 'text':
-            return codeBlock('text', response.data);
+            return codeBlock('text', response);
         case 'html':
-            return codeBlock('html', response.data);
+            return codeBlock('html', response);
         case 'js':
-            return codeBlock('js', response.data);
+            return codeBlock('js', response);
         case 'python':
-            return codeBlock('python', response.data);
+            return codeBlock('python', response);
         case 'diff':
-            return codeBlock('diff', response.data);
+            return codeBlock('diff', response);
         default:
-            return 'Invalid response parser';
+            return 'Invalid_response_parser';
     }
 }
 
