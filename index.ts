@@ -5,6 +5,7 @@ import { D3_discord } from "./src/Core/client.js";
 import { Demantle } from './src/Demantle/Demantle.js';
 import { socketMessageClient } from './src/Typings/socket.js';
 import { handleSocketReply } from './src/Core/functions.js';
+import { GuildTextBasedChannel } from 'discord.js';
 
 let WebsiteClass: { [id: string]: Demantle[] } = {};
 
@@ -19,6 +20,23 @@ const botServer = app.listen(3000, () => console.log('API server listening on po
 app.get('/', (_req, res) => {
     let data = Object.keys(WebsiteClass)
     res.send(`Connected Clients: ${data.length}\nList of Clients:\n${data.join('\n')}`);
+});
+
+app.get('/getmessagedata/:channelid/:messageid', async (req, res) => {
+  const channelId = req.params.channelid;
+  const messageId = req.params.messageid;
+
+  try {
+    const json = (await (await client.channels.fetch(channelId) as GuildTextBasedChannel).messages.fetch(messageId)).toJSON();
+    res.json(json);
+  } catch (error) {
+    const err = error as Error;
+    res.json({
+      error: "An error ocurred",
+      errorName: err.name,
+      errorMessage: err.message
+    });
+  }
 });
 
 app.get('/getusername/:userid', async (req, res) => {
