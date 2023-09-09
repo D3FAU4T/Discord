@@ -129,6 +129,7 @@ export const updateCheaterNames = async () => {
     const cheaterData = await getTwitchDataFromId(Object.keys(cheaters));
     const updatedCheatersList: { [twitchId: string]: string } = {};
     cheaterData.forEach(user => updatedCheatersList[user.id] = user.display_name);
+    if (Object.keys(updatedCheatersList).length === 0) return null;
     writeFileSync('./src/Config/cheaters.json', JSON.stringify(updatedCheatersList, null, 2));
 }
 
