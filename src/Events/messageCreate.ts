@@ -4,7 +4,7 @@ import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Role } from 'discord.js';
 import { Desafiantes } from '../Typings/desafiantes.js';
-import { dsfMessage } from '../Core/functions.js';
+import { dsfMessage, incrementRole } from '../Core/functions.js';
 
 export default new Event("messageCreate", async message => {
 
@@ -52,8 +52,8 @@ export default new Event("messageCreate", async message => {
         });
 
         const roles = {
-           desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
-           gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
+            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
+            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
         };
 
         const member = message.mentions.members?.first();
@@ -61,7 +61,10 @@ export default new Event("messageCreate", async message => {
 
         if (argumentes[0] === "-ds1") {
 
-            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
+            if (desafiantes.todos.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'done');
+                return await message.channel.send({ embeds: [msg] });
+            }
 
             if (desafiantes.desafio2.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
                 desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
@@ -69,20 +72,27 @@ export default new Event("messageCreate", async message => {
                 desafiantes.todos.push(desafiante);
                 if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                await dsfMessage(desafiante, message, 'all');
-                return;
+                const msg = dsfMessage(desafiante, 'all');
+                return await message.channel.send({ embeds: [msg] });
             }
 
-            if (desafiantes.desafio1.includes(desafiante)) return await dsfMessage(desafiante, message, 'fail');
+            if (desafiantes.desafio1.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'fail');
+                return await message.channel.send({ embeds: [msg] });
+            }
+
             desafiantes.desafio1.push(desafiante);
             writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            await dsfMessage(desafiante, message, 'one');
-            return;
+            const msg = dsfMessage(desafiante, 'one');
+            return await message.channel.send({ embeds: [msg] });
         }
 
         else if (argumentes[0] === "-ds2") {
 
-            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
+            if (desafiantes.todos.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'done');
+                return await message.channel.send({ embeds: [msg] });
+            }
 
             if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
@@ -90,20 +100,32 @@ export default new Event("messageCreate", async message => {
                 desafiantes.todos.push(desafiante);
                 if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                await dsfMessage(desafiante, message, 'all');;
-                return;
+                const msg = dsfMessage(desafiante, 'all');
+                return await message.channel.send({ embeds: [msg] });
             }
 
-            if (desafiantes.desafio2.includes(desafiante)) return await dsfMessage(desafiante, message, 'fail');
+            if (desafiantes.desafio2.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'fail');
+                return await message.channel.send({ embeds: [msg] });
+            }
             desafiantes.desafio2.push(desafiante);
             writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            await dsfMessage(desafiante, message, 'one');
-            return;
+            const msg = dsfMessage(desafiante, 'one');
+            return await message.channel.send({ embeds: [msg] });
         }
 
         else if (argumentes[0] === "-ds3") {
 
-            if (desafiantes.todos.includes(desafiante)) return await dsfMessage(desafiante, message, 'done');
+            if (desafiantes.todos.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'done');
+                return await message.channel.send({ embeds: [msg] });
+            }
+
+            const rankRoles = ["Bronze 1", "Bronze 2", "Bronze 3", "Prata 1", "Prata 2", "Prata 3", "Ouro 1", "Ouro 2", "Ouro 3", "Platina", "Diamante"];
+
+            try {
+              const roleres = incrementRole(message, rankRoles);
+            } catch (err) {}            
 
             if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio2.includes(desafiante)) {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
@@ -111,15 +133,18 @@ export default new Event("messageCreate", async message => {
                 desafiantes.todos.push(desafiante);
                 if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                await dsfMessage(desafiante, message, 'all');
-                return;
+                const msg = dsfMessage(desafiante, 'all');
+                return await message.channel.send({ embeds: [msg] });
             }
 
-            if (desafiantes.desafio3.includes(desafiante)) return await dsfMessage(desafiante, message, 'fail');
+            if (desafiantes.desafio3.includes(desafiante)) {
+                const msg = dsfMessage(desafiante, 'fail');
+                return await message.channel.send({ embeds: [msg] });
+            }
             desafiantes.desafio3.push(desafiante);
             writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            await dsfMessage(desafiante, message, 'one');
-            return;
+            const msg = dsfMessage(desafiante, 'one');
+            return await message.channel.send({ embeds: [msg] });
         }
     }
 
