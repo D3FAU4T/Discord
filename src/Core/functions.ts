@@ -215,42 +215,26 @@ export const searchGarticAnswer = (query: string): string[] => {
     return array.filter(item => regex.test(item)).sort();
 }
 
-export const dsfMessage = async (nomeDoDesafiante: string, message: Message<boolean>, success: "one" | "all" | "fail" | "done") => {
-    if (success === 'all') await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                .setDescription(`Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
-                .setColor("Green")
-        ]
-    });
+export const dsfMessage = (nomeDoDesafiante: string, success: "one" | "all" | "fail" | "done") => {
+    if (success === 'all') return new EmbedBuilder()
+        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+        .setDescription(`Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
+        .setColor("Green")
 
-    else if (success === 'one') await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
-                .setColor("Green")
-        ]
-    })
+    else if (success === 'one') return new EmbedBuilder()
+        .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
+        .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
+        .setColor("Green")
 
-    else if (success === 'done') await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                .setDescription("Este cara já completou todos os desafios")
-                .setColor("Red")
-        ]
-    })
+    else if (success === 'done') return new EmbedBuilder()
+        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+        .setDescription("Este cara já completou todos os desafios")
+        .setColor("Red")
 
-    else await message.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
-                .setColor("Red")
-        ]
-    });
+    else return new EmbedBuilder()
+        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
+        .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
+        .setColor("Red")
 }
 
 export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()
@@ -258,3 +242,31 @@ export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder
     .setTitle(err.message)
     .setDescription(`\`\`\`ts\n${err.stack}\n\`\`\``)
     .setColor("Red");
+
+export const incrementRole = (message: Message<boolean>, roles: string[]) => {
+    let currentRole = "";
+    for (const roleName of roles) {
+        if (message.member?.roles.cache.some(role => role.name === roleName)) {
+            currentRole = roleName;
+            break;
+        }
+    }
+
+    if (currentRole === "") return "NO_ROLE_FOUND";
+
+    const currentIndex = roles.indexOf(currentRole);
+
+    if (currentIndex < roles.length - 1) {
+        const nextRoleName = roles[currentIndex + 1];
+        const nextRole = message.guild?.roles.cache.find(role => role.name === nextRoleName);
+        if (nextRole) {
+            message.member?.roles.add(nextRole);
+            message.member?.roles.remove(currentRole);
+            return nextRole.id;
+        }
+
+        else return "NEXT_ROLE_NOT_FOUND";
+    }
+
+    else return "MAX_ROLE_REACHED";
+}
