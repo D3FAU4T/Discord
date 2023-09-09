@@ -42,7 +42,7 @@ export default new Event("messageCreate", async message => {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];
 
-        if (!desafiante.includes('<@') && !desafiante.includes('>')) return message.channel.send({
+        if (desafiante !== undefined && !desafiante.includes('<@') && !desafiante.includes('>')) return message.channel.send({
             embeds: [
                 new EmbedBuilder()
                     .setAuthor({ name: "Eita", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
@@ -52,8 +52,8 @@ export default new Event("messageCreate", async message => {
         });
 
         const roles = {
-            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
-            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
+           desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
+           gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
         };
 
         const member = message.mentions.members?.first();
