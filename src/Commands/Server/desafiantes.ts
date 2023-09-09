@@ -59,7 +59,7 @@ export default new Command({
                         new ButtonBuilder()
                             .setLabel(locale === "pt-BR" ? "Desafios" : "Challenges")
                             .setStyle(ButtonStyle.Link)
-                            .setURL("https://discord.com/channels/456915295307694111/745046180374773860")
+                            .setURL(locale === "pt-BR" ? "https://discord.com/channels/456915295307694111/745046180374773860" : "https://discord.com/channels/1132372789706371072/1148346708208652360")
                     )
                 ]
             });
