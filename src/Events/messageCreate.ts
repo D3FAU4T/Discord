@@ -38,7 +38,8 @@ export default new Event("messageCreate", async message => {
     } catch (err) { }
 
     // Desafiantes
-    if (message.content.toLowerCase().startsWith('-ds') && message.channel.id === "1133396329163407560") {
+    const dsfChannels = ["1150321372862631936", "1133396329163407560"];
+    if (message.content.toLowerCase().startsWith('-ds') && dsfChannels.includes(message.channel.id)) {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];
 
@@ -52,12 +53,12 @@ export default new Event("messageCreate", async message => {
         });
 
         const roles = {
-            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
-            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
+            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067") as Role,
+            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664") as Role
         };
 
         const member = message.mentions.members?.first();
-        if (roles.desafiante) member?.roles.add(roles.desafiante);
+        member?.roles.add(roles.desafiante);
 
         if (argumentes[0] === "-ds1") {
 
@@ -70,7 +71,7 @@ export default new Event("messageCreate", async message => {
                 desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.todos.push(desafiante);
-                if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
+                member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
                 const msg = dsfMessage(desafiante, 'all');
                 return await message.channel.send({ embeds: [msg] });
@@ -98,7 +99,7 @@ export default new Event("messageCreate", async message => {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.todos.push(desafiante);
-                if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
+                member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
                 const msg = dsfMessage(desafiante, 'all');
                 return await message.channel.send({ embeds: [msg] });
@@ -122,18 +123,19 @@ export default new Event("messageCreate", async message => {
             }
 
             const rankRoles = ["Bronze 1", "Bronze 2", "Bronze 3", "Prata 1", "Prata 2", "Prata 3", "Ouro 1", "Ouro 2", "Ouro 3", "Platina", "Diamante"];
+            let newRoleId: string | undefined;
 
-            try {
-              const roleres = incrementRole(message, rankRoles);
-            } catch (err) {}            
+            const roleResPossibilities = ["NEXT_ROLE_NOT_FOUND", "MAX_ROLE_REACHED"];
+            const roleres = incrementRole(member, rankRoles);
+            if (!roleResPossibilities.includes(roleres)) newRoleId = roleres;
 
             if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio2.includes(desafiante)) {
                 desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
                 desafiantes.todos.push(desafiante);
-                if (roles.gartiqueiros) member?.roles.add(roles.gartiqueiros);
+                member?.roles.add(roles.gartiqueiros);
                 writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                const msg = dsfMessage(desafiante, 'all');
+                const msg = dsfMessage(desafiante, 'all', newRoleId);
                 return await message.channel.send({ embeds: [msg] });
             }
 
@@ -141,9 +143,10 @@ export default new Event("messageCreate", async message => {
                 const msg = dsfMessage(desafiante, 'fail');
                 return await message.channel.send({ embeds: [msg] });
             }
+
             desafiantes.desafio3.push(desafiante);
             writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            const msg = dsfMessage(desafiante, 'one');
+            const msg = dsfMessage(desafiante, 'one', newRoleId);
             return await message.channel.send({ embeds: [msg] });
         }
     }
@@ -152,8 +155,8 @@ export default new Event("messageCreate", async message => {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
 
         const roles = {
-            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067"),
-            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664")
+            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067") as Role,
+            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664") as Role
         };
 
         if (message.member?.roles.cache.has("1135979193155469342")) {
@@ -184,8 +187,8 @@ export default new Event("messageCreate", async message => {
                     desafiantes.desafio2 = [];
                     desafiantes.desafio3 = [];
                     desafiantes.todos = [];
-                    if (roles.desafiante) roles.desafiante.members.forEach(member => member.roles.remove(roles.desafiante as Role));
-                    if (roles.gartiqueiros) roles.gartiqueiros.members.forEach(member => member.roles.remove(roles.gartiqueiros as Role));
+                    roles.desafiante.members.forEach(member => member.roles.remove(roles.desafiante));
+                    roles.gartiqueiros.members.forEach(member => member.roles.remove(roles.gartiqueiros));
                     writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
 
                     await i.update({

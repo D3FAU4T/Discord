@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import WebSocket from 'ws';
-import { codeBlock, EmbedBuilder, Message } from 'discord.js';
+import { codeBlock, EmbedBuilder, GuildMember } from 'discord.js';
 import { readFileSync, writeFileSync } from 'fs'
 import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { responses, ResponseType } from '../Typings/Demantle.js';
@@ -215,15 +215,15 @@ export const searchGarticAnswer = (query: string): string[] => {
     return array.filter(item => regex.test(item)).sort();
 }
 
-export const dsfMessage = (nomeDoDesafiante: string, success: "one" | "all" | "fail" | "done") => {
+export const dsfMessage = (nomeDoDesafiante: string, success: "one" | "all" | "fail" | "done", roleId?: string) => {
     if (success === 'all') return new EmbedBuilder()
         .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-        .setDescription(`Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
+        .setDescription(roleId ? `Eba ${nomeDoDesafiante}, você ganhou um novo rank » <@&${roleId}>\nParabéns ${nomeDoDesafiante}, você completou todos os desafios!` : `Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
         .setColor("Green")
 
     else if (success === 'one') return new EmbedBuilder()
         .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-        .setDescription(`Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
+        .setDescription(roleId ? `Eba ${nomeDoDesafiante}, você ganhou um novo rank » <@&${roleId}>\nParabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!` : `Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
         .setColor("Green")
 
     else if (success === 'done') return new EmbedBuilder()
@@ -243,25 +243,28 @@ export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder
     .setDescription(`\`\`\`ts\n${err.stack}\n\`\`\``)
     .setColor("Red");
 
-export const incrementRole = (message: Message<boolean>, roles: string[]) => {
+export const incrementRole = (person: GuildMember | undefined, roles: string[]) => {
+    roles.unshift("Unranked");
     let currentRole = "";
+
     for (const roleName of roles) {
-        if (message.member?.roles.cache.some(role => role.name === roleName)) {
+        if (person?.roles.cache.some(role => role.name === roleName)) {
             currentRole = roleName;
             break;
         }
     }
 
-    if (currentRole === "") return "NO_ROLE_FOUND";
+    if (currentRole === "") currentRole = roles[0];
 
     const currentIndex = roles.indexOf(currentRole);
 
     if (currentIndex < roles.length - 1) {
         const nextRoleName = roles[currentIndex + 1];
-        const nextRole = message.guild?.roles.cache.find(role => role.name === nextRoleName);
+        const nextRole = person?.guild.roles.cache.find(role => role.name === nextRoleName);
         if (nextRole) {
-            message.member?.roles.add(nextRole);
-            message.member?.roles.remove(currentRole);
+            const roleToRemove = person?.guild.roles.cache.find(role => role.name === currentRole);
+            person?.roles.add(nextRole);
+            if (roleToRemove) person?.roles.remove(roleToRemove);
             return nextRole.id;
         }
 
