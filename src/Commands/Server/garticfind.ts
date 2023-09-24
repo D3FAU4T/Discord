@@ -23,7 +23,7 @@ export default new Command({
     name: "garticfind",
     description: "Get the gartic answer for a query if exists in gos dictionary",
     emote: false,
-    guildId: ["1053990732958023720", "976169594085572679"],
+    guildId: ["1053990732958023720", "976169594085572679", "1021508735165808641"],
     data: new SlashCommandBuilder()
         .setName("garticfind")
         .setDescription("Get the gartic answer for a query if exists in gos dictionary")
