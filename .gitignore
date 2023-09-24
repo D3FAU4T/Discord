@@ -8,3 +8,4 @@ node_modules
 /src/Config/cheaters.json
 /src/Config/Musical.json
 /src/Core/Error.log
+/.vs
