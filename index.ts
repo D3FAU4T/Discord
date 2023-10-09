@@ -15,7 +15,7 @@ client.start();
 const app = express();
 app.use(cors());
 
-const botServer = app.listen(3000, () => console.log('API server listening on port 3000'));
+const botServer = app.listen(6969, () => console.log('API server listening on port 3000'));
 
 app.get('/', (_req, res) => {
     let data = Object.keys(WebsiteClass)

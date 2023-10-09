@@ -2,7 +2,7 @@ import { Event } from "../Typings/event.js";
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Role } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, PermissionsBitField, Role } from 'discord.js';
 import { Desafiantes } from '../Typings/desafiantes.js';
 import { dsfMessage, incrementRole } from '../Core/functions.js';
 
@@ -16,16 +16,22 @@ export default new Event("messageCreate", async message => {
     if (message.guild === null) console.log(`${message.author.username} [PRIV MSG] ---> ${message.content}`);
     else console.log(`[${message.guild.name}] / [${message.author.username}] : ${message.content}`);
 
+    if (message.guild === null || message.channel.type === ChannelType.DM) return;
+
     // Message handling
     const argumentes = message.content.toLowerCase().split(' ');
     const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
+
+    const permissions = message.guild.members.me?.permissionsIn(message.channel);
 
     // Emote Handling
     const matches = argumentes.filter(word => emoteList.includes(word));
     if (matches.length > 0) matches.forEach(emoteName => {
         const emote = client.emotes.get(emoteName.toLowerCase());
         if (!emote || !emote.emote) return;
-        emote.run({ message: message, client: client });
+        if (permissions) {
+            if (permissions.has(PermissionsBitField.Flags.SendMessages)) emote.run({ message: message, client: client });
+        }
     });
 
     try {
@@ -33,7 +39,9 @@ export default new Event("messageCreate", async message => {
         if (tempMatches.length > 0) tempMatches.forEach(emoteName => {
             const emote = client.tempEmotes[emoteName.toLowerCase()];
             if (!emote) return;
-            message.channel.send(emote);
+            if (permissions) {
+                if (permissions.has(PermissionsBitField.Flags.SendMessages)) message.channel.send(emote);
+            }
         });
     } catch (err) { }
 

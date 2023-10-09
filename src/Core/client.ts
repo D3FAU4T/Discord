@@ -76,7 +76,7 @@ export class D3_discord extends Client {
       title: ''
     }
   } as SimulatorRadioCombined;
-  
+
 
   constructor() {
     super({
@@ -251,5 +251,18 @@ export class D3_discord extends Client {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  public async getUsernameAndDisplayname(userList: `<@${number}>`[]) {
+    let data: { displayName: string, username: string }[] = [];
+    for (const user of userList) {
+      const id = user.replace('<@', '').replace('>', '');
+      const person = await this.users.fetch(id);
+      data.push({
+        displayName: person.displayName,
+        username: person.username
+      });
+    }
+    return data;
   }
 }
