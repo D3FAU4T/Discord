@@ -18,7 +18,7 @@ export default new Command({
         }),
     run: async ({ client, interaction }) => {
         if (interaction === undefined) return;
-        await interaction.deferReply();
+        await interaction.reply('...');
 
         const translations = {
             "en-US": [
@@ -68,6 +68,7 @@ export default new Command({
                     )
                 ]
             });
+          /*
 
             const buttonCollector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, filter: i => i.user.id === interaction.user.id });
 
@@ -115,6 +116,7 @@ export default new Command({
                     content: locale === 'pt-BR' ? `Você selecionou o desafio ${selectCollector.values[0].replace('dsf', '')}\nEste comando está incompleto e é um trabalho em andamento` : `You selected the challenge ${selectCollector.values[0].replace('dsf', '')}\nThis command is incomplete and is a work in progress`
                 });
             });
+          */
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
@@ -122,4 +124,4 @@ export default new Command({
             });
         }
     }
-})
+});

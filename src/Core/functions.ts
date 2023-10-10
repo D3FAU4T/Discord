@@ -208,11 +208,41 @@ export const calculatePoints = (targetLevel: number): number => {
     return points + bonusPoints;
 }
 
-export const searchGarticAnswer = (query: string): string[] => {
-    const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
-    query = query.replace(/\s/g, "");
-    const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
-    return array.filter(item => regex.test(item)).sort();
+export const searchGarticAnswer = (query: string) => {
+    const text = readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase();
+    const strippedText = query
+      .replace("​\n:point_right: ", '')
+      .replace(" \n​", '')
+      .replace('​\n👉', ``)
+      .replace('👉', '')
+      .replace(/\n/gim, '')
+      .split(' ')
+      .filter(char => char !== ``)
+      .filter(char => char !== ' ');
+    console.log(strippedText);
+    let ch = `[\\wáàâãéèêíïóôõöúçñ]`
+    let regexString = `^\\s+"${strippedText[0].toLowerCase()}`;
+    let letterCount = 0;
+
+    strippedText.slice(1).forEach(word => {
+        if (word === '\\_' || word === '_') letterCount++;
+        else if (word === '-\\_') {
+            regexString += `${ch}{${letterCount}}-`;
+            letterCount = 1;
+        }
+
+        else if (word === '​') {
+            regexString += `${ch}{${letterCount}}\\s`;
+            letterCount = 1;
+        }
+    });
+
+    regexString += `${ch}{${letterCount}}"`;
+    const regex = new RegExp(regexString, 'gim');
+    return {
+        results: text.match(regex)?.map(item => item.replace(/\s+/g, ' ').trim().replace(/"/g, ''))?.sort(),
+        regex: regexString
+    };
 }
 
 export const dsfMessage = (nomeDoDesafiante: string, success: "one" | "all" | "fail" | "done", roleId?: string) => {

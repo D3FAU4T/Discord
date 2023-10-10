@@ -37,28 +37,18 @@ export default new Command({
         if (interaction === undefined) return;
         await interaction.deferReply();
 
-        let word = interaction.options.getString("query", true)
-            .replace('​\n:point_right: ', '')
-            .replace('\n​', '')
-            .replace(/\\/g, '')
-            .replace(/\n/g, '')
-            .replace('👉 ', '')
-            .replace(/\\/g, '');
-
-        const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        let word = interaction.options.getString("query", true);
 
         try {
-            while (word[word.length - 1] !== "_") word = word.slice(0, -1);
-            while (!alphabet.includes(word[0])) word = word.slice(1);
-            const answers = client.functions.searchGarticAnswer(word);
+            const { results } = client.functions.searchGarticAnswer(word);
             const list: string[] = [];
-            answers.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
+            results?.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
             const msg = await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
-                        .setTitle(`Possible answers for the query:\n \`${word}\``)
-                        .setDescription(answers.join(',  '))
+                        .setTitle(`Possible answers for the query:\n \`${word.replace(/\\/g, '')}\``)
+                        .setDescription(results?.join(',  ') || "No answers found")
                         .setColor("Blue")
                 ],
                 components: [actionComponent]
@@ -69,12 +59,12 @@ export default new Command({
 
             collector.on("collect", async (i: MessageComponentInteraction) => {
                 if (i.customId === `garticfind_0`) await i.update({
-                    embeds: [createEmbed(word, answers, false)],
+                    embeds: [createEmbed(word, results || [], false)],
                     components: [actionComponent]
                 })
 
                 else await i.update({
-                    embeds: [createEmbed(word, answers, true)],
+                    embeds: [createEmbed(word, results || [], true)],
                     components: [actionComponent]
                 });
             });
