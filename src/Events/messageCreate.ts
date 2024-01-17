@@ -46,7 +46,7 @@ export default new Event("messageCreate", async message => {
     } catch (err) { }
 
     // Desafiantes
-    const dsfChannels = ["1150321372862631936", "1133396329163407560"];
+    const dsfChannels = ["1150321372862631936", "1133396329163407560", "1083247602369318962"];
     if (message.content.toLowerCase().startsWith('-ds') && dsfChannels.includes(message.channel.id)) {
         let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
         const desafiante = message.content.split(' ')[1];
