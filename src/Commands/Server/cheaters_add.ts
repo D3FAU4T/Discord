@@ -18,10 +18,10 @@ export default new Command({
         ),
     run: async ({ interaction, client }) => {
         if (interaction === undefined) return;
-        await interaction.deferReply();
+        // await interaction.deferReply();
 
         try {
-            const person = interaction.options.getString('cheater_name', true).toLowerCase();
+            const person = (interaction.options.get("cheater_name", true).value as string).toLowerCase();
             const duplicate = new EmbedBuilder()
                 .setTitle("Duplicate Entry")
                 .setDescription(`The username ${person} is already on the list and will not be added twice.`)
@@ -38,7 +38,7 @@ export default new Command({
                 ]
             });
 
-            let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
+            let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as Record<string, string>;
             if (Object.keys(cheaters).includes(userData.id)) return await interaction.editReply({ embeds: [duplicate] });
             cheaters[userData.id] = userData.displayName;
             writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
