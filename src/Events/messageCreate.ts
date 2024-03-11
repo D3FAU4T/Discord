@@ -1,10 +1,8 @@
 import { Event } from "../Typings/event.js";
-import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { readdirSync } from 'fs';
 import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, PermissionsBitField, Role } from 'discord.js';
-import { Desafiantes } from '../Typings/desafiantes.js';
-import { dsfMessage, incrementRole } from '../Core/functions.js';
+import { ChannelType, EmbedBuilder, PermissionsBitField } from 'discord.js';
 
 export default new Event("messageCreate", async message => {
 
@@ -44,196 +42,6 @@ export default new Event("messageCreate", async message => {
             }
         });
     } catch (err) { }
-
-    // Desafiantes
-    const dsfChannels = ["1150321372862631936", "1133396329163407560"];
-    if (message.content.toLowerCase().startsWith('-ds') && dsfChannels.includes(message.channel.id)) {
-        let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
-        const desafiante = message.content.split(' ')[1];
-
-        if (desafiante !== undefined && !desafiante.includes('<@') && !desafiante.includes('>')) return message.channel.send({
-            embeds: [
-                new EmbedBuilder()
-                    .setAuthor({ name: "Eita", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
-                    .setDescription(`Você não mencionou ninguém para adicionar na lista de desafiantes\n\n**Exemplo:**\`\`\`\n-ds1 @user\n-ds2 @user\n-ds3 @user\n\`\`\``)
-                    .setColor("Yellow")
-            ]
-        });
-
-        const roles = {
-            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067") as Role,
-            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664") as Role
-        };
-
-        const member = message.mentions.members?.first();
-        member?.roles.add(roles.desafiante);
-
-        if (argumentes[0] === "-ds1") {
-
-            if (desafiantes.todos.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'done');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            if (desafiantes.desafio2.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
-                desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.todos.push(desafiante);
-                member?.roles.add(roles.gartiqueiros);
-                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                const msg = dsfMessage(desafiante, 'all');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            if (desafiantes.desafio1.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'fail');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            desafiantes.desafio1.push(desafiante);
-            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            const msg = dsfMessage(desafiante, 'one');
-            return await message.channel.send({ embeds: [msg] });
-        }
-
-        else if (argumentes[0] === "-ds2") {
-
-            if (desafiantes.todos.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'done');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio3.includes(desafiante)) {
-                desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.desafio3 = desafiantes.desafio3.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.todos.push(desafiante);
-                member?.roles.add(roles.gartiqueiros);
-                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                const msg = dsfMessage(desafiante, 'all');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            if (desafiantes.desafio2.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'fail');
-                return await message.channel.send({ embeds: [msg] });
-            }
-            desafiantes.desafio2.push(desafiante);
-            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            const msg = dsfMessage(desafiante, 'one');
-            return await message.channel.send({ embeds: [msg] });
-        }
-
-        else if (argumentes[0] === "-ds3") {
-
-            if (desafiantes.todos.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'done');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            const rankRoles = ["Bronze 1", "Bronze 2", "Bronze 3", "Prata 1", "Prata 2", "Prata 3", "Ouro 1", "Ouro 2", "Ouro 3", "Platina", "Diamante"];
-            let newRoleId: string | undefined;
-
-            const roleResPossibilities = ["NEXT_ROLE_NOT_FOUND", "MAX_ROLE_REACHED"];
-            const roleres = incrementRole(member, rankRoles);
-            if (!roleResPossibilities.includes(roleres)) newRoleId = roleres;
-
-            if (desafiantes.desafio1.includes(desafiante) && desafiantes.desafio2.includes(desafiante)) {
-                desafiantes.desafio1 = desafiantes.desafio1.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.desafio2 = desafiantes.desafio2.filter((desafiantes) => desafiantes !== desafiante);
-                desafiantes.todos.push(desafiante);
-                member?.roles.add(roles.gartiqueiros);
-                writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-                const msg = dsfMessage(desafiante, 'all', newRoleId);
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            if (desafiantes.desafio3.includes(desafiante)) {
-                const msg = dsfMessage(desafiante, 'fail');
-                return await message.channel.send({ embeds: [msg] });
-            }
-
-            desafiantes.desafio3.push(desafiante);
-            writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-            const msg = dsfMessage(desafiante, 'one', newRoleId);
-            return await message.channel.send({ embeds: [msg] });
-        }
-    }
-
-    else if (message.content.toLowerCase() === '-resetar' && message.channel.id === "1133396329163407560") {
-        let desafiantes = JSON.parse(readFileSync("./src/Config/desafiantes.json", "utf-8")) as Desafiantes;
-
-        const roles = {
-            desafiante: message.guild?.roles.cache.find(role => role.id === "1148339662746833067") as Role,
-            gartiqueiros: message.guild?.roles.cache.find(role => role.id === "1148345685335363664") as Role
-        };
-
-        if (message.member?.roles.cache.has("1135979193155469342")) {
-            const msg = await message.channel.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setAuthor({ name: "Deseja redefinir a lista?", iconURL: "https://images-ext-2.discordapp.net/external/LJYK0J8-fh4w4ryIYW-30TF8kuX6X0pHvxuu31XuVbI/%3Fv%3D12/https/garticbot.gg/images/icons/alert.png" })
-                        .setDescription("Pressione o botão de confirmação abaixo para redefinir. Lembrando que essa ação é irreversível após pressionar o botão redefinir.")
-                        .setColor("Yellow")
-                        .setFooter({ text: "Você tem 5 minutos para responder", iconURL: "https://media.discordapp.net/attachments/1111174841161220169/1134961239387287612/gtc_catAviso.png" })
-                ],
-                components: [
-                    new ActionRowBuilder<ButtonBuilder>().addComponents(
-                        new ButtonBuilder()
-                            .setCustomId("btn_reset")
-                            .setEmoji("✅")
-                            .setLabel("Confirmar")
-                            .setStyle(ButtonStyle.Success)
-                    )
-                ]
-            });
-
-            const collector = msg.createMessageComponentCollector({ time: 300000, filter: (i) => i.user.id === message.author.id });
-
-            collector.on("collect", async (i) => {
-                if (i.customId === "btn_reset") {
-                    desafiantes.desafio1 = [];
-                    desafiantes.desafio2 = [];
-                    desafiantes.desafio3 = [];
-                    desafiantes.todos = [];
-                    roles.desafiante.members.forEach(member => member.roles.remove(roles.desafiante));
-                    roles.gartiqueiros.members.forEach(member => member.roles.remove(roles.gartiqueiros));
-                    writeFileSync("./src/Config/desafiantes.json", JSON.stringify(desafiantes, null, 2));
-
-                    await i.update({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setAuthor({ name: "Lista redefinida!", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-                                .setDescription("A lista de desafiantes foi redefinida com sucesso!")
-                                .setColor("Green")
-                        ],
-                        components: []
-                    });
-                }
-            });
-
-            collector.on("ignore", async (i) => {
-                await i.followUp({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                            .setDescription("Somente a pessoa que usou o comando pode interagir com os botões")
-                            .setColor("Red")
-                    ],
-                    ephemeral: true
-                });
-            });
-
-        }
-
-        else message.channel.send({
-            embeds: [
-                new EmbedBuilder()
-                    .setAuthor({ name: "Eita", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-                    .setDescription("Você não tem permissão para usar esse comando. Só pessoas com cargo <@&1135979193155469342> podem usar")
-                    .setColor("Red")
-            ]
-        });
-    }
 
     // D3mantle checker
     if (Object.keys(client.semantle).includes(message.channel.id)) {
@@ -292,9 +100,9 @@ export default new Event("messageCreate", async message => {
                             .setColor("Green")
                             .setThumbnail("https://cdn.discordapp.com/attachments/992564973064699924/1035425625374208000/frisco7GG.png")
                             .setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 256 }) })
-                            .setFooter({ text: `POG POG POG (Chantell approved!)`, iconURL: "https://cdn.discordapp.com/attachments/920832476606234664/1056767933927411712/88f52b10d581542266f90c963f77b9d9.png" })
+                            .setFooter({ text: `POG POG POG (Chantell approved!)`, iconURL: client.users.cache.get("1006373310126362624")?.displayAvatarURL({ extension: 'png', size: 256 }) })
                             .addFields(
-                                { name: "winner", value: `${message.author.username}`, inline: true },
+                                { name: "winner", value: `<@${message.author.id}>`, inline: true },
                                 { name: "word", value: `${response.word}`, inline: true },
                                 { name: "number-of-guesses", value: `${response.guessLength}`, inline: true }
                             )
