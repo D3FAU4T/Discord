@@ -215,61 +215,8 @@ export const searchGarticAnswer = (query: string): string[] => {
     return array.filter(item => regex.test(item)).sort();
 }
 
-export const dsfMessage = (nomeDoDesafiante: string, success: "one" | "all" | "fail" | "done", roleId?: string) => {
-    if (success === 'all') return new EmbedBuilder()
-        .setAuthor({ name: "Adicionado com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-        .setDescription(roleId ? `Eba ${nomeDoDesafiante}, você ganhou um novo rank » <@&${roleId}>\nParabéns ${nomeDoDesafiante}, você completou todos os desafios!` : `Parabéns ${nomeDoDesafiante}, você completou todos os desafios!`)
-        .setColor("Green")
-
-    else if (success === 'one') return new EmbedBuilder()
-        .setAuthor({ name: "Adicionando com sucesso", iconURL: "https://images-ext-1.discordapp.net/external/vRinCI6dMGE1eNRk-tqZqtjIDtAKQvRgM3BaX5Eu0H8/%3Fv%3D12/https/garticbot.gg/images/icons/hit.png" })
-        .setDescription(roleId ? `Eba ${nomeDoDesafiante}, você ganhou um novo rank » <@&${roleId}>\nParabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!` : `Parabéns ${nomeDoDesafiante}, obrigado pela sua contribuição!`)
-        .setColor("Green")
-
-    else if (success === 'done') return new EmbedBuilder()
-        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-        .setDescription("Este cara já completou todos os desafios")
-        .setColor("Red")
-
-    else return new EmbedBuilder()
-        .setAuthor({ name: "Erro", iconURL: "https://images-ext-1.discordapp.net/external/Myy2JZKWwkK-NqxkH-csqLwwXzckt5ykPRfEmfqOLjk/%3Fv%3D12/https/garticbot.gg/images/icons/error.png" })
-        .setDescription(`Você já completou esse desafio ${nomeDoDesafiante}!`)
-        .setColor("Red")
-}
-
 export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()
     .setAuthor({ name: message || err.name, iconURL: "https://cdn.discordapp.com/attachments/1097538516436660355/1146354645107748925/Error.png" })
     .setTitle(err.message)
     .setDescription(`\`\`\`ts\n${err.stack}\n\`\`\``)
     .setColor("Red");
-
-export const incrementRole = (person: GuildMember | undefined, roles: string[]) => {
-    roles.unshift("Unranked");
-    let currentRole = "";
-
-    for (const roleName of roles) {
-        if (person?.roles.cache.some(role => role.name === roleName)) {
-            currentRole = roleName;
-            break;
-        }
-    }
-
-    if (currentRole === "") currentRole = roles[0];
-
-    const currentIndex = roles.indexOf(currentRole);
-
-    if (currentIndex < roles.length - 1) {
-        const nextRoleName = roles[currentIndex + 1];
-        const nextRole = person?.guild.roles.cache.find(role => role.name === nextRoleName);
-        if (nextRole) {
-            const roleToRemove = person?.guild.roles.cache.find(role => role.name === currentRole);
-            person?.roles.add(nextRole);
-            if (roleToRemove) person?.roles.remove(roleToRemove);
-            return nextRole.id;
-        }
-
-        else return "NEXT_ROLE_NOT_FOUND";
-    }
-
-    else return "MAX_ROLE_REACHED";
-}
