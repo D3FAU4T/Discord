@@ -99,6 +99,7 @@ export class D3_discord extends Client {
 
     public async start(): Promise<void> {
         this.registerFiles();
+        await this.DiscordPlayer.extractors.loadDefault();
         this.login(process.env['discordToken']);
         setInterval(async () => await this.getRadioData(), 10000)
     }
