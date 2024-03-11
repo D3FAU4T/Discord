@@ -85,47 +85,32 @@ const chunkArray = <T>(array: T[], chunkSize: number) => {
 
 export const getTwitchDataFromId = async (arrOfIds: string[]) => {
     let dataArr: TwitchUserData[] = [];
-    if (arrOfIds.length > 100) {
 
-        const chunkedArray = chunkArray(arrOfIds, 100);
+    const headers = {
+        Authorization: `Bearer ${process.env['TwitchAuth']}`,
+        'Client-Id': process.env['TwitchClientId'],
+        "Content-Type": "application/json"
+    };
 
-        for (const chunk of chunkedArray) {
-            try {
-                const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${chunk.join('&id=')}`, {
-                    headers: {
-                        Authorization: `Bearer ${process.env['TwitchAuth']}`,
-                        'Client-Id': process.env['TwitchClientId'],
-                        "Content-Type": "application/json"
-                    }
-                });
-                dataArr.push(...data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        return dataArr;
-    }
-
-    else {
+    const fetchData = async (ids: string[]) => {
         try {
-            const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${arrOfIds.join('&id=')}`, {
-                headers: {
-                    Authorization: `Bearer ${process.env['TwitchAuth']}`,
-                    'Client-Id': process.env['TwitchClientId'],
-                    "Content-Type": "application/json"
-                }
-            });
+            const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${ids.join('&id=')}`, { headers });
             dataArr.push(...data.data);
         } catch (error) {
             console.error(error);
         }
-        return dataArr;
-    }
+    };
+
+    const chunkedArray = chunkArray(arrOfIds, 100);
+    const fetchPromises = chunkedArray.map(fetchData);
+
+    await Promise.all(fetchPromises);
+
+    return dataArr;
 }
 
 export const updateCheaterNames = async () => {
-    const cheaters: { [twitchId: string]: string } = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase());
+    const cheaters: Record<string, string> = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase());
     const cheaterData = await getTwitchDataFromId(Object.keys(cheaters));
     const updatedCheatersList: { [twitchId: string]: string } = {};
     cheaterData.forEach(user => updatedCheatersList[user.id] = user.display_name);
@@ -208,11 +193,41 @@ export const calculatePoints = (targetLevel: number): number => {
     return points + bonusPoints;
 }
 
-export const searchGarticAnswer = (query: string): string[] => {
-    const array: string[] = JSON.parse(readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase());
-    query = query.replace(/\s/g, "");
-    const regex = new RegExp(`^${query.split("").map(c => c === "_" ? "." : c).join("").replace('​​', ' ')}$`, "i");
-    return array.filter(item => regex.test(item)).sort();
+export const searchGarticAnswer = (query: string) => {
+    const text = readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase();
+    const strippedText = query
+      .replace("​\n:point_right: ", '')
+      .replace(" \n​", '')
+      .replace('​\n👉', ``)
+      .replace('👉', '')
+      .replace(/\n/gim, '')
+      .split(' ')
+      .filter(char => char !== ``)
+      .filter(char => char !== ' ');
+    console.log(strippedText);
+    let ch = `[\\wáàâãéèêíïóôõöúçñ]`
+    let regexString = `^\\s+"${strippedText[0].toLowerCase()}`;
+    let letterCount = 0;
+
+    strippedText.slice(1).forEach(word => {
+        if (word === '\\_' || word === '_') letterCount++;
+        else if (word === '-\\_') {
+            regexString += `${ch}{${letterCount}}-`;
+            letterCount = 1;
+        }
+
+        else if (word === '​') {
+            regexString += `${ch}{${letterCount}}\\s`;
+            letterCount = 1;
+        }
+    });
+
+    regexString += `${ch}{${letterCount}}"`;
+    const regex = new RegExp(regexString, 'gim');
+    return {
+        results: text.match(regex)?.map(item => item.replace(/\s+/g, ' ').trim().replace(/"/g, ''))?.sort(),
+        regex: regexString
+    };
 }
 
 export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()

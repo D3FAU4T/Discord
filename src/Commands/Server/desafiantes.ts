@@ -40,7 +40,7 @@ export default new Command({
 
             const locale = interaction.locale;
 
-            const msg = await interaction.editReply({
+            await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({ name: "COURAGE", iconURL: "https://cdn.discordapp.com/attachments/1133396329163407560/1134517749230620763/Courage.png" })
@@ -59,61 +59,9 @@ export default new Command({
                         new ButtonBuilder()
                             .setLabel(locale === "pt-BR" ? "Desafios" : "Challenges")
                             .setStyle(ButtonStyle.Link)
-                            .setURL(locale === "pt-BR" ? "https://discord.com/channels/456915295307694111/745046180374773860" : "https://discord.com/channels/1132372789706371072/1148346708208652360"),
-                        new ButtonBuilder()
-                            .setLabel(locale === "pt-BR" ? "Remover" : "Remove")
-                            .setStyle(ButtonStyle.Danger)
-                            .setCustomId("removeDesafiantes")
-                            .setEmoji("❌")
+                            .setURL(locale === "pt-BR" ? "https://discord.com/channels/456915295307694111/745046180374773860" : "https://discord.com/channels/1132372789706371072/1148346708208652360")
                     )
                 ]
-            });
-
-            const buttonCollector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, filter: i => i.user.id === interaction.user.id });
-
-            buttonCollector.on("collect", async i => {
-                if (i.customId !== "removeDesafiantes") return;
-                const dsfSelect = await i.followUp({
-                    ephemeral: true,
-                    embeds: [
-                        new EmbedBuilder()
-                            .setTitle(locale === "pt-BR" ? "Selecione um desafio que você deseja modificar" : "Select a challenge that you want to modify")
-                            .setColor("Blue")
-                    ],
-                    components: [
-                        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-                            new StringSelectMenuBuilder()
-                                .setCustomId("desafiantesMenu")
-                                .setPlaceholder(locale === "pt-BR" ? "Selecione um desafio" : "Select a challenge")
-                                .setMinValues(1)
-                                .setMaxValues(1)
-                                .addOptions(
-                                    new StringSelectMenuOptionBuilder()
-                                        .setLabel(locale === "pt-BR" ? "Desafio 1" : "Challenge 1")
-                                        .setValue("dsf1")
-                                        .setDescription(locale === "pt-BR" ? "235 pontos em Objetos" : "235 points in Objects")
-                                        .setEmoji("1️⃣"),
-                                    new StringSelectMenuOptionBuilder()
-                                        .setLabel(locale === "pt-BR" ? "Desafio 2" : "Challenge 2")
-                                        .setValue("dsf2")
-                                        .setDescription(locale === "pt-BR" ? "5 partidas em Gamagame" : "5 matches in Gamagame")
-                                        .setEmoji("2️⃣"),
-                                    new StringSelectMenuOptionBuilder()
-                                        .setLabel(locale === "pt-BR" ? "Desafio 3" : "Challenge 3")
-                                        .setValue("dsf3")
-                                        .setDescription(locale === "pt-BR" ? "Tema alimentos" : "Foods theme")
-                                        .setEmoji("3️⃣"),
-                                )
-                        )
-                    ]
-                });
-
-                const selectCollector = await dsfSelect.awaitMessageComponent({ time: 300_000, filter: i => i.user.id === interaction.user.id, componentType: ComponentType.StringSelect });
-
-                await selectCollector.followUp({
-                    ephemeral: true,
-                    content: locale === 'pt-BR' ? `Você selecionou o desafio ${selectCollector.values[0].replace('dsf', '')}\nEste comando está incompleto e é um trabalho em andamento` : `You selected the challenge ${selectCollector.values[0].replace('dsf', '')}\nThis command is incomplete and is a work in progress`
-                });
             });
         } catch (error) {
             const err = error as Error;
@@ -122,4 +70,4 @@ export default new Command({
             });
         }
     }
-})
+});

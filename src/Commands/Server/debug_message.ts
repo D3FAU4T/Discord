@@ -6,7 +6,7 @@ export default new Command({
     name: "debug_message",
     description: "Debug message",
     emote: false,
-    guildId: ["1021508735165808641", "1052208273702518934"],
+    guildId: ["1021508735165808641", "1052208273702518934", "1053990732958023720"],
     data: new SlashCommandBuilder()
         .setName("debug_message")
         .setDescription("Debug any message if the bot has access to it")
