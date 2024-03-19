@@ -7,13 +7,16 @@ import { socketMessageClient } from './src/Typings/socket.js';
 import { handleSocketReply } from './src/Core/functions.js';
 import { GuildTextBasedChannel } from 'discord.js';
 
-let WebsiteClass: { [id: string]: Demantle[] } = {};
+console.log("Rebooted");
+
+let WebsiteClass: Record<string, Demantle[]> = {};
 
 export const client = new D3_discord();
 client.start();
 
 const app = express();
 app.use(cors());
+app.use(express.static("./src/Demantle"));
 
 const port = 6536;
 const botServer = app.listen(port, () => console.log(`API server listening on port ${port}`));
@@ -21,6 +24,11 @@ const botServer = app.listen(port, () => console.log(`API server listening on po
 app.get('/', (_req, res) => {
     let data = Object.keys(WebsiteClass)
     res.send(`Connected Clients: ${data.length}\nList of Clients:\n${data.join('\n')}`);
+});
+
+app.get('/d3mantle', (req, res) => {
+  console.log("test");
+  res.sendFile("index.html", { root: "./src/Demantle/" });
 });
 
 app.get('/getmessagedata/:channelid/:messageid', async (req, res) => {
