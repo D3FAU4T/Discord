@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>D3mantle</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div>
+        <h1 class="pageTitle">d3fau4tbot: D3mantle module</h1>
+        <br>
+        <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm guessTextArea m-auto"
+            id="pillNav2" role="tablist"
+            style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white); width: 70%;">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-5" id="Random-tab" data-bs-toggle="tab" type="button" role="tab"
+                    aria-selected="true">Random</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-5" id="Today-tab" data-bs-toggle="tab" type="button" role="tab"
+                    aria-selected="false">Today</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-5" id="Connect-tab" data-bs-toggle="tab" type="button" role="tab"
+                    aria-selected="false">
+                    Connect
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="p-4">
+        <div id="connect-area" hidden>
+            <h3 class="pageTitle" id="HostingId">Hosting ID: </h3>
+            <div class="d-flex input-group guessTextArea justify-content-center mx-auto mb-2" style="width: 60%;"
+                id="connect-area">
+                <span class="input-group-text" id="#Channel">#</span>
+                <input type="text" class="form-control" placeholder="Game Id" aria-label="GameId"
+                    aria-describedby="GameId placeholder" id="GameId-Holder">
+                <button type="button" class="btn btn-primary" id="connectButton">Connect</button>
+            </div>
+            <div class="input-group mb-3 guessTextArea m-auto" style="width: 60%;">
+                <span class="input-group-text" id="@Username">@</span>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                    aria-describedby="Username placeholder" id="Username-Holder">
+            </div>
+        </div>
+        <div class="d-flex guessTextArea justify-content-center mx-auto mb-1">
+            <input type="text" class="form-control mx-auto" id="GuessBox" placeholder="Guess"
+                aria-label="Recipient's Username" aria-describedby="send-guess">
+            <button type="button" class="btn btn-success" id="sendButton">Send</button>
+        </div>
+        <div class="alert alert-danger align-items-center guessTextArea mx-auto mt-3" role="alert" id="guessAlert" style="display: none;">
+            Invalid Word
+        </div>
+    </div>
+
+    <div class="topGuess justify-content-center mx-auto boardArea" id="topGuessDiv" hidden>
+        <br>
+        <h5 class="tableData">Current Guess:</h5>
+
+        <table class="table tableData" id="topGuess">
+            <thread>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thread>
+        </table>
+    </div>
+
+    <div class="tableDiv boardArea justify-content-center mx-auto" id="guessesDiv" hidden>
+        <br>
+        <h5 class="tableData">Guesses:</h5>
+        <table class="table tableData" id="guessTable">
+            <thread>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Guess</th>
+                    <th scope="col">Similarity</th>
+                    <th scope="col">Getting Close?</th>
+                </tr>
+            </thread>
+            <tbody>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="p-4 justify-content-center">
+        <button type="button" class="btn btn-danger" id="GiveUpButton">Give Up</button>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(28, 27, 27);
+}
+
+.pageTitle {
+    color: white;
+    text-align: center;
+}
+
+.tableData {
+    color: white;
+}
+
+.giveuptxt {
+    color: white;
+    font-size: 15pt;
+}
+
+.guessTextArea {
+    width: 60%;    
+}
+
+.boardArea {
+    width: 70%;
+}
