@@ -11,8 +11,8 @@ export default new Event("messageCreate", async message => {
     if (message.author.bot) return;
 
     // Printing to console
-    if (message.guild === null) console.log(`${message.author.username} [PRIV MSG] ---> ${message.content}`);
-    else console.log(`[${message.guild.name}] / [${message.author.username}] : ${message.content}`);
+    // if (message.guild === null) console.log(`${message.author.username} [PRIV MSG] ---> ${message.content}`);
+    // else console.log(`[${message.guild.name}] / [${message.author.username}] : ${message.content}`);
 
     if (message.guild === null || message.channel.type === ChannelType.DM) return;
 

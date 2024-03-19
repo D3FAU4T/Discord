@@ -27,7 +27,6 @@ app.get('/', (_req, res) => {
 });
 
 app.get('/d3mantle', (req, res) => {
-  console.log("test");
   res.sendFile("index.html", { root: "./src/Demantle/" });
 });
 
