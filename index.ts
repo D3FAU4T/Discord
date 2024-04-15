@@ -16,7 +16,8 @@ client.start();
 
 const app = express();
 app.use(cors());
-app.use(express.static("./src/Demantle"));
+// app.use(express.static("./src/Demantle"));
+// Disabled for Hierarchy issue
 
 const port = 6536;
 const botServer = app.listen(port, () => console.log(`API server listening on port ${port}`));
@@ -28,6 +29,22 @@ app.get('/', (_req, res) => {
 
 app.get('/d3mantle', (req, res) => {
   res.sendFile("index.html", { root: "./src/Demantle/" });
+});
+
+app.get('/d3mantle/style.css', (req, res) => {
+  res.sendFile("style.css", { root: "./src/Demantle/" });
+});
+
+app.get('/d3mantle/script.js', (req, res) => {
+  res.sendFile("script.js", { root: "./src/Demantle/" });
+});
+
+app.get('/stopots', (req, res) => {
+  res.sendFile("StopotS.html", { root: "./src/StopotS/" });
+});
+
+app.get('/stopots/script.js', (req, res) => {
+  res.sendFile("script.js", { root: "./src/StopotS/" });
 });
 
 app.get('/getmessagedata/:channelid/:messageid', async (req, res) => {
