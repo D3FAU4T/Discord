@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="theme-color" content="#8181FF">
+    <meta name="format-detection" content="telephone=no">
+    <title>StopotS</title>
+    <link rel="stylesheet" type="text/css" href="https://stopots.com/styles/main.css">
+    <link rel="icon" sizes="192x192" href="https://stopots.com/favicon.ico">
+    <script type="text/javascript" src="/stopots/script.js" defer></script>
+</head>
+
+<body class="common">
+    <div id="root">
+        <div id="app">
+            <div class="screensContainer fade-enter-done" id="scale">
+                <div id="screens">
+                    <div id="screenGame" class="game slide-enter-done">
+                        <div id="header">
+                            <div class="logo">
+                                <figure></figure>
+                            </div>
+                            <div class="infos">
+                                <div class="rounds">
+                                    <p>ROUNDS</p>
+                                    <span id="currentRound">1</span>
+                                    <p id="maxRound">/4</p>
+                                </div>
+                                <div class="ctLetter">
+                                    <div class="active">
+                                        <ul>
+                                            <li id="letter">
+                                                <span>U</span>
+                                            </li>
+                                            <li class="trophy"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <button class="info" type="button" title="info"></button>
+                                    <button class="sound" type="button" title="sound"></button>
+                                    <button class="share" type="button" title="share"></button>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="exit" type="button">
+                                    <strong>EXIT</strong>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="side">
+                                <div class="ctUsers">
+                                    <div class="scroll" id="scrollbar">
+                                        <div class="scrollElements">
+                                            <ul id="users"></ul>
+                                        </div>
+                                        <!-- class scrollBar -->
+                                        <div class="scrollBar">
+                                            <div class="scrollTrack" style="top: 4px; height: 388.913px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <div class="ct ranking up-enter-done">
+                                    <div>
+                                        <h3>ROUND'S RANKING</h3>
+                                        <div class="scroll">
+                                            <div class="scrollElements" id="scoreboard"></div>
+                                            <div class="scrollBar">
+                                                <div class="scrollTrack" style="top: 4px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="time" class="time-yellow">
+                                        <div class="icon"></div>
+                                        <div class="barTime">
+                                            <div style="width: 50%; transition-property: width; transition-duration: 45137ms; transition-timing-function: linear;" id="timer"></div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="bt-yellow icon-exclamation shake">
+                                        <strong>I'm Ready</strong>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="chat">
+                                <div class="scroll">
+                                    <div class="scrollElements">
+                                        <ul class="historic">
+                                            <li class="actionStop">
+                                                <span>Automatic stop!</span>
+                                            </li>
+                                          <li class="actionStop">
+                                              <span>Automatic stop!</span>
+                                          </li>
+                                          <li class="actionStop">
+                                              <span>Automatic stop!</span>
+                                          </li>
+                                            <!-- <li class="actionStop">
+                                                <strong>𝔻𝟛𝔽𝔸𝕌𝟜𝕋</strong>
+                                                <span> claimed stop!</span>
+                                            </li>
+                                            <li class="sending sent">
+                                                <strong>𝔻𝟛𝔽𝔸𝟜𝕋</strong>
+                                                <span>claimed stop!</span>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                    <div class="scrollBar">
+                                        <div class="scrollTrack" style="top: 4px;"></div>
+                                    </div>
+                                </div>
+                                <form id="chatForm">
+                                    <input type="text" id="chatBar" placeholder="Chat here..." maxlength="50" autocomplete="off" value="" spellcheck="false">
+                                    <label for="submit">
+                                      <input type="submit">
+                                    </label>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+        <!-- <div class="banner">
+            <div data-freestar-ad="__160x600" id="stopots_sidewall_right" name="stopots_sidewall_right"></div>
+        </div> -->
+    </div>
+    <div id="cache"></div>
+    <div>
+        <div id="AdHeader"></div>
+        <div id="AdContainer"></div>
+        <div id="AD_Top"></div>
+        <div id="homead"></div>
+        <div id="ad-lead"></div>
+    </div>
+</body>
+
+</html>
