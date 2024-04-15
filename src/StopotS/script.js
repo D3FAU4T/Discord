@@ -34,7 +34,7 @@ chatForm.addEventListener('submit', (e) => {
 function parameterParser() {
   return {
     self: urlParams.get('self'),
-    owner: urlParams.get('owner'),
+    owner: urlParams.get('owner') || urlParams.get('self'),
     pfp: urlParams.get('pfp') === null ? null : urlParams.get('pfp'),
     currentRound: Number(urlParams.get('currentround')) || 1,
     maxRounds: Number(urlParams.get('maxrounds')) || 4,
