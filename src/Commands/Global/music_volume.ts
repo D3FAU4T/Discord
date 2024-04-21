@@ -1,5 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { useMainPlayer } from 'discord-player';
 
 export default new Command({
   name: "music_volume",
@@ -21,7 +22,8 @@ export default new Command({
     await interaction.deferReply();
 
     try {
-      const queue = client.DiscordPlayer.queues.get(interaction.guildId as string);
+      const player = useMainPlayer();
+      const queue = player.queues.get(interaction.guildId as string);
       if (!queue) return await interaction.editReply({
         embeds: [
           new EmbedBuilder()

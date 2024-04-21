@@ -1,5 +1,6 @@
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { useMainPlayer } from 'discord-player';
 
 export default new Command({
   name: "music_queue",
@@ -13,7 +14,8 @@ export default new Command({
     await interaction.deferReply();
 
     try {
-      const queue = client.DiscordPlayer.nodes.cache.get(interaction.guildId as string);
+      const player = useMainPlayer();
+      const queue = player.nodes.cache.get(interaction.guildId as string);
       if (!queue) return await interaction.editReply({
         embeds: [
           new EmbedBuilder()

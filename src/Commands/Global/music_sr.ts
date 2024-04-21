@@ -1,5 +1,6 @@
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { useMainPlayer } from 'discord-player';
 
 export default new Command({
   name: "music_sr",
@@ -19,6 +20,7 @@ export default new Command({
     await interaction.deferReply();
 
     try {
+      const player = useMainPlayer();
       const voiceChannel = (interaction.member as GuildMember).voice.channel;
       if (!voiceChannel) return await interaction.editReply({
         embeds: [
@@ -49,7 +51,7 @@ export default new Command({
         ]
       });
 
-      const { track } = await client.DiscordPlayer.play(voiceChannel, interaction.options.getString("query", true), {
+      const { track } = await player.play(voiceChannel, interaction.options.getString("query", true), {
         nodeOptions: {
           metadata: {
             interaction: interaction,
