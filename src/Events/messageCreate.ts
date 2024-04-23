@@ -18,7 +18,7 @@ export default new Event("messageCreate", async message => {
 
     // Message handling
     const argumentes = message.content.toLowerCase().split(' ');
-    const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.js')).map(file => file.replace('.js', ''));
+    const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.ts')).map(file => file.replace('.ts', ''));
 
     const permissions = message.guild.members.me?.permissionsIn(message.channel);
 

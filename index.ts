@@ -19,7 +19,7 @@ app.use(cors());
 // app.use(express.static("./src/Demantle"));
 // Disabled for Hierarchy issue
 
-const port = 6536;
+const port = 3000;
 const botServer = app.listen(port, () => console.log(`API server listening on port ${port}`));
 
 app.get('/', (_req, res) => {
