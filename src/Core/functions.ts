@@ -232,6 +232,11 @@ export const searchGarticAnswer = (query: string) => {
     let matches = text.match(new RegExp(regex, 'g'));
     let sortedArr: string[] | null = null;
     if (matches) sortedArr = matches.map(match => match.replace(/"/g, '')).sort();
+    if (
+        sortedArr === null &&
+        !strippedText.includes('_') &&
+        !strippedText.includes('\\_')
+    ) regex = `wtf`;
 
     return {
         results: sortedArr,
