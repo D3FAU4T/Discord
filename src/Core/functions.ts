@@ -172,9 +172,8 @@ export const calculateLevels = (targetPoints: number): number => {
     while ((points + bonusPoints) < targetPoints) {
         levels++;
         points++;
-        if (levels % 15 == 0) {
+        if (levels % 15 == 0)
             bonusPoints += Math.floor(levels / 15) * 5;
-        }
     }
     return levels;
 }
@@ -186,48 +185,58 @@ export const calculatePoints = (targetLevel: number): number => {
     while (levels < targetLevel) {
         levels++;
         points++;
-        if (levels % 15 == 0) {
+        if (levels % 15 == 0)
             bonusPoints += Math.floor(levels / 15) * 5;
-        }
     }
     return points + bonusPoints;
 }
 
 export const searchGarticAnswer = (query: string) => {
     const text = readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase();
-    const strippedText = query
-      .replace("​\n:point_right: ", '')
-      .replace(" \n​", '')
-      .replace('​\n👉', ``)
-      .replace('👉', '')
-      .replace(/\n/gim, '')
-      .split(' ')
-      .filter(char => char !== ``)
-      .filter(char => char !== ' ');
-    console.log(strippedText);
-    let ch = `[\\wáàâãéèêíïóôõöúçñ]`
-    let regexString = `^\\s+"${strippedText[0].toLowerCase()}`;
-    let letterCount = 0;
 
-    strippedText.slice(1).forEach(word => {
-        if (word === '\\_' || word === '_') letterCount++;
-        else if (word === '-\\_') {
-            regexString += `${ch}{${letterCount}}-`;
-            letterCount = 1;
+    let strippedText: string | string[] = query
+        .replace("​\n:point_right: ", '');
+
+    if (strippedText.endsWith(" ")) strippedText = strippedText.slice(0, -1);
+    if (!strippedText.endsWith(" \n​")) strippedText += " \n​";
+
+    let regex = `"`;
+
+    const handleSpecialQueries = (splitter: string) => {
+        if (typeof strippedText === 'string') strippedText = strippedText.split(splitter);
+
+        for (let k = 0; k < strippedText.length; k++) {
+            let wordArr = strippedText[k].split(' ');
+            if (wordArr.includes('_') && k !== strippedText.length - 1) wordArr.push('');
+            for (let i = 0, letterCount = -1; i < wordArr.length; i++) {
+                if (i === 0) {
+                    if (wordArr[i] !== `\\_` && wordArr[i] !== '_') regex += wordArr[i].toLowerCase() + `\\w{`;
+                    else regex += `\\w{`, letterCount++;
+                }
+                if (wordArr[i] === `` || wordArr[i] === '\n​') {
+                    regex += `${letterCount}}`;
+                    break;
+                }
+                letterCount++;
+            }
+            if (k !== strippedText.length - 1) regex += splitter !== '-' ? `\\s` : '-';
         }
+        regex += `"`;
+    }
 
-        else if (word === '​') {
-            regexString += `${ch}{${letterCount}}\\s`;
-            letterCount = 1;
-        }
-    });
+    if (strippedText.includes('​ ​')) handleSpecialQueries('​ ​');
+    else if (strippedText.includes('-')) handleSpecialQueries('-');
+    else if (strippedText.includes('  ')) handleSpecialQueries('  ');
+    else handleSpecialQueries('%');
 
-    regexString += `${ch}{${letterCount}}"`;
-    const regex = new RegExp(regexString, 'gim');
+    let matches = text.match(new RegExp(regex, 'g'));
+    let sortedArr: string[] | null = null;
+    if (matches) sortedArr = matches.map(match => match.replace(/"/g, '')).sort();
+
     return {
-        results: text.match(regex)?.map(item => item.replace(/\s+/g, ' ').trim().replace(/"/g, ''))?.sort(),
-        regex: regexString
-    };
+        results: sortedArr,
+        regex: regex
+    }
 }
 
 export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()
