@@ -4,7 +4,7 @@ import cors from 'cors';
 import { D3_discord } from "./src/Core/client.js";
 import { Demantle } from './src/Demantle/Demantle.js';
 import { socketMessageClient } from './src/Typings/socket.js';
-import { handleSocketReply } from './src/Core/functions.js';
+import { handleSocketReply, searchGarticAnswer } from './src/Core/functions.js';
 import { GuildTextBasedChannel } from 'discord.js';
 
 console.log("Rebooted");
@@ -16,6 +16,7 @@ client.start();
 
 const app = express();
 app.use(cors());
+app.use(express.text());
 // app.use(express.static("./src/Demantle"));
 // Disabled for Hierarchy issue
 
@@ -68,6 +69,21 @@ app.get('/getusername/:userid', async (req, res) => {
   const userId = req.params.userid;
   const { username } = await client.users.fetch(userId);
   res.send(username);
+});
+
+app.post('/garticfind', (req, res) => {
+    try {
+        let data = JSON.parse(req.body);
+        res.json(searchGarticAnswer(data.query));
+        
+    } catch(err) {
+        console.log(req.body);
+        res.json({
+            error: `It's json bro JSON`,
+            resolution: `JSON.stringify({ query: "S _ _ _ _" })`,
+            explanation: `"query" takes gartic hint as input only`,
+        })
+    }
 });
 
 const d3socket = new WebSocket.Server({ server: botServer });
