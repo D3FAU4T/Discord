@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.text());
 app.use(express.static("./Bhotianaa"));
-// Disabled for Hierarchy issue
+app.use(express.static("./src/Gartic/public"));
 
 const port = 3000;
 const botServer = app.listen(port, () =>
@@ -31,6 +31,18 @@ app.get("/", (_req, res) => {
         `Connected Clients: ${data.length}\nList of Clients:\n${data.join("\n")}`,
     );
 });
+
+app.get("/gartic", (req, res) => {
+    res.sendFile("index.html", { root: "./src/Gartic" });
+})
+
+app.get("/r/:id", (req, res) => {
+    res.sendFile("system.html", { root: "./src/Gartic/system" });
+});
+
+app.get("/ping", (req, res) => res.json({
+    return: true
+}));
 
 app.get("/d3mantle", (req, res) => {
     res.sendFile("index.html", { root: "./src/Demantle/" });
