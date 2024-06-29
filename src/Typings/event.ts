@@ -26,12 +26,13 @@ export class Event<Key extends keyof ClientEvents> {
     constructor(
         public event: Key,
         public run: (...args: ClientEvents[Key]) => void
-    ) {}
+    ) { }
 }
 
 export class MusicEvent<Key extends keyof GuildQueueEvents> {
     constructor(
         public event: Key,
+        // @ts-ignore
         public run: (...args: DiscordPlayerEvents[Key]) => void
-    ) {}
+    ) { }
 }
