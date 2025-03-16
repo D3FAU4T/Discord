@@ -19,7 +19,6 @@ export default new Command({
     .setName("semantle_random")
     .setDescription("Play a game of semantle with a random hidden word"),
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
         await interaction.deferReply();
 
         if (interaction.channel && interaction.guild) {

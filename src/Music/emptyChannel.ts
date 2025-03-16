@@ -1,12 +1,16 @@
 import { EmbedBuilder } from "discord.js";
 import { MusicEvent } from "../Typings/event.js";
-import { MusicMetadata } from "../Typings/music.js";
+import type { MusicMetadata } from "../Typings/music.js";
 
 export default new MusicEvent("emptyChannel", queue => {
     let metadata = queue.metadata as MusicMetadata;
     if (metadata.isRadio) return;
     queue.connection?.disconnect();
-    metadata.interaction.channel?.send({
+
+    const channel = metadata.interaction.channel;
+    if (!channel || !channel.isSendable()) return;
+
+    channel.send({
         embeds: [
             new EmbedBuilder()
             .setTitle(`Leaving the channel`)

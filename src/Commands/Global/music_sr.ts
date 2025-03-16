@@ -1,6 +1,7 @@
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 import { useMainPlayer } from 'discord-player';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "music_sr",
@@ -16,7 +17,6 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
@@ -51,7 +51,7 @@ export default new Command({
         ]
       });
 
-      const { track } = await player.play(voiceChannel, interaction.options.getString("query", true), {
+      const { track } = await player.play(voiceChannel, interaction.options.get("query", true).value as string, {
         nodeOptions: {
           metadata: {
             interaction: interaction,
@@ -84,7 +84,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
 

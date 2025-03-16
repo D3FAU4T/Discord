@@ -1,6 +1,7 @@
 import { remove } from 'remove-accents';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "define",
@@ -16,11 +17,10 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
-      const word = remove(interaction.options.getString("word", true)).trim();
+      const word = remove(interaction.options.get("word", true).value as string).trim();
       const definition = await client.getWordDefinition(word, 'en');
       await interaction.editReply({
         embeds: [
@@ -35,7 +35,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

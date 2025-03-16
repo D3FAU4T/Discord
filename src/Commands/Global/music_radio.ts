@@ -1,6 +1,7 @@
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../Core/command";
 import { useMainPlayer } from "discord-player";
+import { makeErrorEmbed } from "../../Core/functions";
 
 export default new Command({
     name: "music_radio",
@@ -10,7 +11,6 @@ export default new Command({
         .setName("music_radio")
         .setDescription("Play simulator radio station"),
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
         await interaction.deferReply();
 
         try {
@@ -45,12 +45,12 @@ export default new Command({
                 ]
             });
 
-            const { track } = await player.play(voiceChannel, process.env["ms"] as string, {
+            await player.play(voiceChannel, process.env["ms"] as string, {
                 nodeOptions: {
                     metadata: {
-                        interaction: interaction,
+                        client,
+                        interaction,
                         isRadio: true,
-                        client: client
                     },
                     leaveOnEnd: false,
                     leaveOnStop: false,
@@ -70,7 +70,7 @@ export default new Command({
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
-                embeds: [client.functions.makeErrorEmbed(err)]
+                embeds: [makeErrorEmbed(err)]
             });
         }
     }

@@ -54,14 +54,12 @@ export default new Command({
                 .setRequired(false)
         ),
     run: ({ interaction }) => {
-        if (interaction === undefined) return;
-
-        const owner = interaction.options.getString("owner", false);
-        const max_round = interaction.options.getInteger("max_round", false);
-        const current_round = interaction.options.getInteger("current_round", false);
-        const max_players = interaction.options.getInteger("max_players", false);
-        const time_left = interaction.options.getInteger("time_left", false);
-        const scoreboard = interaction.options.getString("scoreboard", true)
+        const owner = interaction.options.get("owner", false)?.value;
+        const max_round = interaction.options.get("max_round", false)?.value;
+        const current_round = interaction.options.get("current_round", false)?.value;
+        const max_players = interaction.options.get("max_players", false)?.value;
+        const time_left = interaction.options.get("time_left", false)?.value;
+        const scoreboard = (interaction.options.get("scoreboard", true).value as string)
         .replace(/\,\s+/g, ",");
 
         const pfp = interaction.user.displayAvatarURL({ extension: "png", size: 4096 });

@@ -1,6 +1,6 @@
-import { writeFileSync, readFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { getTwitchData, makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
     name: 'cheaters_add',
@@ -17,8 +17,7 @@ export default new Command({
                 .setRequired(true)
         ),
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
-        // await interaction.deferReply();
+        await interaction.deferReply();
 
         try {
             const person = (interaction.options.get("cheater_name", true).value as string).toLowerCase();
@@ -27,7 +26,7 @@ export default new Command({
                 .setDescription(`The username ${person} is already on the list and will not be added twice.`)
                 .setColor("Red");
 
-            const userData = await client.functions.getTwitchData(person);
+            const userData = await getTwitchData(person);
 
             if ('error' in userData) return await interaction.editReply({
                 embeds: [
@@ -38,10 +37,10 @@ export default new Command({
                 ]
             });
 
-            let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as Record<string, string>;
+            let cheaters: Record<string, string> = await Bun.file('./src/Config/cheaters.json').json();
             if (Object.keys(cheaters).includes(userData.id)) return await interaction.editReply({ embeds: [duplicate] });
             cheaters[userData.id] = userData.displayName;
-            writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
+            await Bun.write('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
             await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
@@ -61,7 +60,7 @@ export default new Command({
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
-                embeds: [client.functions.makeErrorEmbed(err)]
+                embeds: [makeErrorEmbed(err)]
             });
         }
     }

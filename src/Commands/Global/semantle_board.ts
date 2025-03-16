@@ -10,10 +10,7 @@ export default new Command({
     .setName("semantle_board")
     .setDescription("Shows the board again in case someone converses after the board"),
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
-
         try {
-
             await interaction.deferReply()
 
             if (client.semantle[interaction.channel?.id!] === undefined || client.semantle[interaction.channel?.id!].configurations.findTheWord === false) {

@@ -1,12 +1,13 @@
 import axios from "axios";
 import { Command } from "../../Core/command";
 import { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder } from "discord.js";
+import { makeErrorEmbed, textFormatter } from "../../Core/functions";
 
 export default new Command({
     name: "debug_message",
     description: "Debug message",
     emote: false,
-    guildId: ["1021508735165808641", "1052208273702518934", "1053990732958023720"],
+    guildId: ["1021508735165808641", "1053990732958023720"],
     data: new SlashCommandBuilder()
         .setName("debug_message")
         .setDescription("Debug any message if the bot has access to it")
@@ -16,12 +17,11 @@ export default new Command({
                 .setDescription("Enter the message link of discord")
                 .setRequired(true)
         ),
-    run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
+    run: async ({ interaction }) => {
         await interaction.deferReply();
 
         try {
-            const link = interaction.options.getString("message_link", true);
+            const link = interaction.options.get("message_link", true).value as string;
             if (!link.startsWith('https://discord.com')) return await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
@@ -54,13 +54,13 @@ export default new Command({
                 });
 
                 else return await interaction.editReply(
-                    client.functions.textFormatter(res, "json")
+                    textFormatter(res, "json")
                 );
             }
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
-                embeds: [client.functions.makeErrorEmbed(err)]
+                embeds: [makeErrorEmbed(err)]
             });
         }
     }

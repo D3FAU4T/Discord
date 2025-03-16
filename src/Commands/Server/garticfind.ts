@@ -1,5 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageComponentInteraction, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    MessageComponentInteraction,
+    SlashCommandBuilder
+} from 'discord.js';
+import { makeErrorEmbed, searchGarticAnswer } from '../../Core/functions.js';
 
 const buttonComponents = [
     new ButtonBuilder().setLabel("Compact View").setStyle(ButtonStyle.Primary),
@@ -33,14 +41,13 @@ export default new Command({
                 .setDescription("Paste the gartic hint here that looks like this: C _ _ _ _ _ _ _ _")
                 .setRequired(true)
         ),
-    run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
+    run: async ({ interaction }) => {
         await interaction.deferReply();
 
-        let word = interaction.options.getString("query", true);
+        let word = interaction.options.get("query", true).value as string;
 
         try {
-            const { results } = client.functions.searchGarticAnswer(word);
+            const { results } = searchGarticAnswer(word);
             const list: string[] = [];
             results?.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
             const msg = await interaction.editReply({
@@ -71,7 +78,7 @@ export default new Command({
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
-                embeds: [client.functions.makeErrorEmbed(err, `[${err.name}] Error finding the query:\n \`${word}\``)]
+                embeds: [makeErrorEmbed(err, `[${err.name}] Error finding the query:\n \`${word}\``)]
             });
         }
     }

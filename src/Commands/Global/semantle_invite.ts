@@ -17,10 +17,7 @@ export default new Command({
     ),
     run: async ({ interaction, client }) => {
 
-        if (interaction === undefined) return;
-
         try {
-
             await interaction.deferReply();
 
             const person = (await client.users.fetch(interaction.options.get('invitee', true).value as string)).id

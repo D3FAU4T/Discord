@@ -1,6 +1,7 @@
 import axios from "axios";
 import { EmbedBuilder } from 'discord.js';
 import { Command } from "../../Core/command.js";
+import { getRandom, makeErrorEmbed } from "../../Core/functions.js";
 
 export default new Command({
     name: "inspire",
@@ -8,12 +9,11 @@ export default new Command({
     emote: false,
     guildId: ["976169594085572679"],
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
         await interaction.deferReply();
 
         try {
             const { data } = await axios.get<{ a: string; q: string; }[]>("https://zenquotes.io/api/quotes");
-            const randomQuote = client.functions.getRandom(data);
+            const randomQuote = getRandom(data);
             await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
@@ -34,7 +34,7 @@ export default new Command({
         } catch (error) {
             const err = error as Error;
             await interaction.editReply({
-                embeds: [client.functions.makeErrorEmbed(err)]
+                embeds: [makeErrorEmbed(err)]
             });
         }
     }

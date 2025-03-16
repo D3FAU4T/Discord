@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 import { useMainPlayer } from 'discord-player';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "music_volume",
@@ -18,7 +19,6 @@ export default new Command({
         .setMinValue(0)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
@@ -33,7 +33,7 @@ export default new Command({
         ]
       });
 
-      const volume = interaction.options.getInteger("vol", true);
+      const volume = interaction.options.get("vol", true).value as number;
 
       if (volume > 100) return await interaction.editReply({
         embeds: [
@@ -65,7 +65,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   },

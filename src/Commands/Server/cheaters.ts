@@ -9,6 +9,8 @@ import {
   SlashCommandBuilder
 } from 'discord.js';
 
+import { enumerateWithIndex, getCheaters, makeErrorEmbed } from '../../Core/functions.js';
+
 const buttons = [
   new ButtonBuilder().setLabel("Previous").setStyle(ButtonStyle.Primary),
   new ButtonBuilder().setLabel("Show all").setStyle(ButtonStyle.Secondary),
@@ -58,7 +60,6 @@ export default new Command({
         .setRequired(false)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
@@ -70,7 +71,7 @@ export default new Command({
           embeds: [
             new EmbedBuilder()
               .setTitle(`Showing ${i * itemsPerPage + 1}-${i * itemsPerPage + itemsPerPage} cheaters saved into my memory (${cheaters.length} in total)`)
-              .setDescription(client.functions.makeList(client.functions.getCheaters(i * itemsPerPage, i * itemsPerPage + itemsPerPage), i * itemsPerPage).join("\n"))
+              .setDescription(enumerateWithIndex(getCheaters(i * itemsPerPage, i * itemsPerPage + itemsPerPage), i * itemsPerPage).join("\n"))
               .setColor("Red")
               .setAuthor({ name: "Courtesy of D3FAU4T", iconURL: "https://cdn.discordapp.com/avatars/867522091490607134/aed8cac1742d4dbdba79d5de17700592.webp?size=256", url: "https://twitch.tv/d3fau4t" })
               .setFooter({ text: `Page ${i + 1} of ${numberOfPages} 🤖 Note: Buttons are valid for 5 mins after creation and can only be controlled by whoever initiated the Slash Command` })
@@ -82,10 +83,10 @@ export default new Command({
       let page = 1;
       let cheaters = (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[]).sort();
 
-      if (interaction.options.getString('cheater_name', false) === null) {
+      if (interaction.options.get('cheater_name', false)?.value === null) {
         let embedPages = pageCreator();
         const msg = await interaction.editReply({
-          embeds: embedPages[0].embeds,
+          embeds: embedPages[0]?.embeds,
           components: [embedPages[0].components]
         });
 
@@ -97,7 +98,7 @@ export default new Command({
             page++;
             for (let j = 0; j < embedPages.length; j++) {
               if (page == j + 1) await i.update({
-                embeds: embedPages[j].embeds,
+                embeds: embedPages[j]?.embeds,
                 components: [embedPages[j].components]
               });
             }
@@ -105,7 +106,7 @@ export default new Command({
             page--;
             for (let j = 0; j < embedPages.length; j++) {
               if (page == j + 1) await i.update({
-                embeds: embedPages[j].embeds,
+                embeds: embedPages[j]?.embeds,
                 components: [embedPages[j].components]
               });
             }
@@ -114,7 +115,7 @@ export default new Command({
               embeds: [
                 new EmbedBuilder()
                   .setTitle(`Showing all ${cheaters.length} cheaters saved into my memory`)
-                  .setDescription(client.functions.getCheaters(0, cheaters.length).join(", "))
+                  .setDescription(getCheaters(0, cheaters.length).join(", "))
                   .setColor("Red")
                   .setAuthor({ name: "Courtesy of D3FAU4T", iconURL: "https://cdn.discordapp.com/avatars/867522091490607134/aed8cac1742d4dbdba79d5de17700592.webp?size=256", url: "https://twitch.tv/d3fau4t" })
               ],
@@ -124,7 +125,7 @@ export default new Command({
         });
 
       } else {
-        const toFind = interaction.options.getString('cheater_name', true).toLowerCase();
+        const toFind = (interaction.options.get('cheater_name', true).value as string).toLowerCase();
         const found = cheaters.includes(toFind) ? 'Yep that MF is a cheater' : 'Nope never heard of this guy';
 
         await interaction.editReply({
@@ -146,7 +147,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

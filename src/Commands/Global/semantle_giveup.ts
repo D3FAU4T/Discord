@@ -17,7 +17,6 @@ export default new Command({
         .setChoices({ name: "Yes", value: "yes" }, { name: "No", value: "no" })
     ),
     run: async ({ interaction, client }) => {
-        if (interaction === undefined) return;
         try {
             const showWord = interaction.options.get('show_publicly', true).value as "yes" | "no";
             

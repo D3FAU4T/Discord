@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 import { useMainPlayer } from 'discord-player';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "music_skip",
@@ -10,7 +11,6 @@ export default new Command({
     .setName('music_skip')
     .setDescription("Skip any currently playing music"),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
@@ -37,7 +37,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

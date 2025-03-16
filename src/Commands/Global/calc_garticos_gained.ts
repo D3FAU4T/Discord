@@ -1,5 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { calculatePoints, makeErrorEmbed } from '../../Core/functions.js';
 
 type Locale = "en-US" | "en-GB" | "pt-BR";
 
@@ -32,12 +33,11 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
-      const tPoints = interaction.options.getNumber("level", true);
-      const garticosGained = client.functions.calculatePoints(tPoints);
+      const tPoints = interaction.options.get("level", true).value as number;
+      const garticosGained = calculatePoints(tPoints);
 
       const locales: Record<Locale, string[]> = {
         "en-US": [
@@ -75,7 +75,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

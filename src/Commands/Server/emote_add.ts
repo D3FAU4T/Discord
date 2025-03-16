@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 
@@ -35,16 +34,15 @@ export default new Command({
       .setRequired(true)
   ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
 
-    const emoteName = interaction.options.getString("emote_name", true).toLowerCase();
-    const emoteLink = interaction.options.getString("emote_url", true);
+    const emoteName = (interaction.options.get("emote_name", true).value as string).toLowerCase();
+    const emoteLink = interaction.options.get("emote_url", true).value as string;
 
     let emoteFileBody = emoteTemplate.replace('EmoteNameHere', emoteName)
     .replace('EmoteDescHere', `Sends a ${emoteName} emote as a pic/gif`)
     .replace('EmoteLinkHere', emoteLink);
 
-    writeFileSync(`./src/Emotes/${emoteName}.ts`, emoteFileBody);
+    await Bun.write(`./src/Emotes/${emoteName}.ts`, emoteFileBody);
 
     client.tempEmotes[emoteName] = emoteLink;
 

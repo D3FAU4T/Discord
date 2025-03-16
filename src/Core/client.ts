@@ -1,45 +1,25 @@
-import glob from 'glob';
 import axios from 'axios';
 import { load } from 'cheerio';
-import { Player, GuildQueueEvents } from 'discord-player';
+import { Player, type GuildQueueEvents } from 'discord-player';
+import { DefaultExtractors } from '@discord-player/extractor';
 import { remove } from 'remove-accents';
-import { promisify } from 'util';
-import { commandsInterface } from '../Typings/commands.js';
+import type { commandsInterface } from '../Typings/commands.js';
 import { Event, MusicEvent } from '../Typings/event.js';
-import { MerriamWebsterAPI, dictionaryAPI } from '../Typings/definitions.js';
+import type { MerriamWebsterAPI, dictionaryAPI } from '../Typings/definitions.js';
 import { Demantle } from '../Demantle/Demantle.js';
-import { SimulatorRadioCombined, icons } from '../Typings/music.js';
-import { Musical } from '../Gartic/Musical.js';
+import { type SimulatorRadioCombined, icons } from '../Typings/music.js';
+import { Musical } from './Musical.js';
 import {
-    ApplicationCommandDataResolvable,
+    type ApplicationCommandDataResolvable,
     Client,
-    ClientEvents,
+    type ClientEvents,
     Collection,
     EmbedBuilder,
     Events,
     GatewayIntentBits,
     Partials,
-    VoiceBasedChannel
+    type VoiceBasedChannel
 } from "discord.js";
-import {
-    GetRandom,
-    axiosHandler,
-    parser,
-    fetchCheaters,
-    numberAssign,
-    between,
-    calculateLevels,
-    calculatePoints,
-    getTwitchData,
-    getTwitchDataFromId,
-    makeErrorEmbed,
-    handleSocketReply,
-    searchGarticAnswer,
-    updateCheaterNames,
-    updateWOSLevels
-} from './functions.js';
-
-const globPromise = promisify(glob);
 
 export class D3_discord extends Client {
 
@@ -50,24 +30,6 @@ export class D3_discord extends Client {
     public DiscordPlayer = new Player(this);
     public RadioChannels: VoiceBasedChannel[] = [];
     public tempEmotes: Record<string, string> = {};
-
-    public functions = {
-        getRandom: GetRandom,
-        getBetween: between,
-        textFormatter: parser,
-        getCheaters: fetchCheaters,
-        makeList: numberAssign,
-        axiosHandler,
-        calculateLevels,
-        calculatePoints,
-        getTwitchData,
-        getTwitchDataFromId,
-        makeErrorEmbed,
-        handleSocketReply,
-        searchGarticAnswer,
-        updateCheaterNames,
-        updateWOSLevels
-    }
 
     public RadioData: SimulatorRadioCombined = {
         now_playing: {
@@ -98,75 +60,84 @@ export class D3_discord extends Client {
     }
 
     public async start(): Promise<void> {
-        this.registerFiles();
-        await this.DiscordPlayer.extractors.loadDefault();
-        this.login(process.env['discordToken']);
+        await this.registerFiles();
+        await this.DiscordPlayer.extractors.loadMulti(DefaultExtractors);
         setInterval(async () => await this.getRadioData(), 10000)
+        await this.login(process.env.discordToken);
     }
 
     public async importFile(filePath: string): Promise<unknown> {
-        return await require(filePath).default;
+        return (await import(filePath)).default;
     }
 
     private registerSlashCommands(command: ApplicationCommandDataResolvable[], guildId?: string): void {
         if (guildId) {
-            console.log(`Registering command to the guild: ${guildId}`);
-            this.guilds.cache.get(guildId)?.commands.set(command);
+            const guild = this.guilds.cache.get(guildId);
+
+            if (!guild) {
+                console.error(`Guild not found: ${guildId}`);
+                return;
+            }
+
+            guild.commands.set(command);
         }
+        
         else this.application?.commands.set(command);
     }
 
     private async registerFiles(): Promise<void> {
-
         const serverCommands: { [guildId: string]: ApplicationCommandDataResolvable[] } = {};
         const globalCommands: ApplicationCommandDataResolvable[] = [];
 
         // Commands
-        const commandFiles = await globPromise(`${__dirname}/../Commands/*/*{.ts,.js}`);
-        commandFiles.forEach(async filePath => {
-            const command = await this.importFile(filePath) as commandsInterface;
-            if (command.emote || command.data === undefined) return;
+        const globTSJS = new Bun.Glob('*{.ts,.js}');
+
+        for await (const file of globTSJS.scan(`${__dirname}/../Commands/Global/`)) {
+            const command = await this.importFile(`${__dirname}/../Commands/Global/${file}`) as commandsInterface;
+            if (command.emote || !command.data) continue;
+            this.commands.set(command.name, command);
+            globalCommands.push(command.data.toJSON());
+        }
+        
+        for await (const file of globTSJS.scan(`${__dirname}/../Commands/Server/`)) {
+            const command = await this.importFile(`${__dirname}/../Commands/Server/${file}`) as commandsInterface;
+            if (command.emote || !command.data || !command.guildId) continue;
             this.commands.set(command.name, command);
 
-            if (!command.guildId) globalCommands.push(command.data.toJSON());
-            else {
-                command.guildId.forEach(guildId => {
-                    if (command.data === undefined) return;
-                    if (!serverCommands[guildId]) serverCommands[guildId] = [];
-                    serverCommands[guildId].push(command.data.toJSON());
-                });
+            for (const guildId of command.guildId) {
+                if (!serverCommands[guildId]) serverCommands[guildId] = [];
+                serverCommands[guildId].push(command.data.toJSON());
             }
-        });
+        }
 
         // Register commands
         this.on(Events.ClientReady, () => {
-            Object.keys(serverCommands).forEach(guildId => {
-                this.registerSlashCommands(serverCommands[guildId], guildId);
-            });
+            for (const guildId of Object.keys(serverCommands)) {
+                if (!serverCommands[guildId]) continue;
+                this.registerSlashCommands(serverCommands[guildId], guildId)
+            }
+
             this.registerSlashCommands(globalCommands);
         });
 
         // Events
-        const eventFiles = await globPromise(`${__dirname}/../Events/*{.ts,.js}`);
-        eventFiles.forEach(async filePath => {
-            const dcEvents = await this.importFile(filePath) as Event<keyof ClientEvents>;
+        for await (const file of globTSJS.scan(`${__dirname}/../Events/`)) {
+            const dcEvents = await this.importFile(`${__dirname}/../Events/${file}`) as Event<keyof ClientEvents>;
             this.on(dcEvents.event, dcEvents.run);
-        });
+        }
 
         // Emotes
-        const emoteFiles = await globPromise(`${__dirname}/../Emotes/*{.ts,.js}`);
-        emoteFiles.forEach(async filePath => {
-            const emote = await this.importFile(filePath) as commandsInterface;
-            if (!emote.emote) return;
+        for await (const file of globTSJS.scan(`${__dirname}/../Emotes/`)) {
+            const emote = await this.importFile(`${__dirname}/../Emotes/${file}`) as commandsInterface;
+            if (!emote.emote) continue;
             this.emotes.set(emote.name, emote);
-        });
+        }
 
         // Discord Player events
-        const discordPlayerEvents = await globPromise(`${__dirname}/../Music/*{.ts,.js}`);
-        discordPlayerEvents.forEach(async filePath => {
-            const event = await this.importFile(filePath) as MusicEvent<keyof GuildQueueEvents>;
+        for await (const file of globTSJS.scan(`${__dirname}/../Music/`)) {
+            const event = await this.importFile(`${__dirname}/../Music/${file}`) as MusicEvent<keyof GuildQueueEvents>;
             this.DiscordPlayer.events.on(event.event, event.run);
-        });
+        }
     }
 
     public async getWordDefinition(word: string, language: "en" | "pt"): Promise<string> {
@@ -202,8 +173,8 @@ export class D3_discord extends Client {
                 try {
                     let definitions: string[] = [];
                     const { data }: { data: MerriamWebsterAPI[] } = await axios.get(`https://www.dictionaryapi.com/api/v3/references/sd4/json/${word}?key=${process.env['merriamKey']}`);
-                    data[0].def.forEach((item, index) => {
-                        const definition: string = item.sseq[0][0][1].dt[0][1];
+                    data[0]?.def.forEach((item, index) => {
+                        const definition = item.sseq[0]?.[0]?.[1]?.dt[0]?.[1]
                         definitions.push(`${index + 1}. ${definition}`);
                     });
                     summary = definitions.join('\n');

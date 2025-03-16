@@ -1,7 +1,8 @@
 // PACKAGES
-import { ColorResolvable, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { ColorResolvable, EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { setTimeout as wait } from 'node:timers/promises';
 import { Command } from '../../Core/command.js';
+import { getRandom, makeErrorEmbed } from '../../Core/functions.js';
 
 interface paragraphs {
   stories: {
@@ -80,17 +81,16 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
-      const stories = client.functions.getRandom(Paragraph.stories).messages;
-      const players = [`<@${interaction.user.id}>`, `<@${interaction.options.getUser("person", true).id}>`];
-      const winner = client.functions.getRandom(players);
+      const stories = getRandom(Paragraph.stories).messages;
+      const players = [`<@${interaction.user.id}>`, `<@${(interaction.options.getMember("person") as GuildMember).id}>`];
+      const winner = getRandom(players);
       const timeouts = [3000, 6000, 9000];
       const colors: ColorResolvable[] = ["Red", "Yellow", "Green", "Purple"];
       for (let i = 0; i < stories.length; i++) {
-        const desc = stories[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${interaction.options.getUser("person", true).id}>`).replace(/@winner/g, winner);
+        const desc = stories[i].replace(/@attacker/g, `<@${interaction.user.id}>`).replace(/@defender/g, `<@${(interaction.options.getMember("person") as GuildMember).id}>`).replace(/@winner/g, winner);
         await interaction.editReply({
           embeds: [
             new EmbedBuilder()
@@ -104,7 +104,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

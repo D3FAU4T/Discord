@@ -9,33 +9,23 @@
   "author": "D3FAU4T",
   "license": "ISC",
   "dependencies": {
-    "@discord-player/extractor": "^4.4.7",
-    "@discord-player/utils": "^0.2.2",
-    "@discordjs/voice": "^0.16.1",
-    "axios": "^1.6.8",
-    "body-parser": "^1.20.3",
-    "cheerio": "^1.0.0-rc.12",
-    "cors": "^2.8.5",
+    "@discord-player/extractor": "^7.1.0",
+    "@discord-player/utils": "^7.1.0",
+    "@discordjs/voice": "^0.18.0",
+    "axios": "^1.8.3",
+    "cheerio": "^1.0.0",
     "cosine-similarity": "^1.0.1",
-    "discord-player": "^6.6.8",
-    "discord.js": "^14.15.3",
-    "express": "^4.21.0",
-    "glob": "^7.2.0",
+    "discord-player": "^7.1.0",
+    "discord.js": "^14.18.0",
     "google-it": "^1.6.4",
-    "mediaplex": "^0.0.9",
-    "node-fetch": "^3.3.1",
+    "mediaplex": "^1.0.0",
     "play-dl": "^1.9.7",
     "prettytable.js": "^1.0.1",
     "remove-accents": "^0.5.0",
-    "translate-google": "^1.5.0",
-    "ws": "^8.17.1"
+    "translate-google": "^1.5.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/glob": "^7.2.0",
-    "@types/node": "^20.10.0",
-    "tsx": "^4.7.1"
+    "@types/bun": "^1.2.5"
   },
   "repository": {
     "type": "git",
@@ -44,5 +34,9 @@
   "bugs": {
     "url": "https://github.com/D3FAU4T/Discord/issues"
   },
-  "homepage": "https://github.com/D3FAU4T/Discord#readme"
+  "homepage": "https://github.com/D3FAU4T/Discord#readme",
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
+  }
 }

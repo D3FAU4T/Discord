@@ -6,7 +6,7 @@ import { ChannelType, EmbedBuilder, PermissionsBitField } from 'discord.js';
 
 export default new Event("messageCreate", async message => {
 
-    client.musical.handleQuestion(message);
+    await client.musical.handleQuestion(message);
 
     if (message.author.bot) return;
 
@@ -28,7 +28,9 @@ export default new Event("messageCreate", async message => {
         const emote = client.emotes.get(emoteName.toLowerCase());
         if (!emote || !emote.emote) return;
         if (permissions) {
-            if (permissions.has(PermissionsBitField.Flags.SendMessages)) emote.run({ message: message, client: client });
+            if (permissions.has(PermissionsBitField.Flags.SendMessages))
+                // @ts-ignore
+                emote.run({ message, client, interaction: null });
         }
     });
 
@@ -53,12 +55,12 @@ export default new Event("messageCreate", async message => {
                 || client.semantle[message.channel.id] == undefined
                 || message.attachments.size > 0
                 || emojiRegex.test(message.content)
-                || client.semantle[message.channel.id].configurations.findTheWord == false
+                || client.semantle[message.channel.id]?.configurations.findTheWord == false
                 || message.content.includes('_')
-                || client.semantle[message.channel.id].ignoreList.includes(message.author.id)
+                || client.semantle[message.channel.id]?.ignoreList.includes(message.author.id)
             ) return;
 
-            const response = await client.semantle[message.channel.id].guess(message.content, message.author.username);
+            const response = await client.semantle[message.channel.id]?.guess(message.content, message.author.username);
             if (response === undefined) return;
 
             if (response.reason === ResponseType.InvalidWord) {
@@ -80,14 +82,14 @@ export default new Event("messageCreate", async message => {
                 await message.delete();
                 const toSend = response.message;
                 const toUpdate = await message.channel.send(toSend);
-                client.semantle[message.channel.id].updateMessage(toUpdate);
+                client.semantle[message.channel.id]?.updateMessage(toUpdate);
             }
             else if (response.reason === ResponseType.UpdateInitialMessageEdit) {
                 await message.delete();
                 const toSend = response.message;
                 const toUpload = await response.initialMessage?.edit({ content: toSend });
                 if (toUpload == undefined) return;
-                client.semantle[message.channel.id].updateMessage(toUpload);
+                client.semantle[message.channel.id]?.updateMessage(toUpload);
             }
             else {
                 const toEdit = response.scoreboard;

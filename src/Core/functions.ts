@@ -1,17 +1,23 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, type AxiosResponse } from 'axios';
 import WebSocket from 'ws';
 import { codeBlock, EmbedBuilder, GuildMember } from 'discord.js';
 import { readFileSync, writeFileSync } from 'fs'
-import { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
-import { responses, ResponseType } from '../Typings/Demantle.js';
-import { WOSLevel, WOSboard } from '../Typings/WOS.js';
-import { TwitchUser, TwitchUserData } from '../Typings/TwitchAPI.js';
+import type { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
+import { type responses, ResponseType } from '../Typings/Demantle.js';
+import type { WOSLevel, WOSboard } from '../Typings/WOS.js';
+import type { TwitchUser, TwitchUserData } from '../Typings/TwitchAPI.js';
 
 export const between = (min: number, max: number) => Math.floor(min + (Date.now() % (max - min + 1)));
 
-export const GetRandom = <T>(array: T[]): T => array[between(0, array.length)];
+export const getRandom = <T>(array: T[]): T => {
+    if (array.length === 0)
+        throw new Error("Array cannot be empty");
 
-export const parser = (response: any, response_parser: parseOpts) => {
+    const randomIndex = between(0, array.length - 1);
+    return array[randomIndex] as T;
+};
+
+export const textFormatter = (response: any, response_parser: parseOpts) => {
     switch (response_parser) {
         case 'json':
             return codeBlock('json', response);
@@ -44,14 +50,14 @@ export const axiosHandler = async (url: string, method: axiosMethods, headers?: 
     }
 }
 
-export const fetchCheaters = (startingIndex = 0, endingIndex = Number.MAX_SAFE_INTEGER): string[] =>
+export const getCheaters = (startingIndex = 0, endingIndex = Number.MAX_SAFE_INTEGER): string[] =>
     (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[])
         .sort()
         .map((person) => person.includes("_") ? `\`${person}\`` : person)
         .slice(startingIndex, endingIndex);
 
 
-export const numberAssign = <T>(arr: T[], startingIndex: number): string[] => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
+export const enumerateWithIndex = <T>(arr: T[], startingIndex: number): string[] => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
 
 export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Random" | "Today" | "Connect"): void => {
     if (res.reason === ResponseType.Found) {
@@ -75,7 +81,7 @@ export const getTwitchData = async (username: string): Promise<twitchDataSuccess
 }
 
 const chunkArray = <T>(array: T[], chunkSize: number) => {
-    const chunkedArray = [];
+    const chunkedArray: T[][] = [];
     for (let i = 0; i < array.length; i += chunkSize) {
         const chunk = array.slice(i, i + chunkSize);
         chunkedArray.push(chunk);
@@ -138,33 +144,6 @@ const convertToPlayableWOSLevel = (obj: WOSLevel, parentFormat: WOSboard): WOSbo
     return parentFormat;
 }
 
-export const updateWOSLevels = async (): Promise<Record<string, WOSboard[]>> => {
-    const boardFormat: WOSboard = JSON.parse(readFileSync('./src/Config/WOSboard.json', 'utf8'));
-    const format: Record<string, WOSboard[]> = {
-        set1: [],
-        set2: [],
-        set3: [],
-        set4: [],
-        set5: [],
-        set6: [],
-        set7: [],
-    };
-
-    const { data } = await axios.get<{ [DiscordId: string]: WOSLevel[] }>('https://wos-level-editor.d3fau4tbot.repl.co/d3fau4tbot/levels');
-
-    for (const levels of Object.values(data)) {
-        for (const level of levels) {
-            const board = convertToPlayableWOSLevel(level, boardFormat);
-            const wordLength = board.column1[0].word.length;
-
-            if (wordLength >= 4 && wordLength <= 9) format[`set${wordLength - 3}`].push(board);
-            else format.set7.push(board);
-        }
-    }
-
-    return format;
-};
-
 export const calculateLevels = (targetPoints: number): number => {
     let levels = 0;
     let points = 0;
@@ -206,10 +185,12 @@ export const searchGarticAnswer = (query: string) => {
         if (typeof strippedText === 'string') strippedText = strippedText.split(splitter);
 
         for (let k = 0; k < strippedText.length; k++) {
+            // @ts-ignore
             let wordArr = strippedText[k].split(' ');
             if (wordArr.includes('_') && k !== strippedText.length - 1) wordArr.push('');
             for (let i = 0, letterCount = -1; i < wordArr.length; i++) {
                 if (i === 0) {
+                    // @ts-ignore
                     if (wordArr[i] !== `\\_` && wordArr[i] !== '_') regex += wordArr[i].toLowerCase() + `\\w{`;
                     else regex += `\\w{`, letterCount++;
                 }

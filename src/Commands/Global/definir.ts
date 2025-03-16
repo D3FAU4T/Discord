@@ -1,5 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "definir",
@@ -19,7 +20,7 @@ export default new Command({
     await interaction.deferReply();
 
     try {
-      const palavra = interaction.options.getString("palavra", true);
+      const palavra = interaction.options.get("palavra", true).value as string;
       const significado = await client.getWordDefinition(palavra, 'pt');
       await interaction.editReply({
         embeds: [
@@ -32,7 +33,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

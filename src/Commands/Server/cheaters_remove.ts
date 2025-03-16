@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
+import { getTwitchData, makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: 'cheaters_remove',
@@ -17,17 +17,16 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
-      const person = interaction.options.getString('person_name', true).toLowerCase();
+      const person = (interaction.options.get('person_name', true).value as string).toLowerCase();
       const notFound = new EmbedBuilder()
         .setTitle("Entry not found")
         .setDescription(`Username ${person} not found in the cheaters list. Please check the spelling or the existence of the user ☠️`)
         .setColor("Red");
 
-      const userData = await client.functions.getTwitchData(person);
+      const userData = await getTwitchData(person);
 
       if ('error' in userData) return await interaction.editReply({
         embeds: [
@@ -38,11 +37,11 @@ export default new Command({
         ]
       });
 
-      let cheaters = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8')) as { [userId: string]: string };
+      let cheaters: Record<string, string> = await Bun.file('./src/Config/cheaters.json').json();
       const cheaterIds = Object.keys(cheaters);
       if (!cheaterIds.includes(userData.id)) return await interaction.editReply({ embeds: [notFound] });
       delete cheaters[userData.id];
-      writeFileSync('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
+      await Bun.write('./src/Config/cheaters.json', JSON.stringify(cheaters, null, 2));
       await interaction.editReply({
         embeds: [
           new EmbedBuilder()
@@ -62,7 +61,7 @@ export default new Command({
     } catch (error) {
       const err = error as Error;
       await interaction.editReply({
-        embeds: [client.functions.makeErrorEmbed(err)]
+        embeds: [makeErrorEmbed(err)]
       });
     }
   }

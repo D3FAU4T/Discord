@@ -2,6 +2,7 @@ import axios from 'axios';
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
 import { chessComRating } from '../../Typings/chessRating.js';
+import { makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: 'rating',
@@ -18,11 +19,10 @@ export default new Command({
         .setRequired(true)
     ),
   run: async ({ interaction, client }) => {
-    if (interaction === undefined) return;
     await interaction.deferReply();
 
     try {
-      const playerName = interaction.options.getString("player_name", true);
+      const playerName = interaction.options.get("player_name", true).value as string;
       const { data } = await axios.get<chessComRating>(`https://api.chess.com/pub/player/${playerName}/stats`);
 
       const getRating = (ratingType: "chess_rapid" | "chess_blitz" | "chess_bullet") => {
@@ -66,7 +66,7 @@ export default new Command({
       else {
         const err = error as Error;
         await interaction.editReply({
-          embeds: [client.functions.makeErrorEmbed(err)]
+          embeds: [makeErrorEmbed(err)]
         });
       }
     }
