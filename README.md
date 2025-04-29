@@ -1,4 +1,4 @@
-# discord
+# Discord
 
 To install dependencies:
 
