@@ -1,11 +1,11 @@
-import axios, { AxiosError, type AxiosResponse } from 'axios';
 import WebSocket from 'ws';
-import { codeBlock, EmbedBuilder, GuildMember } from 'discord.js';
-import { readFileSync, writeFileSync } from 'fs'
-import type { parseOpts, axiosMethods, twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
+import { EmbedBuilder } from 'discord.js';
+import type { twitchDataSuccessResponse, twitchDataFailureResponse } from '../Typings/functions.js';
 import { type responses, ResponseType } from '../Typings/Demantle.js';
-import type { WOSLevel, WOSboard } from '../Typings/WOS.js';
 import type { TwitchUser, TwitchUserData } from '../Typings/TwitchAPI.js';
+import type { dictionaryAPI, MerriamWebsterAPI } from '../Typings/definitions.js';
+import { remove } from 'remove-accents';
+import { load } from 'cheerio';
 
 export const between = (min: number, max: number) => Math.floor(min + (Date.now() % (max - min + 1)));
 
@@ -17,67 +17,39 @@ export const getRandom = <T>(array: T[]): T => {
     return array[randomIndex] as T;
 };
 
-export const textFormatter = (response: any, response_parser: parseOpts) => {
-    switch (response_parser) {
-        case 'json':
-            return codeBlock('json', response);
-        case 'text':
-            return codeBlock('text', response);
-        case 'html':
-            return codeBlock('html', response);
-        case 'js':
-            return codeBlock('js', response);
-        case 'python':
-            return codeBlock('python', response);
-        case 'diff':
-            return codeBlock('diff', response);
-        default:
-            return 'Invalid_response_parser';
-    }
-}
+export const getCheaters = async (startingIndex = 0, endingIndex = Number.MAX_SAFE_INTEGER): Promise<string[]> => {
+    const file = Bun.file("'./src/Config/cheaters.json'");
+    if (!await file.exists()) return [];
 
-export const axiosHandler = async (url: string, method: axiosMethods, headers?: object, data?: any): Promise<AxiosResponse<any, any> | AxiosError<any, any> | Error> => {
-    try {
-        return await axios({
-            method: method,
-            url: url,
-            headers: headers,
-            data: data
-        });
-    } catch (error) {
-        if (axios.isAxiosError(error)) return error;
-        else return error as Error;
-    }
-}
+    const fileContents: Record<string, string> = await file.json();
 
-export const getCheaters = (startingIndex = 0, endingIndex = Number.MAX_SAFE_INTEGER): string[] =>
-    (Object.values(JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase())) as string[])
+    return Object.values(fileContents)
         .sort()
         .map((person) => person.includes("_") ? `\`${person}\`` : person)
         .slice(startingIndex, endingIndex);
+}
 
 
-export const enumerateWithIndex = <T>(arr: T[], startingIndex: number): string[] => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
 
-export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Random" | "Today" | "Connect"): void => {
-    if (res.reason === ResponseType.Found) {
+export const enumerateWithIndex = <T>(arr: T[], startingIndex: number = 0): string[] => arr.map((person, i) => `${startingIndex + i + 1}. ${person}`);
+
+export const handleSocketReply = (res: responses, ws: WebSocket, gameType: "Random" | "Today" | "Connect") => {
+    if (res.reason === ResponseType.Found)
         ws.send(`{ "Server": [ "D3_found", { "guessArr": ${JSON.stringify(res.guesses)} , "indexes": ${JSON.stringify(res.indexes)} , "gameType": "${gameType}", "word": "${res.word}" } ] }`)
-    }
 
-    else if (res.reason === ResponseType.AlreadyExists) {
+    else if (res.reason === ResponseType.AlreadyExists)
         ws.send(`{ "Server": [ "D3_exist" ] }`)
-    }
 
-    else if (res.reason === ResponseType.InvalidWord || res.reason === ResponseType.EditSelfMessageContent) {
+    else if (res.reason === ResponseType.InvalidWord || res.reason === ResponseType.EditSelfMessageContent)
         ws.send(`{ "Server": [ "D3_invalid" ] }`)
-    }
 
-    else ws.send(`{ "Server": ["D3_guess", { "guessArr": ${JSON.stringify(res.guesses)} , "indexes": ${JSON.stringify(res.indexes)} , "gameType": "${gameType}" }] }`);
+    else
+        ws.send(`{ "Server": ["D3_guess", { "guessArr": ${JSON.stringify(res.guesses)} , "indexes": ${JSON.stringify(res.indexes)} , "gameType": "${gameType}" }] }`);
 }
 
 export const getTwitchData = async (username: string): Promise<twitchDataSuccessResponse | twitchDataFailureResponse> => {
-    const { data } = await axios.get<twitchDataSuccessResponse | twitchDataFailureResponse>(`https://api.twitchinsights.net/v1/user/status/${username}`)
-    return data;
+    const response = await fetch(`https://api.twitchinsights.net/v1/user/status/${username}`);
+    return (await response.json()) as twitchDataSuccessResponse | twitchDataFailureResponse;
 }
 
 const chunkArray = <T>(array: T[], chunkSize: number) => {
@@ -92,17 +64,24 @@ const chunkArray = <T>(array: T[], chunkSize: number) => {
 export const getTwitchDataFromId = async (arrOfIds: string[]) => {
     let dataArr: TwitchUserData[] = [];
 
-    const headers = {
+    const headers: Bun.HeadersInit = {
         Authorization: `Bearer ${process.env['TwitchAuth']}`,
-        'Client-Id': process.env['TwitchClientId'],
+        'Client-Id': process.env['TwitchClientId'] ?? '',
         "Content-Type": "application/json"
     };
 
     const fetchData = async (ids: string[]) => {
         try {
-            const { data } = await axios.get<TwitchUser>(`https://api.twitch.tv/helix/users?id=${ids.join('&id=')}`, { headers });
+            const response = await fetch(`https://api.twitch.tv/helix/users?id=${ids.join('&id=')}`, { headers });
+            if (!response.ok) {
+                console.error(`Failed to fetch data: ${response.statusText}`);
+                return;
+            }
+            const data = await response.json() as TwitchUser;
             dataArr.push(...data.data);
-        } catch (error) {
+        }
+
+        catch (error) {
             console.error(error);
         }
     };
@@ -116,33 +95,24 @@ export const getTwitchDataFromId = async (arrOfIds: string[]) => {
 }
 
 export const updateCheaterNames = async () => {
-    const cheaters: Record<string, string> = JSON.parse(readFileSync('./src/Config/cheaters.json', 'utf-8').toLowerCase());
-    const cheaterData = await getTwitchDataFromId(Object.keys(cheaters));
-    const updatedCheatersList: { [twitchId: string]: string } = {};
-    cheaterData.forEach(user => updatedCheatersList[user.id] = user.display_name);
-    if (Object.keys(updatedCheatersList).length === 0) return null;
-    writeFileSync('./src/Config/cheaters.json', JSON.stringify(updatedCheatersList, null, 2));
-}
+    const cheatersFile = Bun.file('./src/Config/cheaters.json');
+    if (!await cheatersFile.exists()) return null;
 
-const convertToPlayableWOSLevel = (obj: WOSLevel, parentFormat: WOSboard): WOSboard => {
+    const fileContents: Record<string, string> = await cheatersFile.json();
+    const cheaterIds = Object.keys(fileContents);
+    if (cheaterIds.length === 0) return null;
 
-    for (const col of ['column1', 'column2', 'column3'] as const) {
-        parentFormat[col] = obj[col].map(slot => {
-            return {
-                word: slot.word,
-                username: "",
-                locked: false,
-                index: slot.index
-            }
-        });
-    }
+    const cheaterData = await getTwitchDataFromId(cheaterIds);
+    if (cheaterData.length === 0) return null;
 
-    parentFormat.lang = obj.Language;
-    parentFormat.timebar.locks.total = 5;
-    parentFormat.timebar.locks.expired = 0;
+    const updatedCheatersList = cheaterData.reduce((acc, user) => {
+        acc[user.id] = user.display_name;
+        return acc;
+    }, {} as Record<string, string>);
 
-    return parentFormat;
-}
+    await cheatersFile.write(JSON.stringify(updatedCheatersList, null, 2));
+    return updatedCheatersList;
+};
 
 export const calculateLevels = (targetPoints: number): number => {
     let levels = 0;
@@ -170,59 +140,43 @@ export const calculatePoints = (targetLevel: number): number => {
     return points + bonusPoints;
 }
 
-export const searchGarticAnswer = (query: string) => {
-    const text = readFileSync('./src/Config/gos.json', 'utf-8').toLowerCase();
+export const searchGarticAnswer = async (query: string) => {
+    const text: string[] = await Bun.file('./src/Config/gos.json').json() ?? [];
 
-    let strippedText: string | string[] = query
-        .replace("​\n:point_right: ", '');
+    let stripped = query
+    .replace(/\"/g, '')
+    .replace('​\n:point_right: ', '')
+    .replace('\n​', '')
+    .replace(/\\/g, '');
 
-    if (strippedText.endsWith(" ")) strippedText = strippedText.slice(0, -1);
-    if (!strippedText.endsWith(" \n​")) strippedText += " \n​";
+    let dynamicPattern = '^' + stripped[0]?.toLowerCase();
+    stripped = stripped.slice(1).trim();
 
-    let regex = `"`;
+    for (const word of stripped.includes('  ') ? stripped.split('  ') : stripped.split(' ​ ​')) {
+        let underscores = 0;
 
-    const handleSpecialQueries = (splitter: string) => {
-        if (typeof strippedText === 'string') strippedText = strippedText.split(splitter);
-
-        for (let k = 0; k < strippedText.length; k++) {
-            // @ts-ignore
-            let wordArr = strippedText[k].split(' ');
-            if (wordArr.includes('_') && k !== strippedText.length - 1) wordArr.push('');
-            for (let i = 0, letterCount = -1; i < wordArr.length; i++) {
-                if (i === 0) {
-                    // @ts-ignore
-                    if (wordArr[i] !== `\\_` && wordArr[i] !== '_') regex += wordArr[i].toLowerCase() + `\\w{`;
-                    else regex += `\\w{`, letterCount++;
-                }
-                if (wordArr[i] === `` || wordArr[i] === '\n​') {
-                    regex += `${letterCount}}`;
-                    break;
-                }
-                letterCount++;
+        for (let i = 0; i < word.length; i++) {
+            if (word[i] === '-') {
+                dynamicPattern += `\\w{${underscores}}-`;
+                underscores = 0;
             }
-            if (k !== strippedText.length - 1) regex += splitter !== '-' ? `\\s` : '-';
+
+            else if (word[i] === '_') underscores++;
         }
-        regex += `"`;
+
+        dynamicPattern += `\\w{${underscores}}\\s`
     }
 
-    if (strippedText.includes('​ ​')) handleSpecialQueries('​ ​');
-    else if (strippedText.includes('-')) handleSpecialQueries('-');
-    else if (strippedText.includes('  ')) handleSpecialQueries('  ');
-    else handleSpecialQueries('%');
+    if (dynamicPattern.endsWith('\\s'))
+        dynamicPattern = dynamicPattern.slice(0, -2);
 
-    let matches = text.match(new RegExp(regex, 'g'));
-    let sortedArr: string[] | null = null;
-    if (matches) sortedArr = matches.map(match => match.replace(/"/g, '')).sort();
-    if (
-        sortedArr === null &&
-        !strippedText.includes('_') &&
-        !strippedText.includes('\\_')
-    ) regex = `wtf`;
+    const regex = new RegExp(dynamicPattern + '$', 'gi');
+    const matches = text.filter((word) => word.match(regex));
 
     return {
-        results: sortedArr,
-        regex: regex
-    }
+        results: matches.sort(),
+        regex: dynamicPattern + '$'
+    };
 }
 
 export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder()
@@ -230,3 +184,58 @@ export const makeErrorEmbed = (err: Error, message?: string) => new EmbedBuilder
     .setTitle(err.message)
     .setDescription(`\`\`\`ts\n${err.stack}\n\`\`\``)
     .setColor("Red");
+
+export const getWordDefinition = async (word: string, language: "en" | "pt"): Promise<string> => {
+    let summary = '';
+    try {
+        if (language === 'en') {
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${remove(word)}`);
+            const data = (await response.json()) as dictionaryAPI[];
+            if (!data || data.length === 0) throw new Error('No data found');
+            const resp = data[0];
+            if (!resp || !resp.meanings) throw new Error('Invalid response structure');
+            let meaningCount = 1;
+            resp.meanings.forEach((meaning: { partOfSpeech: string; definitions: { definition: string; example?: string }[] }) => {
+                meaning.definitions.forEach((definition: { definition: string; example?: string }) => {
+                    summary += `\n${meaningCount}. (${meaning.partOfSpeech}) ${definition.definition}`;
+                    if (definition.example) summary += `\nExample: ${definition.example}`;
+                    meaningCount += 1;
+                });
+            });
+        } else if (language === 'pt') {
+            const response = await fetch('https://dicionario.priberam.org/' + word);
+            const data = await response.text();
+            const $ = load(data);
+            let results = $('#resultados div,#resultados p,#resultados span').contents();
+            const meanings: string[] = [];
+            results.each((_, element) => {
+                if ($(element).is('p')) {
+                    let significado = $(element).text().trim().replace(/\n+/g, '').replace(/\s\s\s/g, '').replace(/\[(\w+,?\s?){1,3}]/, '');
+                    meanings.push(significado);
+                }
+            });
+            if (meanings.length > 0) return meanings.join('\n');
+            else throw new Error('Definição não encontrada');
+        }
+    }
+    
+    catch (err) {
+        if (language === 'en') {
+            try {
+                let definitions: string[] = [];
+                const response = await fetch(`https://www.dictionaryapi.com/api/v3/references/sd4/json/${word}?key=${process.env['merriamKey']}`);
+                const merriamData = (await response.json()) as MerriamWebsterAPI[];
+                if (!merriamData || merriamData.length === 0) throw new Error('No data found in Merriam-Webster API response');
+                merriamData[0]?.def.forEach((item, index) => {
+                    const definition = item.sseq[0]?.[0]?.[1]?.dt[0]?.[1];
+                    definitions.push(`${index + 1}. ${definition}`);
+                });
+                summary = definitions.join('\n');
+            } catch (err) {
+                summary = `An unknown error occurred, check console`;
+                console.error(err);
+            }
+        } else summary = 'Desculpe, não encontrei essa palavra no meu dicionário';
+    }
+    return summary;
+};

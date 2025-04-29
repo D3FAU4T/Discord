@@ -1,6 +1,5 @@
-import { Message } from 'discord.js';
+import { Message, type GuildTextBasedChannel } from 'discord.js';
 import { remove } from 'remove-accents';
-import { readFileSync, writeFileSync } from 'fs';
 // @ts-ignore
 import googleIt from 'google-it';
 
@@ -13,7 +12,8 @@ export class Musical {
 
     constructor(channelId: string) {
         this.channelId = channelId;
-        this.answers = this.loadAnswers();
+        this.loadAnswers()
+        .then(data => this.answers = data);
     }
 
     public async handleQuestion(message: Message<boolean>) {
@@ -21,27 +21,27 @@ export class Musical {
         if (message.author.id !== "487328045275938828") return;
         if (message.embeds.length == 0) return;
 
-        if (message.embeds[0].author?.name === "NOVA RODADA!") {
+        if (message.embeds[0]?.author?.name === "NOVA RODADA!") {
             if (message.embeds[0].footer?.text === "Descubra o trecho que falta!") {
                 this.setCurrentQuestion(message.embeds[0].description!);
                 const answer = this.findAnswer(this.currentQuestion);
-                if (answer) message.channel.send(answer);
+                if (answer) (message.channel as GuildTextBasedChannel).send(answer);
                 else {
                     const answer = await this.searchGoogle(this.currentQuestion);
-                    if (answer) message.channel.send(`${answer[0]}`)
+                    if (answer) (message.channel as GuildTextBasedChannel).send(`${answer[0]}`)
                 }
             }
         }
 
-        else if (message.embeds[0].author?.name === "DICA") {
+        else if (message.embeds[0]?.author?.name === "DICA") {
             if (message.embeds[0].description?.includes('Artista:')) {
                 const artist = message.embeds[0].description?.replace('Artista: ', '').replace(/\_/g, '');
                 const answer = await this.searchGoogle(`${artist} ${this.currentQuestion}`);
-                if (answer) message.channel.send(`${answer[0]}`);
+                if (answer) (message.channel as GuildTextBasedChannel).send(`${answer[0]}`);
             }
         }
 
-        else if (message.embeds[0].author?.name === "DESCOBERTO!") {
+        else if (message.embeds[0]?.author?.name === "DESCOBERTO!") {
             this.setCurrentAnswer(message.embeds[0].description!);
             this.saveAnswer();
         }
@@ -100,7 +100,7 @@ export class Musical {
         if (!this.currentQuestion || !this.currentAnswer) return;
         if (this.answers.includes(this.currentQuestion.replace('_____', this.currentAnswer))) return;
         this.answers.push(this.currentQuestion.replace('_____', this.currentAnswer));
-        writeFileSync('./src/Config/Musical.json', JSON.stringify(this.answers, null, 2));
+        Bun.write('./src/Config/Musical.json', JSON.stringify(this.answers, null, 2));
     }
 
     private setCurrentQuestion(text: string): void {
@@ -113,7 +113,11 @@ export class Musical {
         this.currentAnswer = remove(answer[0].replace(/\*/g, '')).toLowerCase();
     }
 
-    private loadAnswers(): string[] {
-        return JSON.parse(readFileSync('./src/Config/Musical.json', 'utf-8')) as string[];
+    private async loadAnswers(): Promise<string[]> {
+        const file = Bun.file('./src/Config/Musical.json');
+        if (await file.exists())
+            return await file.json();
+        else
+            return [];
     }
 }

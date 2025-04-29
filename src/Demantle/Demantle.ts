@@ -1,18 +1,17 @@
-import axios from 'axios';
+import { fetch as fetch } from 'bun';
 import { Message } from 'discord.js';
-import { readFileSync } from 'fs';
-import { PrettyTable, Cell } from 'prettytable.js';
+import { PrettyTable, type Cell } from 'prettytable.js';
 import {
-    GuessData,
+    type GuessData,
     HiddenWordType,
     ResponseType,
-    d3mantleConfig,
-    responses,
-    metaData
+    type d3mantleConfig,
+    type responses,
+    type metaData
 } from '../Typings/Demantle.js';
 
 const similarity = require('cosine-similarity');
-const britishEnglish: Record<string, string> = JSON.parse(readFileSync("./src/Demantle/BritishEnglish.json", "utf-8"));
+const britishEnglish: Record<string, string> = await Bun.file("./src/Demantle/BritishEnglish.json").json();
 
 export class Demantle {
 
@@ -52,23 +51,28 @@ export class Demantle {
                 const initialDay = 19021;
                 const puzzleNumber = (today - initialDay) % wordList.length
                 this.reset();
-                const word = wordList[puzzleNumber];
-                this.configurations.hiddenWord = word
-                const { data } = await axios.get(`https://semantle.com/model2/${word}/${word}`)
-                this.mainWordVec = data.vec;
-            } else {
-                const randIndex = this.between(0, wordList.length);
-                const word = wordList[randIndex];
+                const word = wordList[puzzleNumber] || "default";
                 this.configurations.hiddenWord = word;
-                const { data } = await axios.get(`https://semantle.com/model2/${word}/${word}`)
+                const response = await fetch(`https://legacy.semantle.com/model2/${word}/${word}`);
+                const data = await response.json() as { vec: number[] };
+                this.mainWordVec = data.vec;
+            }
+            
+            else {
+                const randIndex = this.between(0, wordList.length);
+                const word = wordList[randIndex] || ""; // Ensure word is a string
+                this.configurations.hiddenWord = word;
+                const response = await fetch(`https://legacy.semantle.com/model2/${word}/${word}`);
+                const data = await response.json() as { vec: number[] };
                 this.mainWordVec = data.vec;
             }
         }
 
-        // Fetching wordlist from https://semantle.com website
+        // Fetching wordlist from https://legacy.semantle.com website
         this.fetchWordArray = async (): Promise<string[]> => {
-            const res = await axios.get("https://semantle.com/assets/js/secretWords.js?ver2=");
-            const wordList: string[] = JSON.parse(res.data.replace('secretWords = ', '').replace(/\n/g, '').replace(',]', ']'));
+            const response = await fetch("https://legacy.semantle.com/assets/js/secretWords.js?ver2=");
+            const text = await response.text();
+            const wordList: string[] = JSON.parse(text.replace('secretWords = ', '').replace(/\n/g, '').replace(',]', ']'));
             return wordList;
         }
 
@@ -103,8 +107,8 @@ export class Demantle {
             let similarityNumber = 0;
 
             try {
-                const res = await axios.get(`https://semantle.com/model2/${mainWord}/${yourGuess}`);
-                const data: { percentile?: number, vec: number[] } | '' = res.data;
+                const response = await fetch(`https://legacy.semantle.com/model2/${mainWord}/${yourGuess}`);
+                const data = await response.json() as { percentile?: number, vec: number[] } | '';
                 if (data === '') return;
 
                 similarityNumber = Math.round((similarity(this.mainWordVec, data.vec) * 100) * 100) / 100;
@@ -120,13 +124,14 @@ export class Demantle {
                     else if (data.percentile >= 350) text = `${data.percentile}/1000 🟩🟩🟩🟩⬛⬛⬛⬛⬛⬛`;
                     else if (data.percentile >= 250) text = `${data.percentile}/1000 🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛`;
                     else if (data.percentile >= 150) text = `${data.percentile}/1000 🟩🟩⬛⬛⬛⬛⬛⬛⬛⬛`;
-                } else {
-                    text = Demantle.similarityText(similarityNumber);
                 }
-
-            } catch (err) {
-                if (axios.isAxiosError(err)) console.error(err.response?.data);
-                else console.error(err);
+                
+                else 
+                    text = Demantle.similarityText(similarityNumber);
+            }
+            
+            catch (err) {
+                console.error(err);
             }
 
             return {
@@ -148,7 +153,7 @@ export class Demantle {
         this.guess = async (word: string, username: string): Promise<responses | undefined> => {
 
             word = word.toLowerCase().replace(/_/g, '\_');
-            if (Object.keys(britishEnglish).includes(word)) word = britishEnglish[word];
+            if (Object.keys(britishEnglish).includes(word)) word = britishEnglish[word] ?? word;
 
             // Word Checking process
             if (!this.configurations.findTheWord) return;

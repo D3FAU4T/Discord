@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../Core/command.js';
-import { makeErrorEmbed } from '../../Core/functions.js';
+import { getWordDefinition, makeErrorEmbed } from '../../Core/functions.js';
 
 export default new Command({
   name: "definir",
@@ -21,7 +21,7 @@ export default new Command({
 
     try {
       const palavra = interaction.options.get("palavra", true).value as string;
-      const significado = await client.getWordDefinition(palavra, 'pt');
+      const significado = await getWordDefinition(palavra, 'pt');
       await interaction.editReply({
         embeds: [
           new EmbedBuilder()

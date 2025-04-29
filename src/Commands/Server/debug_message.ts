@@ -1,7 +1,6 @@
-import axios from "axios";
 import { Command } from "../../Core/command";
+import { makeErrorEmbed } from "../../Core/functions";
 import { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder } from "discord.js";
-import { makeErrorEmbed, textFormatter } from "../../Core/functions";
 
 export default new Command({
     name: "debug_message",
@@ -22,6 +21,8 @@ export default new Command({
 
         try {
             const link = interaction.options.get("message_link", true).value as string;
+            const url = new URL(link);
+
             if (!link.startsWith('https://discord.com')) return await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
@@ -42,8 +43,9 @@ export default new Command({
 
             else {
                 let [channelId, messageId] = link.replace(/https\:\/\/discord\.com\/channels\/(\d+\/)/g, '').split('/');
-                const { data } = await axios.get<object>(`https://discord.d3fau4tbot.repl.co/getmessagedata/${channelId}/${messageId}`);
-                const res = JSON.stringify(data, null, 2);
+                const data = await fetch(`https://discord.d3fau4tbot.repl.co/getmessagedata/${channelId}/${messageId}`);
+                const res = JSON.stringify(await data.json(), null, 2);
+
                 if (res.length > 2000) return await interaction.editReply({
                     files: [
                         new AttachmentBuilder(Buffer.from(res), {
@@ -53,11 +55,11 @@ export default new Command({
                     ]
                 });
 
-                else return await interaction.editReply(
-                    textFormatter(res, "json")
-                );
+                else return await interaction.editReply(`\`\`\`json\n${res}\n\`\`\``);
             }
-        } catch (error) {
+        }
+        
+        catch (error) {
             const err = error as Error;
             await interaction.editReply({
                 embeds: [makeErrorEmbed(err)]

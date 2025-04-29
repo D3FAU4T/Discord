@@ -1,4 +1,3 @@
-import axios from "axios";
 import { EmbedBuilder } from 'discord.js';
 import { Command } from "../../Core/command.js";
 import { getRandom, makeErrorEmbed } from "../../Core/functions.js";
@@ -12,7 +11,8 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data } = await axios.get<{ a: string; q: string; }[]>("https://zenquotes.io/api/quotes");
+            const response = await fetch("https://zenquotes.io/api/quotes");
+            const data = await response.json() as { a: string, q: string }[];
             const randomQuote = getRandom(data);
             await interaction.editReply({
                 embeds: [
@@ -31,7 +31,9 @@ export default new Command({
                         )
                 ]
             });
-        } catch (error) {
+        }
+        
+        catch (error) {
             const err = error as Error;
             await interaction.editReply({
                 embeds: [makeErrorEmbed(err)]

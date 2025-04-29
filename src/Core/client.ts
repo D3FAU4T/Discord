@@ -1,14 +1,10 @@
-import axios from 'axios';
-import { load } from 'cheerio';
 import { Player, type GuildQueueEvents } from 'discord-player';
 import { DefaultExtractors } from '@discord-player/extractor';
-import { remove } from 'remove-accents';
-import type { commandsInterface } from '../Typings/commands.js';
 import { Event, MusicEvent } from '../Typings/event.js';
-import type { MerriamWebsterAPI, dictionaryAPI } from '../Typings/definitions.js';
 import { Demantle } from '../Demantle/Demantle.js';
-import { type SimulatorRadioCombined, icons } from '../Typings/music.js';
 import { Musical } from './Musical.js';
+import type { commandsInterface } from '../Typings/commands.js';
+import { type SimulatorRadioCombined, icons } from '../Typings/music.js';
 import {
     type ApplicationCommandDataResolvable,
     Client,
@@ -81,7 +77,7 @@ export class D3_discord extends Client {
 
             guild.commands.set(command);
         }
-        
+
         else this.application?.commands.set(command);
     }
 
@@ -98,7 +94,7 @@ export class D3_discord extends Client {
             this.commands.set(command.name, command);
             globalCommands.push(command.data.toJSON());
         }
-        
+
         for await (const file of globTSJS.scan(`${__dirname}/../Commands/Server/`)) {
             const command = await this.importFile(`${__dirname}/../Commands/Server/${file}`) as commandsInterface;
             if (command.emote || !command.data || !command.guildId) continue;
@@ -140,56 +136,15 @@ export class D3_discord extends Client {
         }
     }
 
-    public async getWordDefinition(word: string, language: "en" | "pt"): Promise<string> {
-        let summary = '';
-        try {
-            if (language === 'en') {
-                const { data } = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${remove(word)}`);
-                const resp: dictionaryAPI = data[0];
-                let meaningCount = 1;
-                resp.meanings.forEach(meaning => {
-                    meaning.definitions.forEach(definition => {
-                        summary += `\n${meaningCount}. (${meaning.partOfSpeech}) ${definition.definition}`;
-                        if (definition.example) summary += `\nExample: ${definition.example}`;
-                        meaningCount += 1;
-                    });
-                });
-            } else if (language === 'pt') {
-                const { data } = await axios.get('https://dicionario.priberam.org/' + word);
-                const $ = load(data);
-                let results = $('#resultados div,#resultados p,#resultados span').contents();
-                const meanings: string[] = [];
-                results.each((_, element) => {
-                    if ($(element).is('p')) {
-                        let significado = $(element).text().trim().replace(/\n+/g, '').replace(/\s\s\s/g, '').replace(/\[(\w+,?\s?){1,3}]/, '');
-                        meanings.push(significado);
-                    }
-                });
-                if (meanings.length > 0) return meanings.join('\n');
-                else throw new Error('Definição não encontrada');
-            }
-        } catch (err: any) {
-            if (language === 'en') {
-                try {
-                    let definitions: string[] = [];
-                    const { data }: { data: MerriamWebsterAPI[] } = await axios.get(`https://www.dictionaryapi.com/api/v3/references/sd4/json/${word}?key=${process.env['merriamKey']}`);
-                    data[0]?.def.forEach((item, index) => {
-                        const definition = item.sseq[0]?.[0]?.[1]?.dt[0]?.[1]
-                        definitions.push(`${index + 1}. ${definition}`);
-                    });
-                    summary = definitions.join('\n');
-                } catch (err) {
-                    summary = `An unknown error occurred, check console`;
-                    console.error(err)
-                }
-            } else summary = 'Desculpe, não encontrei essa palavra no meu dicionário';
-        }
-        return summary;
-    }
-
     private async getRadioData(): Promise<void> {
         try {
-            const { data }: { data: SimulatorRadioCombined } = await axios.get('https://apiv2.simulatorradio.com/metadata/combined');
+            const response = await fetch('https://apiv2.simulatorradio.com/metadata/combined');
+            if (!response.ok) {
+                console.error(`Failed to fetch radio data: ${response.statusText}`);
+                return;
+            }
+            // Explicitly cast the response.json() result to SimulatorRadioCombined
+            const data = (await response.json()) as SimulatorRadioCombined;
             if (data.now_playing.title !== this.RadioData.now_playing.title) {
                 this.RadioData = data;
                 if (this.RadioChannels.length === 0) return;

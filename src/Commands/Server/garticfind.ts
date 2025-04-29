@@ -7,7 +7,7 @@ import {
     MessageComponentInteraction,
     SlashCommandBuilder
 } from 'discord.js';
-import { makeErrorEmbed, searchGarticAnswer } from '../../Core/functions.js';
+import { enumerateWithIndex, makeErrorEmbed, searchGarticAnswer } from '../../Core/functions.js';
 
 const buttonComponents = [
     new ButtonBuilder().setLabel("Compact View").setStyle(ButtonStyle.Primary),
@@ -47,15 +47,13 @@ export default new Command({
         let word = interaction.options.get("query", true).value as string;
 
         try {
-            const { results } = searchGarticAnswer(word);
-            const list: string[] = [];
-            results?.forEach((answer, index) => list.push(`${index + 1}. ${answer}`));
+            const { results, regex } = await searchGarticAnswer(word);
             const msg = await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
-                        .setTitle(`Possible answers for the query:\n \`${word.replace(/\\/g, '')}\``)
-                        .setDescription(results?.join(',  ') || "No answers found")
+                        .setTitle(`Possible answers for the query:\n \`${regex}\``)
+                        .setDescription(enumerateWithIndex(results).join(',  ') || "No answers found")
                         .setColor("Blue")
                 ],
                 components: [actionComponent]
