@@ -22,7 +22,7 @@ const actionComponent = new ActionRowBuilder<ButtonBuilder>().addComponents(
 );
 
 const createEmbed = (query: string, answers: string[], listView: boolean) => new EmbedBuilder()
-    .setTitle(`Possible answers for the query:\n \`${query}\``)
+    .setTitle(`Possible answers for the query:\n \`${query.toUpperCase()}\``)
     .setDescription(listView ? answers.join('\n') : answers.join(',  '))
     .setColor("Blue")
     .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
@@ -53,7 +53,7 @@ export default new Command({
                     new EmbedBuilder()
                         .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
                         .setTitle(`Possible answers for the query:\n \`${regex}\``)
-                        .setDescription(enumerateWithIndex(results).join(',  ') || "No answers found")
+                        .setDescription(results.join(',  ') || "No answers found")
                         .setColor("Blue")
                 ],
                 components: [actionComponent]
@@ -69,7 +69,7 @@ export default new Command({
                 })
 
                 else await i.update({
-                    embeds: [createEmbed(word, results || [], true)],
+                    embeds: [createEmbed(word, enumerateWithIndex(results) || [], true)],
                     components: [actionComponent]
                 });
             });
