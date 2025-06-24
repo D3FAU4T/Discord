@@ -1,5 +1,4 @@
 import { Event } from "../Typings/event.js";
-import { readdirSync } from 'fs';
 import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
 import { ChannelType, EmbedBuilder, PermissionsBitField } from 'discord.js';
@@ -17,7 +16,6 @@ export default new Event("messageCreate", async message => {
 
     // Message handling
     const argumentes = message.content.toLowerCase().split(' ');
-    const emoteList = readdirSync(`${__dirname}/../Emotes`).filter(file => file.endsWith('.ts')).map(file => file.replace('.ts', ''));
 
     const permissions = message.guild.members.me?.permissionsIn(message.channel);
 
