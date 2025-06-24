@@ -2,7 +2,7 @@ import { Player, type GuildQueueEvents } from 'discord-player';
 import { DefaultExtractors } from '@discord-player/extractor';
 import { Event, MusicEvent } from '../Typings/event.js';
 import { Demantle } from '../Demantle/Demantle.js';
-import { Musical } from './Musical.js';
+// import { Musical } from './Musical.js';
 import type { commandsInterface } from '../Typings/commands.js';
 import { type SimulatorRadioCombined, icons } from '../Typings/music.js';
 import {
@@ -20,12 +20,10 @@ import {
 export class D3_discord extends Client {
 
     public commands: Collection<string, commandsInterface> = new Collection();
-    public emotes: Collection<string, commandsInterface> = new Collection();
-    public musical = new Musical('1142691243609038959');
+    // public musical = new Musical('1142691243609038959');
     public semantle: Record<string, Demantle> = {}
     public DiscordPlayer = new Player(this);
     public RadioChannels: VoiceBasedChannel[] = [];
-    public tempEmotes: Record<string, string> = {};
 
     public RadioData: SimulatorRadioCombined = {
         now_playing: {
@@ -120,13 +118,6 @@ export class D3_discord extends Client {
         for await (const file of globTSJS.scan(`${__dirname}/../Events/`)) {
             const dcEvents = await this.importFile(`${__dirname}/../Events/${file}`) as Event<keyof ClientEvents>;
             this.on(dcEvents.event, dcEvents.run);
-        }
-
-        // Emotes
-        for await (const file of globTSJS.scan(`${__dirname}/../Emotes/`)) {
-            const emote = await this.importFile(`${__dirname}/../Emotes/${file}`) as commandsInterface;
-            if (!emote.emote) continue;
-            this.emotes.set(emote.name, emote);
         }
 
         // Discord Player events

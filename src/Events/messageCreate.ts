@@ -4,15 +4,14 @@ import { client } from "../../index.js";
 import { ResponseType } from '../Typings/Demantle.js';
 import { ChannelType, EmbedBuilder, PermissionsBitField } from 'discord.js';
 
+import emotesData from '../Config/emotes.json';
+const emotes: Record<string, string> = emotesData;
+
 export default new Event("messageCreate", async message => {
 
-    await client.musical.handleQuestion(message);
+    // await client.musical.handleQuestion(message);
 
     if (message.author.bot) return;
-
-    // Printing to console
-    // if (message.guild === null) console.log(`${message.author.username} [PRIV MSG] ---> ${message.content}`);
-    // else console.log(`[${message.guild.name}] / [${message.author.username}] : ${message.content}`);
 
     if (message.guild === null || message.channel.type === ChannelType.DM) return;
 
@@ -23,27 +22,13 @@ export default new Event("messageCreate", async message => {
     const permissions = message.guild.members.me?.permissionsIn(message.channel);
 
     // Emote Handling
-    const matches = argumentes.filter(word => emoteList.includes(word));
+    const matches = argumentes.filter(word => Object.keys(emotes).includes(word));
     if (matches.length > 0) matches.forEach(emoteName => {
-        const emote = client.emotes.get(emoteName.toLowerCase());
-        if (!emote || !emote.emote) return;
-        if (permissions) {
-            if (permissions.has(PermissionsBitField.Flags.SendMessages))
-                // @ts-ignore
-                emote.run({ message, client, interaction: null });
+        if (permissions && permissions.has(PermissionsBitField.Flags.SendMessages)) {
+            const link = emotes[emoteName.toLowerCase()];
+            if (link) message.channel.send(link);
         }
     });
-
-    try {
-        const tempMatches = argumentes.filter(word => Object.keys(client.tempEmotes).includes(word));
-        if (tempMatches.length > 0) tempMatches.forEach(emoteName => {
-            const emote = client.tempEmotes[emoteName.toLowerCase()];
-            if (!emote) return;
-            if (permissions) {
-                if (permissions.has(PermissionsBitField.Flags.SendMessages)) message.channel.send(emote);
-            }
-        });
-    } catch (err) { }
 
     // D3mantle checker
     if (Object.keys(client.semantle).includes(message.channel.id)) {
