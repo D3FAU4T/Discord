@@ -119,19 +119,32 @@ export class Bot extends Client<true> {
         this.once(Events.ClientReady, async (client) => {
             client.application.commands.set(globalCommands);
 
+            // Group guild commands by guild ID for batch setting
+            const guildCommandMap = new Map<string, typeof guildCommands>();
+
             for (const guildCommand of guildCommands) {
                 const guildIds = accessData[guildCommand.name];
                 if (!guildIds) continue;
-                for (const guildId of guildIds) {
-                    const guild = client.guilds.cache.get(guildId);
-                    if (!guild) continue;
 
-                    await guild.commands.create(guildCommand);
+                for (const guildId of guildIds) {
+                    if (!guildCommandMap.has(guildId)) {
+                        guildCommandMap.set(guildId, []);
+                    }
+                    
+                    guildCommandMap.get(guildId)!.push(guildCommand);
                 }
             }
 
+            // Set commands for each guild in batch
+            for (const [guildId, commands] of guildCommandMap) {
+                const guild = client.guilds.cache.get(guildId);
+                if (!guild) continue;
+
+                await guild.commands.set(commands);
+            }
+
             console.log(`Logged in as ${client.user.tag}`);
-        })
+        });
 
         const eventPromises = eventFiles.map(async file => {
             const event = await this.import<Event<keyof ClientEvents>>(
