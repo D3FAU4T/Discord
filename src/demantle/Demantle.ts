@@ -175,6 +175,6 @@ export default class Demantle {
                 row.gettingClose
             ]);
 
-        return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '').replace(/_/g, '\\_') + "\n\`\`\`";        
+        return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '') + "\n\`\`\`";        
     }
 }
