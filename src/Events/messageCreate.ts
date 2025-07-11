@@ -1,103 +1,120 @@
-import { Event } from "../Typings/event.js";
-import { client } from "../../index.js";
-import { ResponseType } from '../Typings/Demantle.js';
-import { ChannelType, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { Event } from "../core/client";
+import {
+    MessageFlags, PermissionFlagsBits,
+    PresenceUpdateStatus, SectionBuilder
+} from "discord.js";
 
-import emotesData from '../Config/emotes.json';
-const emotes: Record<string, string> = emotesData;
+import type { demantleDb } from "../typings/demantle";
 
 export default new Event("messageCreate", async message => {
+    if (message.author.bot || !message.guild) return;
 
-    // await client.musical.handleQuestion(message);
+    const permissions = message.guild.members.me?.permissionsIn(message.channel.id);
+    if (!permissions || !permissions.has(PermissionFlagsBits.SendMessages)) return;
 
-    if (message.author.bot) return;
+    const words = message.content.toLowerCase().split(" ");
 
-    if (message.guild === null || message.channel.type === ChannelType.DM) return;
+    // Emotes handling
+    const matches = words.filter(word => message.client.emotes[word]);
+    for (const match of matches)
+        await message.reply(message.client.emotes[match]!);
 
-    // Message handling
-    const argumentes = message.content.toLowerCase().split(' ');
+    // Demantle game handling
+    if (message.client.demantles.size && message.client.demantles.has(message.channel.id)) {
+        const demantle = message.client.demantles.get(message.channel.id)!;
 
-    const permissions = message.guild.members.me?.permissionsIn(message.channel);
+        const emojiRegex = /[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu;
+        if (
+            emojiRegex.test(message.content)
+            || message.content.includes("https://")
+            || message.attachments.size > 0
+            || demantle.ignoreIds.includes(message.author.id)
+            || words.length !== 1
+        ) return;
 
-    // Emote Handling
-    const matches = argumentes.filter(word => Object.keys(emotes).includes(word));
-    if (matches.length > 0) matches.forEach(emoteName => {
-        if (permissions && permissions.has(PermissionsBitField.Flags.SendMessages)) {
-            const link = emotes[emoteName.toLowerCase()];
-            if (link) message.channel.send(link);
+        const guessResult = await demantle.game.guess(words[0]!, message.author.username);
+
+        // First guess: If guess is successful but no table cached
+        if (guessResult.success && !demantle.message) {
+            await message.delete();
+            demantle.message = await message.channel.send(guessResult.table);
         }
-    });
 
-    // D3mantle checker
-    if (Object.keys(client.semantle).includes(message.channel.id)) {
-        try {
-            const emojiRegex = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
-            if (
-                message.author.bot
-                || message.content.split(' ').length != 1
-                || client.semantle[message.channel.id] == undefined
-                || message.attachments.size > 0
-                || emojiRegex.test(message.content)
-                || client.semantle[message.channel.id]?.configurations.findTheWord == false
-                || message.content.includes('_')
-                || client.semantle[message.channel.id]?.ignoreList.includes(message.author.id)
-            ) return;
+        // Win condition
+        else if (guessResult.success && words[0] === demantle.game.word) {
+            const updatedStats = await message.client.db.collection<demantleDb>('Demantle')
+                .findOneAndUpdate(
+                    { userId: message.author.id },
+                    { $inc: { wins: 1 } },
+                    { upsert: true, returnDocument: "after", includeResultMetadata: false },
+                );
 
-            const response = await client.semantle[message.channel.id]?.guess(message.content, message.author.username);
-            if (response === undefined) return;
+            if (!updatedStats)
+                await message.channel.send("An error occurred while updating your stats. Please report this issue to the developer.");
 
-            if (response.reason === ResponseType.InvalidWord) {
-                await message.delete();
-                const toSend = response.message;
-                message.channel.send(toSend);
-            }
-            else if (response.reason === ResponseType.EditSelfMessageContent) {
-                await message.delete();
-                const toSend = response.message;
-                response.initialMessage?.edit({ content: toSend });
-            }
-            else if (response.reason === ResponseType.AlreadyExists) {
-                await message.delete();
-                const toSend = response.message;
-                response.initialMessage?.edit({ content: toSend });
-            }
-            else if (response.reason === ResponseType.UpdateInitialMessage) {
-                await message.delete();
-                const toSend = response.message;
-                const toUpdate = await message.channel.send(toSend);
-                client.semantle[message.channel.id]?.updateMessage(toUpdate);
-            }
-            else if (response.reason === ResponseType.UpdateInitialMessageEdit) {
-                await message.delete();
-                const toSend = response.message;
-                const toUpload = await response.initialMessage?.edit({ content: toSend });
-                if (toUpload == undefined) return;
-                client.semantle[message.channel.id]?.updateMessage(toUpload);
-            }
-            else {
-                const toEdit = response.scoreboard;
-                await response.initialMessage?.edit({ content: toEdit });
-                await message.channel.send({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setTitle("Semantle: Found!")
-                            .setDescription(`GGs Word found!`)
-                            .setColor("Green")
-                            .setThumbnail("https://cdn.discordapp.com/attachments/992564973064699924/1035425625374208000/frisco7GG.png")
-                            .setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 256 }) })
-                            .setFooter({ text: `POG POG POG (Chantell approved!)`, iconURL: client.users.cache.get("1006373310126362624")?.displayAvatarURL({ extension: 'png', size: 256 }) })
-                            .addFields(
-                                { name: "winner", value: `<@${message.author.id}>`, inline: true },
-                                { name: "word", value: `${response.word}`, inline: true },
-                                { name: "number-of-guesses", value: `${response.guessLength}`, inline: true }
-                            )
-                    ]
+            await demantle.message!.edit(guessResult.table);
+
+            const section = new SectionBuilder()
+                .addTextDisplayComponents(
+                    textDisplay => textDisplay
+                        .setContent([
+                            `# ${message.author.displayName} 🎉`,
+                            `🏆 **Word**: ${demantle.game.word}`,
+                            `🏅 **Wins**: \`${updatedStats?.wins ?? `unknown`}\``,
+                            `🔢 **Number of guesses**: \`${demantle.game.guesses.length}\``
+                        ].join('\n'))
+                )
+                .setThumbnailAccessory(
+                    thumbnail => thumbnail
+                        .setURL(message.author.displayAvatarURL({ size: 128 }))
+                );
+
+            await message.channel.send({
+                flags: MessageFlags.IsComponentsV2,
+                components: [section],
+            });
+
+            message.client.demantles.delete(message.channel.id);
+
+            // Clear bot presence if no games are active
+            if (message.client.demantles.size === 0)
+                message.client.user.setPresence({
+                    activities: [],
+                    status: PresenceUpdateStatus.Idle,
                 });
+        }
 
-                delete client.semantle[message.channel.id];
-            }
-        } catch (err) {
-            console.error(err);
+        // Any guess after first: If guess is successful and first table cached
+        else if (guessResult.success && demantle.message) {
+            await message.delete();
+            demantle.message = await demantle.message.edit(guessResult.table);
+        }
+
+        // First guess: Invalid guess
+        else if (!guessResult.success && !demantle.message) {
+            const msg = await message.delete();
+            demantle.message = await message.channel.send(`<@${msg.author.id}> I have no idea what that is X\\_X`);
+        }
+
+        // Any guess after first: Invalid guess
+        else if (!guessResult.success && demantle.message) {
+            const msg = await message.delete();
+
+            let originalContent = demantle.message.content;
+
+            // Remove any previous error messages (lines starting with <@userId>)
+            const lines = originalContent.split('\n');
+            const tableStartIndex = lines.findIndex(line => !line.match(/^<@\d+>/));
+            const gameTable = tableStartIndex !== -1 ? lines.slice(tableStartIndex).join('\n') : originalContent;
+
+            if (guessResult.error === 'invalid_guess')
+                demantle.message = await demantle.message.edit(
+                    `<@${msg.author.id}> I have no idea what \`${words[0]}\` is X\\_X\n${gameTable}`
+                );
+
+            else demantle.message = await demantle.message.edit(
+                `<@${msg.author.id}> The word \`${words[0]}\` has already been guessed!\n${gameTable}`
+            );
         }
     }
 });

@@ -1,5 +1,3 @@
-type link = string;
-
 interface last {
     rating: number;
     date: number;
@@ -9,7 +7,7 @@ interface last {
 interface best {
     rating: number;
     date: number;
-    game: link;
+    game: string; // It is a link
 }
 
 interface record {

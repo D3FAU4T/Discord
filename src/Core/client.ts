@@ -1,36 +1,34 @@
-import { Player, type GuildQueueEvents } from 'discord-player';
-import { DefaultExtractors } from '@discord-player/extractor';
-import { Event, MusicEvent } from '../Typings/event.js';
-import { Demantle } from '../Demantle/Demantle.js';
-// import { Musical } from './Musical.js';
-import type { commandsInterface } from '../Typings/commands.js';
-import { type SimulatorRadioCombined, icons } from '../Typings/music.js';
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import { readJsonFile, fileExists, scanFiles } from "./runtime";
+import type { Command } from "../typings/core";
+import type { demantleManager } from "../typings/demantle";
+
 import {
-    type ApplicationCommandDataResolvable,
-    Client,
-    type ClientEvents,
-    Collection,
-    EmbedBuilder,
-    Events,
-    GatewayIntentBits,
-    Partials,
-    type VoiceBasedChannel
+    Client, Collection, Events,
+    GatewayIntentBits, Partials,
+    PresenceUpdateStatus,
+    type ClientEvents
 } from "discord.js";
 
-export class D3_discord extends Client {
+export class Event<Key extends keyof ClientEvents> {
+    constructor(
+        public name: Key,
+        public execute: (...args: ClientEvents[Key]) => Promise<void>
+    ) { }
+}
 
-    public commands: Collection<string, commandsInterface> = new Collection();
-    // public musical = new Musical('1142691243609038959');
-    public semantle: Record<string, Demantle> = {}
-    public DiscordPlayer = new Player(this);
-    public RadioChannels: VoiceBasedChannel[] = [];
+export class Bot extends Client<true> {
+    public emotes: Record<string, string> = {};
+    public commands: Collection<string, Command> = new Collection();
+    public demantles: Collection<string, demantleManager> = new Collection();
 
-    public RadioData: SimulatorRadioCombined = {
-        now_playing: {
-            title: ''
-        }
-    } as SimulatorRadioCombined;
+    public get db() {
+        return this.mongoClient.db('Discord');
+    }
 
+    private mongoClient: MongoClient;
 
     constructor() {
         super({
@@ -41,144 +39,107 @@ export class D3_discord extends Client {
                 GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.GuildVoiceStates,
                 GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildMessageReactions
             ],
             partials: [
                 Partials.Channel,
-                Partials.GuildMember,
                 Partials.Message,
-                Partials.Reaction,
-                Partials.User
-            ]
+                Partials.GuildMember,
+                Partials.User,
+            ],
+            presence: {
+                status: PresenceUpdateStatus.Idle
+            }
         });
+
+        this.mongoClient = new MongoClient(process.env.mongodbURI!, {
+            serverApi: {
+                version: ServerApiVersion.v1,
+                strict: true,
+                deprecationErrors: true
+            },
+        });
+
+        this.handleShutdown();
     }
 
     public async start(): Promise<void> {
+        await this.mongoClient.connect();
         await this.registerFiles();
-        await this.DiscordPlayer.extractors.loadMulti(DefaultExtractors);
-        setInterval(async () => await this.getRadioData(), 10000)
-        await this.login(process.env.discordToken);
+        await this.login(process.env.discordToken!);
     }
 
-    public async importFile(filePath: string): Promise<unknown> {
-        return (await import(filePath)).default;
-    }
-
-    private registerSlashCommands(command: ApplicationCommandDataResolvable[], guildId?: string): void {
-        if (guildId) {
-            const guild = this.guilds.cache.get(guildId);
-
-            if (!guild) {
-                console.error(`Guild not found: ${guildId}`);
-                return;
-            }
-
-            guild.commands.set(command);
+    private handleShutdown(): void {
+        const shutdown = async () => {
+            await this.mongoClient.close();
+            await this.destroy();
+            process.exit(0);
         }
 
-        else this.application?.commands.set(command);
+        process.on('SIGINT', shutdown);
+        process.on('SIGTERM', shutdown);
+    }
+
+    public async import<T>(filePath: string): Promise<T> {
+        // Convert absolute path to file:// URL for ESM compatibility on Windows
+        const fileUrl = pathToFileURL(filePath).href;
+        return (await import(fileUrl)).default as T;
     }
 
     private async registerFiles(): Promise<void> {
-        const serverCommands: { [guildId: string]: ApplicationCommandDataResolvable[] } = {};
-        const globalCommands: ApplicationCommandDataResolvable[] = [];
 
-        // Commands
-        const globTSJS = new Bun.Glob('*{.ts,.js}');
+        // Load emotes
+        const emotesPath = path.resolve('src', 'config', 'emotes.json');
 
-        for await (const file of globTSJS.scan(`${__dirname}/../Commands/Global/`)) {
-            const command = await this.importFile(`${__dirname}/../Commands/Global/${file}`) as commandsInterface;
-            if (command.emote || !command.data) continue;
-            this.commands.set(command.name, command);
-            globalCommands.push(command.data.toJSON());
-        }
+        if (await fileExists(emotesPath))
+            this.emotes = await readJsonFile(emotesPath);
 
-        for await (const file of globTSJS.scan(`${__dirname}/../Commands/Server/`)) {
-            const command = await this.importFile(`${__dirname}/../Commands/Server/${file}`) as commandsInterface;
-            if (command.emote || !command.data || !command.guildId) continue;
-            this.commands.set(command.name, command);
+        else console.warn(`Emotes file not found at ${emotesPath}. Skipping emotes loading.`);
 
-            for (const guildId of command.guildId) {
-                if (!serverCommands[guildId]) serverCommands[guildId] = [];
-                serverCommands[guildId].push(command.data.toJSON());
-            }
-        }
+        const accessData: Record<string, string[]> = await readJsonFile(path.resolve('src', 'config', 'commands.json'));
 
-        // Register commands
-        this.on(Events.ClientReady, () => {
-            for (const guildId of Object.keys(serverCommands)) {
-                if (!serverCommands[guildId]) continue;
-                this.registerSlashCommands(serverCommands[guildId], guildId)
-            }
+        // Register commands and events concurrently
+        const [commandFiles, eventFiles] = await Promise.all([
+            scanFiles(path.resolve('src', 'commands')),
+            scanFiles(path.resolve('src', 'events'))
+        ]);
 
-            this.registerSlashCommands(globalCommands);
+        const commandPromises = commandFiles.map(async file => {
+            const command = await this.import<Command>(path.resolve('src', 'commands', file));
+            this.commands.set(command.data.name, command);
+            return command.data.toJSON();
         });
 
-        // Events
-        for await (const file of globTSJS.scan(`${__dirname}/../Events/`)) {
-            const dcEvents = await this.importFile(`${__dirname}/../Events/${file}`) as Event<keyof ClientEvents>;
-            this.on(dcEvents.event, dcEvents.run);
-        }
+        const commandResults = (await Promise.allSettled(commandPromises))
+            .filter(result => result.status === 'fulfilled')
+            .map(result => result.value);
 
-        // Discord Player events
-        for await (const file of globTSJS.scan(`${__dirname}/../Music/`)) {
-            const event = await this.importFile(`${__dirname}/../Music/${file}`) as MusicEvent<keyof GuildQueueEvents>;
-            this.DiscordPlayer.events.on(event.event, event.run);
-        }
-    }
+        const globalCommands = commandResults.filter(command => !(command.name in accessData));
+        const guildCommands = commandResults.filter(command => command.name in accessData)
 
-    private async getRadioData(): Promise<void> {
-        try {
-            const response = await fetch('https://apiv2.simulatorradio.com/metadata/combined');
-            if (!response.ok) {
-                console.error(`Failed to fetch radio data: ${response.statusText}`);
-                return;
+        this.once(Events.ClientReady, async (client) => {
+            client.application.commands.set(globalCommands);
+
+            for (const guildCommand of guildCommands) {
+                const guildIds = accessData[guildCommand.name];
+                if (!guildIds) continue;
+                for (const guildId of guildIds) {
+                    const guild = client.guilds.cache.get(guildId);
+                    if (!guild) continue;
+
+                    await guild.commands.create(guildCommand);
+                }
             }
-            // Explicitly cast the response.json() result to SimulatorRadioCombined
-            const data = (await response.json()) as SimulatorRadioCombined;
-            if (data.now_playing.title !== this.RadioData.now_playing.title) {
-                this.RadioData = data;
-                if (this.RadioChannels.length === 0) return;
-                this.RadioChannels.forEach(channel => {
-                    channel.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setTitle("24/7 Radio mode")
-                                .setDescription(`Now playing: ${data.now_playing.title}\nArtist: ${data.now_playing.artists}`)
-                                .setColor("#ff2a00")
-                                .setAuthor({ name: `Simulator Radio`, iconURL: icons.simulatorRadio, url: "https://simulatorradio.com" })
-                                .setFooter({ text: "Embed auto created by d3fau4tbot" })
-                                .setTimestamp()
-                                .setURL("https://simulatorradio.com")
-                                .addFields(
-                                    { name: "Current DJ", value: `${data.djs.now.displayname}`, inline: true },
-                                    { name: "Airing at", value: `<t:${data.djs.now.slotstamp}:f>`, inline: true },
-                                    { name: "Next DJ", value: `${data.djs.next.displayname}`, inline: true },
-                                    { name: "Airing at", value: `<t:${data.djs.next.slotstamp}:f>`, inline: true },
-                                    { name: "DJ Later", value: `${data.djs.later.displayname}`, inline: true },
-                                    { name: "Airing at", value: `<t:${data.djs.later.slotstamp}:f>`, inline: true },
-                                )
-                                .setImage(data.now_playing.art)
-                                .setThumbnail(`https://simulatorradio.com/processor/avatar?size=64&name=${data.djs.now.avatar}`)
-                        ]
-                    });
-                });
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
-    public async getUsernameAndDisplayname(userList: `<@${number}>`[]) {
-        let data: { displayName: string, username: string }[] = [];
-        for (const user of userList) {
-            const id = user.replace('<@', '').replace('>', '');
-            const person = await this.users.fetch(id);
-            data.push({
-                displayName: person.displayName,
-                username: person.username
-            });
-        }
-        return data;
+            console.log(`Logged in as ${client.user.tag}`);
+        })
+
+        const eventPromises = eventFiles.map(async file => {
+            const event = await this.import<Event<keyof ClientEvents>>(
+                path.resolve('src', 'events', file)
+            );
+            this.on(event.name, event.execute);
+        });
+
+        await Promise.allSettled(eventPromises);
     }
 }

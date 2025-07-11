@@ -1,286 +1,180 @@
-import { fetch as fetch } from 'bun';
-import { Message } from 'discord.js';
-import { PrettyTable, type Cell } from 'prettytable.js';
-import {
-    type GuessData,
-    HiddenWordType,
-    ResponseType,
-    type d3mantleConfig,
-    type responses,
-    type metaData
-} from '../Typings/Demantle.js';
+import path from 'node:path';
+import { PrettyTable } from 'prettytable.js';
+import type { DemantleType, guessData, guessResult, similarityResponse } from '../typings/demantle';
+import { readJsonFile, fileExists } from '../core/runtime';
 
-const similarity = require('cosine-similarity');
-const britishEnglish: Record<string, string> = await Bun.file("./src/Demantle/BritishEnglish.json").json();
+const britishEnglish: Record<string, string> = await readJsonFile("./src/Demantle/BritishEnglish.json");
 
-export class Demantle {
+export default class Demantle {
+    public word: string = 'd3fau4t'; // Default
+    public vector: number[] = [];
+    public guesses: string[] = [];
+    public table: guessData[] = [];
 
-    private mainWordVec: number[] = [];
-    private guesses: GuessData[] = [];
-    private indexes: string[] = [];
-    private fetchWordArray: () => Promise<string[]>;
-    private similarityHandler: (mainWord: string, yourGuess: string, guesser: string) => Promise<GuessData | undefined>;
-
-    static similarityText: (similarity: number) => string;
-
-    public ignoreList: string[] = [];
-    public SetHiddenWord: (inputTypeNum: HiddenWordType) => Promise<void>;
-    public reset: () => void;
-    public getMetadata: () => metaData;
-    public between: (min: number, max: number) => number;
-    public GiveUp: () => string;
-    public updateMessage: (message: Message<boolean>) => void;
-    public guess: (word: string, username: string) => Promise<responses | undefined>;
-    public tableMaker: (currentGuess: GuessData, guesses: GuessData[]) => string;
-    public toJSON: () => { guesses: GuessData[]; indexes: string[]; mainWordVec: number[]; ignoreList: string[]; fetchWordArray: string; similarityHandler: string; similarityText: string; SetHiddenWord: string; reset: string; between: string; GiveUp: string; updateMessage: string; guess: string; tableMaker: string; configurations: d3mantleConfig; };
-    public configurations: d3mantleConfig = {
-        hiddenWord: "",
-        findTheWord: true,
-        message: null,
-        initialMessage: true
+    constructor(gameType: DemantleType) {
+        this.setHiddenWord(gameType);
     }
 
-    constructor(hiddenWord: HiddenWordType | string) {
-        this.SetHiddenWord = async (inputTypeNum: HiddenWordType): Promise<void> => {
+    private async setHiddenWord(gameType: DemantleType) {
 
-            const wordList = await this.fetchWordArray();
+        const wordList = await this.loadWordList(path.resolve('src', 'demantle', 'English.json'));
 
-            if (inputTypeNum === HiddenWordType.Senior) {
-                const now = Date.now();
-                const today = Math.floor(now / 86400000);
-                const initialDay = 19021;
-                const puzzleNumber = (today - initialDay) % wordList.length
-                this.reset();
-                const word = wordList[puzzleNumber] || "default";
-                this.configurations.hiddenWord = word;
-                const response = await fetch(`https://legacy.semantle.com/model2/${word}/${word}`);
-                const data = await response.json() as { vec: number[] };
-                this.mainWordVec = data.vec;
-            }
-            
-            else {
-                const randIndex = this.between(0, wordList.length);
-                const word = wordList[randIndex] || ""; // Ensure word is a string
-                this.configurations.hiddenWord = word;
-                const response = await fetch(`https://legacy.semantle.com/model2/${word}/${word}`);
-                const data = await response.json() as { vec: number[] };
-                this.mainWordVec = data.vec;
-            }
+        if (!wordList)
+            throw new Error('Word list not found. Please ensure `English.json` exists at `./src/demantle/English.json`.');
+
+        if (gameType === 'Random') {
+            this.word = wordList[Math.floor(0 + (Math.random() * (wordList.length - 0 + 1)))] ?? 'd3fau4t';
+            const vec = (await this.getVector(this.word, this.word))!;
+            this.vector = vec.vec;
         }
 
-        // Fetching wordlist from https://legacy.semantle.com website
-        this.fetchWordArray = async (): Promise<string[]> => {
-            const response = await fetch("https://legacy.semantle.com/assets/js/secretWords.js?ver2=");
-            const text = await response.text();
-            const wordList: string[] = JSON.parse(text.replace('secretWords = ', '').replace(/\n/g, '').replace(',]', ']'));
-            return wordList;
+        else {
+            const today = Math.floor(Date.now() / 86400000);
+            const initialDay = 19021;
+            const puzzleNumber = (today - initialDay) % wordList.length
+            const word = wordList[puzzleNumber] ?? "d3fau4t";
+            this.word = word;
+            const vec = (await this.getVector(word, word))!;
+            this.vector = vec.vec;
+        }
+    }
+
+    private async loadWordList(filePath: string): Promise<string[] | null> {
+        if (!await fileExists(filePath)) return null;
+        return await readJsonFile(filePath);
+    }
+
+    private async getVector(word: string, guess: string): Promise<similarityResponse | null> {
+        const response = await fetch(`https://legacy.semantle.com/model2/${word}/${guess}`);
+
+        if (response.headers.get('content-type') !== 'application/json')
+            return null;
+
+        return await response.json() as similarityResponse;
+    }
+
+    private static getSimilarityText(similarity: number, isPercentile?: boolean) {
+        if (isPercentile) {
+            if (similarity === 1000)
+                return 'found'.padEnd(35, ' ');
+            else if (similarity >= 950)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩`;
+            else if (similarity >= 850)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬛`;
+            else if (similarity >= 750)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩🟩🟩🟩⬛⬛`;
+            else if (similarity >= 650)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩🟩🟩⬛⬛⬛`;
+            else if (similarity >= 550)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩🟩⬛⬛⬛⬛`;
+            else if (similarity >= 450)
+                return `${similarity}/1000 🟩🟩🟩🟩🟩⬛⬛⬛⬛⬛`;
+            else if (similarity >= 350)
+                return `${similarity}/1000 🟩🟩🟩🟩⬛⬛⬛⬛⬛⬛`;
+            else if (similarity >= 250)
+                return `${similarity}/1000 🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛`;
+            else if (similarity >= 150)
+                return `${similarity}/1000 🟩🟩⬛⬛⬛⬛⬛⬛⬛⬛`;
+            else
+                return `${similarity}/1000 🟩⬛⬛⬛⬛⬛⬛⬛⬛⬛`;
         }
 
-        this.reset = (): void => {
-            this.configurations.hiddenWord = "";
-            this.configurations.findTheWord = true;
-            this.guesses = [];
+        else {
+            if (similarity == 100)
+                return 'found' + ' '.repeat(30);
+            else if (similarity <= 20)
+                return 'cold' + ' '.repeat(31);
+            else if (similarity <= 30)
+                return 'tepid' + ' '.repeat(30);
+            else
+                return 'warm' + ' '.repeat(31);
         }
+    }
 
-        this.between = (min: number, max: number): number => {
-            return Math.floor(min + (Math.random() * (max - min + 1)));
-        }
+    public static getSimilarity(vecA: number[], vecB: number[]): number {
 
-        this.GiveUp = (): string => {
-            return this.configurations.hiddenWord;
-        }
+        const dot = (a: typeof vecA, b: typeof vecB) =>
+            a.reduce((sum, val, i) => sum + val * b[i]!, 0);
 
-        this.updateMessage = (message: Message<boolean>): void => {
-            this.configurations.message = message;
-        }
+        const magA = Math.sqrt(dot(vecA, vecA));
+        const magB = Math.sqrt(dot(vecB, vecB));
 
-        this.getMetadata = (): metaData => {
-            return {
-                "guesses": this.guesses,
-                "indexes": this.indexes,
-            }
-        }
+        if (magA && magB)
+            return dot(vecA, vecB) / (magA * magB);
 
-        this.similarityHandler = async (mainWord: string, yourGuess: string, guesser: string): Promise<GuessData | undefined> => {
+        return 0;
+    }
 
-            let text = '';
-            let similarityNumber = 0;
+    public async guess(word: string, username: string): Promise<guessResult> {
+        let gettingClose = 'Are we getting close?';
+        word = word.toLowerCase();
 
-            try {
-                const response = await fetch(`https://legacy.semantle.com/model2/${mainWord}/${yourGuess}`);
-                const data = await response.json() as { percentile?: number, vec: number[] } | '';
-                if (data === '') return;
+        if (word in britishEnglish)
+            word = britishEnglish[word] ?? word;
 
-                similarityNumber = Math.round((similarity(this.mainWordVec, data.vec) * 100) * 100) / 100;
+        if (this.guesses.includes(word))
+            return { success: false, error: 'already_guessed' };
 
-                if (data.percentile) {
-                    if (data.percentile === 1000) text = 'found'.padEnd(35, ' ');
-                    else if (data.percentile >= 950 && data.percentile < 1000) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩`;
-                    else if (data.percentile >= 850) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬛`;
-                    else if (data.percentile >= 750) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩🟩🟩🟩⬛⬛`;
-                    else if (data.percentile >= 650) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩🟩🟩⬛⬛⬛`;
-                    else if (data.percentile >= 550) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩🟩⬛⬛⬛⬛`;
-                    else if (data.percentile >= 450) text = `${data.percentile}/1000 🟩🟩🟩🟩🟩⬛⬛⬛⬛⬛`;
-                    else if (data.percentile >= 350) text = `${data.percentile}/1000 🟩🟩🟩🟩⬛⬛⬛⬛⬛⬛`;
-                    else if (data.percentile >= 250) text = `${data.percentile}/1000 🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛`;
-                    else if (data.percentile >= 150) text = `${data.percentile}/1000 🟩🟩⬛⬛⬛⬛⬛⬛⬛⬛`;
-                }
-                
-                else 
-                    text = Demantle.similarityText(similarityNumber);
-            }
-            
-            catch (err) {
-                console.error(err);
-            }
+        const data = await this.getVector(this.word, word);
 
-            return {
-                guesser,
-                word: yourGuess,
-                similarity: similarityNumber,
-                gettingClose: text
-            }
+        if (!data)
+            return { success: false, error: 'invalid_guess' };
 
-        }
+        this.guesses.push(word);
 
-        Demantle.similarityText = (similarity: number): string => {
-            if (similarity == 100) return 'found' + ' '.repeat(35 - 'found'.length);
-            else if (similarity <= 20) return 'cold' + ' '.repeat(35 - 'cold'.length);
-            else if (similarity <= 30) return 'tepid' + ' '.repeat(35 - 'tepid'.length);
-            else return 'warm' + ' '.repeat(35 - 'warm'.length);
-        }
+        const similarity = Math.round(Demantle.getSimilarity(this.vector, data.vec) * 10000) / 100;
 
-        this.guess = async (word: string, username: string): Promise<responses | undefined> => {
-
-            word = word.toLowerCase().replace(/_/g, '\_');
-            if (Object.keys(britishEnglish).includes(word)) word = britishEnglish[word] ?? word;
-
-            // Word Checking process
-            if (!this.configurations.findTheWord) return;
-
-            if (this.indexes.includes(word)) return {
-                reason: ResponseType.AlreadyExists,
-                message: `The word \`${word}\` has already been guessed\n${this.configurations.message?.content}`,
-                initialMessage: this.configurations.message,
-                guesses: this.guesses,
-                indexes: this.indexes
-            }
-            // Word pushing process
-            else this.indexes.push(word);
-
-            const data = await this.similarityHandler(this.configurations.hiddenWord, word, username.normalize('NFKC'));
-
-            if (data === undefined) {
-                if (this.configurations.initialMessage) return {
-                    reason: ResponseType.InvalidWord,
-                    message: `Idk the word \`${word}\` :'(`,
-                    initialMessage: this.configurations.message,
-                    guesses: this.guesses,
-                    indexes: this.indexes
-                }
-
-                else return {
-                    reason: ResponseType.EditSelfMessageContent,
-                    message: `Idk the word \`${word}\` :'(\n${this.configurations.message?.content}`,
-                    initialMessage: this.configurations.message,
-                    guesses: this.guesses,
-                    indexes: this.indexes
-                }
-            }
-
-            if (data.similarity === 100) {
-
-                this.configurations.findTheWord = false;
-                return {
-                    reason: ResponseType.Found,
-                    message: `${username} found the word ${word}!\nPOG\nPOG\nPOG\nIt took ${this.indexes.length} no. of guesses to get the hidden word`,
-                    initialMessage: this.configurations.message,
-                    word,
-                    scoreboard: this.tableMaker(data, this.guesses),
-                    guessLength: this.indexes.length,
-                    guesses: this.guesses,
-                    indexes: this.indexes
-                }
-            }
-
-            this.guesses.push(data);
-
-            if (this.configurations.initialMessage) {
-
-                this.configurations.initialMessage = false;
-                return {
-                    reason: ResponseType.UpdateInitialMessage,
-                    message: this.tableMaker(data, this.guesses),
-                    initialMessage: this.configurations.message,
-                    guesses: this.guesses,
-                    indexes: this.indexes
-                }
-
-            }
-            else return {
-                reason: ResponseType.UpdateInitialMessageEdit,
-                message: this.tableMaker(data, this.guesses),
-                initialMessage: this.configurations.message,
-                guesses: this.guesses,
-                indexes: this.indexes
-            }
-        }
-
-        this.tableMaker = (currentGuess: GuessData, guesses: GuessData[]): string => {
-            const table = new PrettyTable();
-            const formattedGuesses: [string, number, string, number, string][] = []
-
-            for (const guess of guesses.sort((a, b) => b.similarity - a.similarity)) {
-                formattedGuesses.push([
-                    guess.guesser,
-                    this.indexes.indexOf(guess.word) + 1,
-                    guess.word,
-                    guess.similarity,
-                    guess.gettingClose
-                ])
-            }
-
-            formattedGuesses.unshift([
-                currentGuess.guesser,
-                this.indexes.indexOf(currentGuess.word) + 1,
-                currentGuess.word,
-                currentGuess.similarity,
-                currentGuess.gettingClose
-            ])
+        if (data.percentile)
+            gettingClose = Demantle.getSimilarityText(data.percentile, true);
+        else
+            gettingClose = Demantle.getSimilarityText(similarity);
 
 
-            table.setHeader(["From", "#", "Guess", "Similarity", "Getting Close?"]);
-            table.addRow(formattedGuesses[0] as Cell[]);
-            table.addRow(["________", "__", "___________", "___________", "__________________________________"]);
-            table.addRow(["        ", "  ", "           ", "           ", "                                  "]);
-            for (const guess of formattedGuesses.slice(1, 10)) {
-                table.addRow(guess);
-            }
+        const currentGuess = {
+            word,
+            username,
+            similarity,
+            gettingClose
+        };
 
-            return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '').replace(/_/g, '\_') + "\n\`\`\`"
-        }
+        this.table.push(currentGuess);
+        this.table.sort((a, b) => b.similarity - a.similarity);
 
-        this.toJSON = () => {
-            return {
-                guesses: this.guesses,
-                indexes: this.indexes,
-                mainWordVec: this.mainWordVec,
-                ignoreList: this.ignoreList,
-                fetchWordArray: this.fetchWordArray.toString(),
-                similarityHandler: this.similarityHandler.toString(),
-                similarityText: Demantle.similarityText.toString(),
-                SetHiddenWord: this.SetHiddenWord.toString(),
-                reset: this.reset.toString(),
-                between: this.between.toString(),
-                GiveUp: this.GiveUp.toString(),
-                updateMessage: this.updateMessage.toString(),
-                guess: this.guess.toString(),
-                tableMaker: this.tableMaker.toString(),
-                configurations: this.configurations
-            }
-        }
+        if (this.table.length > 9)
+            this.table.pop();
 
-        if (typeof hiddenWord === 'string') this.configurations.hiddenWord = hiddenWord.toLowerCase();
-        else if (hiddenWord === HiddenWordType.Senior || HiddenWordType.Random) this.SetHiddenWord(hiddenWord);
+        return {
+            success: true,
+            table: this.getTable(currentGuess),
+            currentGuess
+        };
+    }
+
+    public getTable(currentGuess: guessData): string {
+        const table = new PrettyTable();
+
+        table.setHeader(["From", "#", "Guess", "Similarity", "Getting Close?"]);
+
+        table.addRow([
+            currentGuess.username,
+            this.guesses.indexOf(currentGuess.word) + 1,
+            currentGuess.word,
+            currentGuess.similarity,
+            currentGuess.gettingClose
+        ]);
+
+        table.addRow(["________", "__", "___________", "___________", "__________________________________"]);
+        table.addRow(["        ", "  ", "           ", "           ", "                                  "]);
+
+        for (const row of this.table)
+            table.addRow([
+                row.username,
+                this.guesses.indexOf(row.word) + 1,
+                row.word,
+                row.similarity,
+                row.gettingClose
+            ]);
+
+        return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '').replace(/_/g, '\_') + "\n\`\`\`";        
     }
 }
