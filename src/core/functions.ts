@@ -1,0 +1,1 @@
+export const getRandom = <T>(array: T[]): T | null => array.length > 0 ? array[Math.floor(Math.random() * array.length)]! : null;
