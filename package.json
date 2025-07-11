@@ -1,41 +1,35 @@
 {
-  "name": "discord",
-  "version": "3.2.0",
-  "description": "A simple discord bot for my friends",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "D3FAU4T",
-  "license": "ISC",
-  "dependencies": {
-    "@discord-player/extractor": "^7.1.0",
-    "@discord-player/utils": "^7.1.0",
-    "@discordjs/voice": "^0.18.0",
-    "cheerio": "^1.1.0",
-    "cosine-similarity": "^1.0.1",
-    "discord-player": "^7.1.0",
-    "discord.js": "^14.20.0",
-    "google-it": "^1.6.4",
-    "mediaplex": "^1.0.0",
-    "play-dl": "^1.9.7",
-    "prettytable.js": "^1.0.1",
-    "remove-accents": "^0.5.0",
-    "translate-google": "^1.5.0"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.2.17"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/D3FAU4T/Discord.git"
-  },
-  "bugs": {
-    "url": "https://github.com/D3FAU4T/Discord/issues"
-  },
-  "homepage": "https://github.com/D3FAU4T/Discord#readme",
-  "private": true,
-  "peerDependencies": {
-    "typescript": "^5.8.3"
-  }
+    "name": "discord",
+    "module": "start.mjs",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "start": "NODE_ENV=production node start.mjs",
+        "dev": "NODE_ENV=development node start.mjs",
+        "test": "npm run test:cross",
+        "start:node": "NODE_ENV=production tsx --env-file=.env.production.local index.ts",
+        "dev:node": "NODE_ENV=development tsx --env-file=.env.development.local index.ts",
+        "start:bun": "NODE_ENV=production bun run index.ts",
+        "dev:bun": "NODE_ENV=development bun run index.ts",
+        "test:bun": "bun test",
+        "test:node": "tsx --env-file=.env.development.local src/tests/path.test.ts",
+        "test:cross": "echo '🧪 Running cross-runtime tests...' && bun run test:bun && echo '✅ Bun tests passed' && npm run test:node && echo '✅ Node.js tests passed' && echo '🎉 All cross-runtime tests passed!'"
+    },
+    "devDependencies": {
+        "@types/bun": "^1.2.18",
+        "@types/node": "^24.0.13",
+        "tsx": "^4.20.3"
+    },
+    "peerDependencies": {
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "cheerio": "^1.1.0",
+        "discord.js": "^14.21.0",
+        "mongodb": "^6.17.0",
+        "prettytable.js": "^1.0.1"
+    },
+    "engines": {
+        "node": ">=24.0.0"
+    }
 }
