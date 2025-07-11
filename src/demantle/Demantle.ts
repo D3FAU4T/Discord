@@ -3,7 +3,7 @@ import { PrettyTable } from 'prettytable.js';
 import type { DemantleType, guessData, guessResult, similarityResponse } from '../typings/demantle';
 import { readJsonFile, fileExists } from '../core/runtime';
 
-const britishEnglish: Record<string, string> = await readJsonFile("./src/Demantle/BritishEnglish.json");
+const britishEnglish: Record<string, string> = await readJsonFile("./src/demantle/BritishEnglish.json");
 
 export default class Demantle {
     public word: string = 'd3fau4t'; // Default
