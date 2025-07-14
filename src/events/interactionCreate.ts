@@ -7,7 +7,7 @@ export default new Event("interactionCreate", async interaction => {
     if (interaction.isChatInputCommand()) {
         const command = commands.get(interaction.commandName);
         if (!command) {
-            await interaction.reply(`This command does not exist.`);
+            await interaction.reply(`This command does not exist. Please press \`CTRL + R\` to refresh your discord client or clear discord cache if you're using mobile.`);
             return;
         }
 

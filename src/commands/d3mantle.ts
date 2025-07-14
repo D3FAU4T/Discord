@@ -1,4 +1,5 @@
 import Demantle from '../demantle/Demantle';
+import { ErrorEmbed } from '../core/functions.js';
 import {
     ActivityType, EmbedBuilder,
     SlashCommandBuilder, PresenceUpdateStatus,
@@ -8,25 +9,17 @@ import {
 import type { Command } from '../typings/core';
 import type { Bot } from '../core/client';
 
-const createErrorEmbed = (description: string): EmbedBuilder =>
-    new EmbedBuilder()
-        .setTitle("D3mantle Error")
-        .setDescription(description)
-        .setColor("Red");
-
 const getGameOrError = (client: Bot, channelId: string) => {
     const demantle = client.demantles.get(channelId);
     if (!demantle)
-        throw createErrorEmbed("There is no game in progress in this channel.");
+        throw ErrorEmbed("D3mantle Error", "There is no game in progress in this channel.");
 
     return demantle;
 };
 
 const startNewGame = async (interaction: ChatInputCommandInteraction<CacheType>, gameType: 'Random' | 'Daily') => {
     if (interaction.client.demantles.has(interaction.channel!.id))
-        return await interaction.editReply({
-            embeds: [createErrorEmbed("A game is already in progress in this channel.")],
-        });
+        throw ErrorEmbed("D3mantle Error", "A game is already in progress in this channel.");
 
     interaction.client.demantles.set(
         interaction.channel!.id,
@@ -98,13 +91,10 @@ export default <Command>{
             });
 
         if (interaction.channel.name !== 'd3mantle')
-            return await interaction.editReply({
-                embeds: [
-                    createErrorEmbed(
-                        "You can only run this command in the `d3mantle` channel due to spamming nature of the game. If the channel doesn't exist, please ask a server admin to create the channel and make sure the channel name is exactly `d3mantle`. You may optionally setup a role system to give access to the players to avoid notification spam for those who are not interested in playing."
-                    )
-                ],
-            });
+            throw ErrorEmbed(
+                "Channel Restriction",
+                "You can only run this command in the `d3mantle` channel due to spamming nature of the game. If the channel doesn't exist, please ask a server admin to create the channel and make sure the channel name is exactly `d3mantle`. You may optionally setup a role system to give access to the players to avoid notification spam for those who are not interested in playing."
+            );
 
         const subCommand = interaction.options.getSubcommand(true) as 'random' | 'daily' | 'giveup' | 'board';
 
@@ -138,7 +128,7 @@ export default <Command>{
                     ]
                 });
             }
-            
+
             else {
                 demantle.ignoreIds.push(interaction.user.id);
                 await interaction.editReply({
@@ -156,7 +146,7 @@ export default <Command>{
             const demantle = getGameOrError(interaction.client, interaction.channel.id);
 
             if (!demantle.message)
-                throw createErrorEmbed("No game board exists yet. Make your first guess to generate the board!");
+                throw ErrorEmbed("D3mantle Error", "No game board exists yet. Make your first guess to generate the board!");
 
             await interaction.editReply({ content: "Sure, here's the board again" });
 

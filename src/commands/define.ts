@@ -2,6 +2,7 @@ import {
     AttachmentBuilder, EmbedBuilder,
     SlashCommandBuilder
 } from 'discord.js';
+import { ErrorEmbed } from '../core/functions.js';
 import type { Command } from '../typings/core.js';
 import type { dictionaryAPI } from '../typings/definitions.js';
 
@@ -22,29 +23,22 @@ export default <Command>{
 
         const response = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + query);
         if (!response.ok)
-            throw new Error("Dictionary API returned an error: " + response.statusText);
+            throw ErrorEmbed("Dictionary API Error", `The server declined our request with reason: \`${response.statusText}\``);
 
         const data = await response.json() as dictionaryAPI[];
 
         if (!data[0] || !data[0].meanings[0] || !data[0].meanings[0].definitions[0])
-            return await interaction.editReply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setTitle("No definition found")
-                        .setDescription(`Could not find a definition for the word: ${query}`)
-                        .setColor("Red")
-                ]
-            });
+            throw ErrorEmbed("Dictionary API Error", `Definition not found for the word: "${query}"`);
 
-        const phoneticsText = data[0].phonetics.find(p => p.text)?.text ?? `No phonetics available`;
-        const phoneticsAudio = data[0].phonetics.find(p => p.audio)?.audio;
+        const phoneticsText = data[0]!.phonetics.find(p => p.text)?.text ?? `No phonetics available`;
+        const phoneticsAudio = data[0]!.phonetics.find(p => p.audio)?.audio;
 
-        const word = data[0].word ?? query;
+        const word = data[0]!.word ?? query;
 
         let text = `# ${word.charAt(0).toUpperCase() + word.slice(1)}\n`;
         text += `${phoneticsText}\n\n\n`;
 
-        for (const meaning of data[0].meanings) {
+        for (const meaning of data[0]!.meanings) {
             text += `**${meaning.partOfSpeech}**\n`;
             text += meaning.definitions.map((def, index, arr) => {
                 let temp = ``;

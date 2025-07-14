@@ -1,8 +1,8 @@
 import path from 'node:path';
+import { readFile, access } from 'node:fs/promises';
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { setTimeout as wait } from 'node:timers/promises';
-import { getRandom } from '../core/functions.js';
-import { readJsonFile, fileExists } from '../core/runtime.js';
+import { getRandom, ErrorEmbed } from '../core/functions.js';
 import type { Command } from '../typings/core.js';
 
 export default <Command>{
@@ -19,19 +19,28 @@ export default <Command>{
         await interaction.deferReply();
 
         const phrasePath = path.resolve('src', 'config', 'duelPhrases.json');
-        const paragraphs: string[][] = await fileExists(phrasePath) ? await readJsonFile(phrasePath) : [];
+        let paragraphs: string[][] = [];
+
+        const fileExists = await access(phrasePath)
+            .then(() => true)
+            .catch(() => false);
+
+        if (fileExists) {
+            const content = await readFile(phrasePath, 'utf-8');
+            paragraphs = JSON.parse(content);
+        }
 
         const phrases = getRandom(paragraphs);
 
         if (!phrases)
-            throw new Error("No phrases found for the duel.");
+            throw ErrorEmbed("Configuration Error", "No duel phrases found. Please contact the developer.");
 
         const opponent = interaction.options.getMember("person");
 
         if (!(opponent instanceof GuildMember))
-            throw new Error("The specified user is not a valid guild member.");
+            throw ErrorEmbed("Invalid User", "The specified user is not a valid guild member.");
 
-        const winner = getRandom([interaction.user.id, opponent.id])!;
+        const winner = getRandom([interaction.user.id, opponent.id]);
 
         for (let i = 0; i < phrases.length; i++) {
             const desc = phrases[i]!;

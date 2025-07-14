@@ -1,10 +1,10 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { getRandom, ErrorEmbed } from "../core/functions.js";
 import type { Command } from "../typings/core.js";
-import { getRandom } from "../core/functions.js";
 
 type Quote = { a: string; q: string };
 
-export default <Command> {
+export default <Command>{
     data: new SlashCommandBuilder()
         .setName("inspire")
         .setDescription("Gives you an inspirational quote from zenquotes API"),
@@ -13,12 +13,16 @@ export default <Command> {
         await interaction.deferReply();
 
         const response = await fetch("https://zenquotes.io/api/quotes");
+
+        if (!response.ok)
+            throw ErrorEmbed("ZenQuotes API Error", `Failed to fetch quotes: ${response.statusText}`);
+
         const data = await response.json() as Quote[];
 
         const randomQuote = getRandom(data);
 
         if (!randomQuote)
-            throw new Error("No quotes found");
+            throw ErrorEmbed("ZenQuotes API Error", "Inspirational quotes not found");
 
         await interaction.editReply({
             embeds: [
@@ -37,7 +41,7 @@ export default <Command> {
                     })
                     .setThumbnail("https://cdn.discordapp.com/attachments/993276383591665796/1030640368355643482/quote-icon_1627548.jpg")
                     .setTimestamp()
-                    .addFields({ name: "Quote", value: randomQuote.q, inline: false }, { name: "Author", value: randomQuote.a, inline: false }),
+                    .addFields({ name: "Quote", value: randomQuote!.q, inline: false }, { name: "Author", value: randomQuote.a, inline: false }),
             ],
         });
     },

@@ -1,4 +1,4 @@
-import { getRandom } from '../core/functions';
+import { getRandom, ErrorEmbed } from '../core/functions';
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from 'discord.js';
 
 import type { Command } from '../typings/core';
@@ -55,7 +55,7 @@ export default <Command>{
         const person = interaction.options.getMember('person');
 
         if (!(person instanceof GuildMember))
-            throw new Error("The person option must be a GuildMember");
+            throw ErrorEmbed("Validation Error", "The person must be a valid member from the existing server");
 
         const replacedPhrase = phrase.replace(/\@bomber/g, `<@${bomber}>`).replace(/\@person/g, `<@${person.id}>`);
 

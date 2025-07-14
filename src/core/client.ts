@@ -1,7 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { readFile, readdir, access } from 'node:fs/promises';
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { readJsonFile, fileExists, scanFiles } from "./runtime";
 import type { Command } from "../typings/core";
 import type { demantleManager } from "../typings/demantle";
 
@@ -9,7 +9,8 @@ import {
     Client, Collection, Events,
     GatewayIntentBits, Partials,
     PresenceUpdateStatus,
-    type ClientEvents
+    type ClientEvents,
+    type RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
 
 export class Event<Key extends keyof ClientEvents> {
@@ -80,44 +81,83 @@ export class Bot extends Client<true> {
     }
 
     public async import<T>(filePath: string): Promise<T> {
-        // Convert absolute path to file:// URL for ESM compatibility on Windows
+        console.log(`🔄 Importing file: ${filePath}`);
         const fileUrl = pathToFileURL(filePath).href;
-        return (await import(fileUrl)).default as T;
+        console.log(`🔗 File URL: ${fileUrl}`);
+
+        const module = await import(fileUrl);
+        console.log(`✅ Module imported successfully`);
+        return module.default as T;
     }
 
     private async registerFiles(): Promise<void> {
-
         // Load emotes
         const emotesPath = path.resolve('src', 'config', 'emotes.json');
 
-        if (await fileExists(emotesPath))
-            this.emotes = await readJsonFile(emotesPath);
+        try {
+            await access(emotesPath);
+            const emotesContent = await readFile(emotesPath, 'utf-8');
+            this.emotes = JSON.parse(emotesContent);
+        } catch {
+            console.warn(`Emotes file not found at ${emotesPath}. Skipping emotes loading.`);
+        }
 
-        else console.warn(`Emotes file not found at ${emotesPath}. Skipping emotes loading.`);
+        const accessContent = await readFile(path.resolve('src', 'config', 'commands.json'), 'utf-8');
+        const accessData: Record<string, string[]> = JSON.parse(accessContent);
 
-        const accessData: Record<string, string[]> = await readJsonFile(path.resolve('src', 'config', 'commands.json'));
+        // Scan for command and event files
+        const scanDirectory = async (directory: string): Promise<string[]> => {
+            console.log(`📁 Scanning directory: ${directory}`);
+            const files = await readdir(directory, { recursive: true });
+            const tsFiles = files
+                .filter((file): file is string => typeof file === 'string' && file.endsWith('.ts'))
+                .filter(file => !file.includes('.disabled.'));
+            console.log(`🔍 Found ${tsFiles.length} files:`, tsFiles);
+            return tsFiles;
+        };
 
         // Register commands and events concurrently
         const [commandFiles, eventFiles] = await Promise.all([
-            scanFiles(path.resolve('src', 'commands')),
-            scanFiles(path.resolve('src', 'events'))
+            scanDirectory(path.resolve('src', 'commands')),
+            scanDirectory(path.resolve('src', 'events'))
         ]);
 
+        // Add debugging for file discovery
+        console.log('📁 Command files found:', commandFiles);
+        console.log('📁 Event files found:', eventFiles);
+
         const commandPromises = commandFiles.map(async file => {
+            console.log(`🔄 Processing command file: ${file}`);
             const command = await this.import<Command>(path.resolve('src', 'commands', file));
+            console.log(`✅ Loaded command: ${command.data.name}`);
             this.commands.set(command.data.name, command);
             return command.data.toJSON();
         });
 
         const commandResults = (await Promise.allSettled(commandPromises))
-            .filter(result => result.status === 'fulfilled')
+            .filter((result): result is PromiseFulfilledResult<RESTPostAPIChatInputApplicationCommandsJSONBody> => {
+                if (result.status === 'rejected') {
+                    console.error('❌ Command failed to load:', result.reason);
+                    return false;
+                }
+
+                else return true;
+            })
             .map(result => result.value);
 
+        console.log(`📊 Total commands loaded: ${commandResults.length}`);
+        console.log('📊 Command names:', commandResults.map(cmd => cmd.name));
+
         const globalCommands = commandResults.filter(command => !(command.name in accessData));
-        const guildCommands = commandResults.filter(command => command.name in accessData)
+        const guildCommands = commandResults.filter(command => command.name in accessData);
+
+        console.log(`🌐 Global commands: ${globalCommands.length}`, globalCommands.map(cmd => cmd.name));
+        console.log(`🏰 Guild commands: ${guildCommands.length}`, guildCommands.map(cmd => cmd.name));
 
         this.once(Events.ClientReady, async (client) => {
-            client.application.commands.set(globalCommands);
+            console.log('🚀 Setting global commands...');
+            await client.application.commands.set(globalCommands);
+            console.log('✅ Global commands set');
 
             // Group guild commands by guild ID for batch setting
             const guildCommandMap = new Map<string, typeof guildCommands>();
@@ -130,7 +170,7 @@ export class Bot extends Client<true> {
                     if (!guildCommandMap.has(guildId)) {
                         guildCommandMap.set(guildId, []);
                     }
-                    
+
                     guildCommandMap.get(guildId)!.push(guildCommand);
                 }
             }
@@ -138,18 +178,25 @@ export class Bot extends Client<true> {
             // Set commands for each guild in batch
             for (const [guildId, commands] of guildCommandMap) {
                 const guild = client.guilds.cache.get(guildId);
-                if (!guild) continue;
+                if (!guild) {
+                    console.warn(`⚠️ Guild not found: ${guildId}`);
+                    continue;
+                }
 
+                console.log(`🏰 Setting ${commands.length} commands for guild: ${guild.name}`);
                 await guild.commands.set(commands);
+                console.log(`✅ Commands set for guild: ${guild.name}`);
             }
 
             console.log(`Logged in as ${client.user.tag}`);
         });
 
         const eventPromises = eventFiles.map(async file => {
+            console.log(`🔄 Processing event file: ${file}`);
             const event = await this.import<Event<keyof ClientEvents>>(
                 path.resolve('src', 'events', file)
             );
+            console.log(`✅ Loaded event: ${event.name}`);
             this.on(event.name, event.execute);
         });
 

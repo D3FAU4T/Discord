@@ -1,9 +1,14 @@
 import path from 'node:path';
+import { readFile, access } from 'node:fs/promises';
 import { PrettyTable } from 'prettytable.js';
 import type { DemantleType, guessData, guessResult, similarityResponse } from '../typings/demantle';
-import { readJsonFile, fileExists } from '../core/runtime';
 
-const britishEnglish: Record<string, string> = await readJsonFile("./src/Demantle/BritishEnglish.json");
+const readJsonFile = async <T>(filePath: string): Promise<T> => {
+    const content = await readFile(filePath, 'utf-8');
+    return JSON.parse(content);
+};
+
+const britishEnglish: Record<string, string> = await readJsonFile("./src/demantle/BritishEnglish.json");
 
 export default class Demantle {
     public word: string = 'd3fau4t'; // Default
@@ -40,7 +45,15 @@ export default class Demantle {
     }
 
     private async loadWordList(filePath: string): Promise<string[] | null> {
-        if (!await fileExists(filePath)) return null;
+        const fileExists = await access(filePath)
+            .then(() => true)
+            .catch(() => false);
+
+        if (!fileExists) {
+            console.warn(`Word list file not found at ${filePath}.`);
+            return null;
+        }
+
         return await readJsonFile(filePath);
     }
 
@@ -175,6 +188,6 @@ export default class Demantle {
                 row.gettingClose
             ]);
 
-        return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '').replace(/_/g, '\\_') + "\n\`\`\`";        
+        return "\`\`\`\n" + table.toString().replace(/[-+|]/g, '').replace(/_/g, '\\_') + "\n\`\`\`";
     }
 }
