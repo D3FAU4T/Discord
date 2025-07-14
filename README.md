@@ -1,47 +1,45 @@
 # Discord Bot
 
-A Discord.js v14 bot with cross-runtime compatibility (Bun/Node.js).
+A Discord.js v14 bot built with TypeScript and Bun runtime, featuring word games, utility commands, and interactive features.
 
-## Installation
-
-### Quick Start (Auto-detected Runtime)
+## Quick Start
 
 1. Clone the repository
-2. Copy `.env.example` to `.env.production.local` and fill in your values
+2. Copy `.env.example` to `.env.production.local` and fill in your Discord bot token
 3. Install dependencies and run:
 
 ```bash
 # Install dependencies
-npm install
-# OR
 bun install
 
-# Run the bot (automatically detects and uses best available runtime)
-npm run start
+# Run the bot
+bun run dev        # Development mode
+bun run start      # Production mode
 ```
-
-## Runtime Detection
-
-The bot automatically detects the runtime environment and uses appropriate APIs:
-
-- **Bun**: Uses native Bun APIs for optimal performance
-- **Node.js**: Falls back to tsx with Node.js APIs for compatibility
 
 ## Requirements
 
-- **Bun**: Latest version (recommended)
-- **Node.js**: 24.0.0+ (fallback if bun is not installed)
+- **Bun**: Latest version (recommended for best performance)
+- **Node.js**: 24.0.0+ (fallback support via tsx)
 - **TypeScript**: 5.0+
 
-## Testing
+## Development
 
-The project includes a unified cross-runtime test suite that automatically detects the runtime and uses the appropriate testing framework:
+### Adding Commands
 
-```bash
-# Run all tests (both Bun and Node.js)
-npm test
-# OR
-bun test
+1. Create a `.ts` file in `src/commands/`
+2. Export a default object implementing the `Command` interface
+3. Use `ErrorEmbed` from `core/functions` for consistent error handling
+
+### Error Handling
+
+Commands use a standardized error system:
+
+```typescript
+import { ErrorEmbed } from '../core/functions';
+
+// Throw user-friendly errors
+throw ErrorEmbed("Error Title", "Description");
 ```
 
-This project was created using `bun init` in bun v1.2.17. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime, but the project is compatible with Node.js as a fallback.
+This project uses Bun as the primary runtime with TypeScript for type safety and modern Discord.js patterns.

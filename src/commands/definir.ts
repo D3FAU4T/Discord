@@ -1,8 +1,9 @@
 import * as cheerio from 'cheerio';
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { ErrorEmbed } from '../core/functions.js';
 import type { Command } from '../typings/core.js';
 
-export default <Command> {
+export default <Command>{
     data: new SlashCommandBuilder()
         .setName("definir")
         .setDescription("Obter a definição de uma palavra")
@@ -18,30 +19,27 @@ export default <Command> {
         const response = await fetch('https://dicionario.priberam.org/' + palavra);
 
         if (!response.ok)
-            throw new Error("Erro ao acessar o dicionário: " + response.statusText);
+            throw ErrorEmbed("Erro de Dicionário", `O dicionário respondeu com: "${response.statusText}". Parece que ele decidiu tirar folga hoje 😅`);
 
         const data = await response.text();
         const $ = cheerio.load(data);
 
-        const significado = $('#resultados div,#resultados p,#resultados span')
-            .contents()
-            .toArray()
-            .filter(elem => $(elem).is('p'))
-            .map(elem =>
-                $(elem)
-                    .text()
-                    .trim()
-                    .replace(/\n+/g, '')
-                    .replace(/\s\s\s/g, '')
-                    .replace(/\[(\w+,?\s?){1,3}]/, '')
-            );
+        const primaryImageLink = $('img[loading="lazy"]').first().attr('src');
+
+        if (!primaryImageLink)
+            throw ErrorEmbed("Erro de Dicionário", `Ih, não rolou! O servidor disse que essa palavra aí não tá no dicionário não. 😅`);
+
+        const imageResp = await fetch(primaryImageLink);
+
+        if (!imageResp.ok)
+            throw ErrorEmbed("Erro de Dicionário", `A imagem não pôde ser carregada: "${imageResp.statusText}"`);
 
         await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle(`Definição da palavra: ${palavra}`)
-                    .setDescription(significado.join('\n') || "Nenhuma definição encontrada.")
-                    .setColor("Random")
+            files: [
+                new AttachmentBuilder(
+                    Buffer.from(await imageResp.arrayBuffer()),
+                    { name: palavra + ".png", description: "Definição de " + palavra }
+                ),
             ]
         });
 
