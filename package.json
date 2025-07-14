@@ -4,16 +4,9 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "start": "NODE_ENV=production node start.mjs",
-        "dev": "NODE_ENV=development node start.mjs",
-        "test": "npm run test:cross",
-        "start:node": "NODE_ENV=production tsx --env-file=.env.production.local index.ts",
-        "dev:node": "NODE_ENV=development tsx --env-file=.env.development.local index.ts",
-        "start:bun": "NODE_ENV=production bun run index.ts",
-        "dev:bun": "NODE_ENV=development bun run index.ts",
-        "test:bun": "bun test",
-        "test:node": "tsx --env-file=.env.development.local src/tests/path.test.ts",
-        "test:cross": "echo '🧪 Running cross-runtime tests...' && bun run test:bun && echo '✅ Bun tests passed' && npm run test:node && echo '✅ Node.js tests passed' && echo '🎉 All cross-runtime tests passed!'"
+        "start": "NODE_ENV=production bun run index.ts",
+        "dev": "NODE_ENV=development bun run index.ts",
+        "deploy": "NODE_ENV=production tsx --env-file=.env.production.local index.ts"
     },
     "devDependencies": {
         "@types/bun": "^1.2.18",
