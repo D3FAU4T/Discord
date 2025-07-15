@@ -168,10 +168,17 @@ export default class Demantle {
 
         table.setHeader(["From", "#", "Guess", "Similarity", "Getting Close?"]);
 
+        let easterEggWord = currentGuess.word === 'demon' ? 'demon 😈' :
+            currentGuess.word === 'angel' ? 'angel 👼' :
+                currentGuess.word === 'summer' ? 'summer ☀️' :
+                    currentGuess.word === 'love' ? 'love ❤️' :
+                        currentGuess.word === 'heart' ? 'heart ❤️' :
+                            currentGuess.word;
+
         table.addRow([
             currentGuess.username,
             this.guesses.indexOf(currentGuess.word) + 1,
-            currentGuess.word,
+            easterEggWord,
             currentGuess.similarity,
             currentGuess.gettingClose
         ]);
