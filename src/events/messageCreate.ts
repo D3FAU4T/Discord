@@ -32,6 +32,12 @@ export default new Event("messageCreate", async message => {
             || words.length !== 1
         ) return;
 
+        const permissionsToDelete = permissions.has(PermissionFlagsBits.ManageMessages) || permissions.has(PermissionFlagsBits.Administrator);
+        if (!permissionsToDelete) {
+            await message.reply("I need the `Manage Messages` permission to delete your guesses for a smooth experience.");
+            return;
+        }
+
         const guessResult = await demantle.game.guess(words[0]!, message.author.username);
 
         // First guess: If guess is successful but no table cached
@@ -42,7 +48,7 @@ export default new Event("messageCreate", async message => {
 
         // Win condition
         else if (guessResult.success && words[0] === demantle.game.word) {
-            const updatedStats = await message.client.db.collection<demantleDb>('Demantle')
+            const updatedStats = await message.client.db?.collection<demantleDb>('Demantle')
                 .findOneAndUpdate(
                     { userId: message.author.id },
                     { $inc: { wins: 1 } },
