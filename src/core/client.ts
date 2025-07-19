@@ -26,10 +26,10 @@ export class Bot extends Client<true> {
     public demantles: Collection<string, demantleManager> = new Collection();
 
     public get db() {
-        return this.mongoClient.db('Discord');
+        return this.mongoClient?.db('Discord');
     }
 
-    private mongoClient: MongoClient;
+    private mongoClient: MongoClient | null = null;
 
     constructor() {
         super({
@@ -52,26 +52,34 @@ export class Bot extends Client<true> {
             }
         });
 
-        this.mongoClient = new MongoClient(process.env.mongodbURI!, {
-            serverApi: {
-                version: ServerApiVersion.v1,
-                strict: true,
-                deprecationErrors: true
-            },
-        });
-
         this.handleShutdown();
     }
 
     public async start(): Promise<void> {
-        await this.mongoClient.connect();
+        try {
+            this.mongoClient = new MongoClient(process.env.mongodbURI, {
+                tls: true,
+                tlsInsecure: false,
+                serverApi: {
+                    version: ServerApiVersion.v1,
+                    strict: true,
+                    deprecationErrors: true
+                },
+            });
+        }
+
+        catch (e) {
+            console.error('❌ Failed to connect to MongoDB:', e);
+        }
+
+        await this.mongoClient?.connect();
         await this.registerFiles();
         await this.login(process.env.discordToken!);
     }
 
     private handleShutdown(): void {
         const shutdown = async () => {
-            await this.mongoClient.close();
+            await this.mongoClient?.close();
             await this.destroy();
             process.exit(0);
         }
@@ -81,12 +89,8 @@ export class Bot extends Client<true> {
     }
 
     public async import<T>(filePath: string): Promise<T> {
-        console.log(`🔄 Importing file: ${filePath}`);
         const fileUrl = pathToFileURL(filePath).href;
-        console.log(`🔗 File URL: ${fileUrl}`);
-
         const module = await import(fileUrl);
-        console.log(`✅ Module imported successfully`);
         return module.default as T;
     }
 
@@ -98,7 +102,9 @@ export class Bot extends Client<true> {
             await access(emotesPath);
             const emotesContent = await readFile(emotesPath, 'utf-8');
             this.emotes = JSON.parse(emotesContent);
-        } catch {
+        }
+        
+        catch {
             console.warn(`Emotes file not found at ${emotesPath}. Skipping emotes loading.`);
         }
 
@@ -107,12 +113,10 @@ export class Bot extends Client<true> {
 
         // Scan for command and event files
         const scanDirectory = async (directory: string): Promise<string[]> => {
-            console.log(`📁 Scanning directory: ${directory}`);
             const files = await readdir(directory, { recursive: true });
             const tsFiles = files
                 .filter((file): file is string => typeof file === 'string' && file.endsWith('.ts'))
                 .filter(file => !file.includes('.disabled.'));
-            console.log(`🔍 Found ${tsFiles.length} files:`, tsFiles);
             return tsFiles;
         };
 
@@ -127,9 +131,7 @@ export class Bot extends Client<true> {
         console.log('📁 Event files found:', eventFiles);
 
         const commandPromises = commandFiles.map(async file => {
-            console.log(`🔄 Processing command file: ${file}`);
             const command = await this.import<Command>(path.resolve('src', 'commands', file));
-            console.log(`✅ Loaded command: ${command.data.name}`);
             this.commands.set(command.data.name, command);
             return command.data.toJSON();
         });
@@ -145,19 +147,13 @@ export class Bot extends Client<true> {
             })
             .map(result => result.value);
 
-        console.log(`📊 Total commands loaded: ${commandResults.length}`);
         console.log('📊 Command names:', commandResults.map(cmd => cmd.name));
 
         const globalCommands = commandResults.filter(command => !(command.name in accessData));
         const guildCommands = commandResults.filter(command => command.name in accessData);
 
-        console.log(`🌐 Global commands: ${globalCommands.length}`, globalCommands.map(cmd => cmd.name));
-        console.log(`🏰 Guild commands: ${guildCommands.length}`, guildCommands.map(cmd => cmd.name));
-
         this.once(Events.ClientReady, async (client) => {
-            console.log('🚀 Setting global commands...');
             await client.application.commands.set(globalCommands);
-            console.log('✅ Global commands set');
 
             // Group guild commands by guild ID for batch setting
             const guildCommandMap = new Map<string, typeof guildCommands>();
@@ -183,20 +179,16 @@ export class Bot extends Client<true> {
                     continue;
                 }
 
-                console.log(`🏰 Setting ${commands.length} commands for guild: ${guild.name}`);
                 await guild.commands.set(commands);
-                console.log(`✅ Commands set for guild: ${guild.name}`);
             }
 
             console.log(`Logged in as ${client.user.tag}`);
         });
 
         const eventPromises = eventFiles.map(async file => {
-            console.log(`🔄 Processing event file: ${file}`);
             const event = await this.import<Event<keyof ClientEvents>>(
                 path.resolve('src', 'events', file)
             );
-            console.log(`✅ Loaded event: ${event.name}`);
             this.on(event.name, event.execute);
         });
 
