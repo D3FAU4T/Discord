@@ -6,6 +6,8 @@ import {
 
 import type { demantleDb } from "../typings/demantle";
 
+const githubRegex = /https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([\w\d]+)\/([^#\s]+)(?:#L(\d+)(?:-L(\d+))?)?/g;
+
 export default new Event("messageCreate", async message => {
     if (message.author.bot || !message.guild) return;
 
@@ -18,6 +20,51 @@ export default new Event("messageCreate", async message => {
     const matches = words.filter(word => message.client.emotes[word]);
     for (const match of matches)
         await message.reply(message.client.emotes[match]!);
+
+    // Github Link handling
+    const githubMatch = message.content.match(githubRegex);
+    if (githubMatch) {
+        const matches = Array.from(message.content.matchAll(githubRegex));
+        const [_, user, repo, commit, filePath, lineStartStr, lineEndStr] = matches[0]!;
+        if (!user || !repo || !commit || !filePath) return;
+
+        const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/${commit}/${filePath}`;
+
+        try {
+            const res = await fetch(rawUrl);
+            if (!res.ok)
+                throw new Error(`Fetch failed with status ${res.status}`);
+
+            const code = await res.text();
+
+            let snippet = code;
+            const lines = code.split('\n');
+
+            const lineStart = lineStartStr ? parseInt(lineStartStr, 10) : undefined;
+            const lineEnd = lineEndStr ? parseInt(lineEndStr, 10) : lineStart;
+
+            if (lineStart !== undefined) {
+                const start = Math.max(lineStart - 1, 0);
+                const end = lineEnd !== undefined ? lineEnd : start + 1;
+                snippet = lines.slice(start, end).join('\n');
+            }
+
+            const lang = filePath.split('.').pop() ?? '';
+
+            // Discord message limit handling
+            const maxLength = 1900;
+            const preview = snippet.length > maxLength
+                ? snippet.slice(0, maxLength) + '\n...'
+                : snippet;
+
+            await message.reply({
+                content: `\`\`\`${lang}\n${preview}\n\`\`\``,
+                allowedMentions: { repliedUser: false },
+            });
+        }
+
+        catch {}
+    }
 
     // Demantle game handling
     if (message.client.demantles.size && message.client.demantles.has(message.channel.id)) {
