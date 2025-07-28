@@ -22,10 +22,18 @@ export default new Event("messageCreate", async message => {
         await message.reply(message.client.emotes[match]!);
 
     // "Re" prefix joke handling (specific server only)
-    if (message.guild.id === "1053990732958023720" && words.length === 1) {
-        const word = words[0]!;
-        if (word.toLowerCase().startsWith("re") && word.length > 2) {
-            const wordWithoutRe = word.slice(2);
+    if (message.guild.id === "1053990732958023720") {
+        const reWords = words.filter(word => word.toLowerCase().startsWith("re") && word.length > 2);
+
+        // Check if all words start with "re" OR if there are more than 7 "re" words
+        if ((reWords.length === words.length && words.length > 1) || reWords.length > 7) {
+            await message.react("🤡");
+            const wordList = reWords.map(word => `- ${word.slice(2)} again`).join('\n');
+            await message.reply(`To:\n${wordList}`);
+        }
+        // Single "re" word
+        else if (words.length === 1 && reWords.length === 1) {
+            const wordWithoutRe = words[0]!.slice(2);
             await message.reply(`To ${wordWithoutRe} again 🤡`);
         }
     }
