@@ -22,7 +22,7 @@ export default new Event("messageCreate", async message => {
         await message.reply(message.client.emotes[match]!);
 
     // "Re" prefix joke handling (specific server only)
-    if (message.guild.id === "871594906907451402" && words.length === 1) {
+    if (message.guild.id === "1053990732958023720" && words.length === 1) {
         const word = words[0]!;
         if (word.toLowerCase().startsWith("re") && word.length > 2) {
             const wordWithoutRe = word.slice(2);
