@@ -21,6 +21,15 @@ export default new Event("messageCreate", async message => {
     for (const match of matches)
         await message.reply(message.client.emotes[match]!);
 
+    // "Re" prefix joke handling (specific server only)
+    if (message.guild.id === "871594906907451402" && words.length === 1) {
+        const word = words[0]!;
+        if (word.toLowerCase().startsWith("re") && word.length > 2) {
+            const wordWithoutRe = word.slice(2);
+            await message.reply(`To ${wordWithoutRe} again 🤡`);
+        }
+    }
+
     // Github Link handling
     const githubMatch = message.content.match(githubRegex);
     if (githubMatch) {
@@ -63,7 +72,7 @@ export default new Event("messageCreate", async message => {
             });
         }
 
-        catch {}
+        catch { }
     }
 
     // Demantle game handling
