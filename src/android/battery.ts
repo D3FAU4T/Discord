@@ -1,4 +1,4 @@
-import { createCanvas, loadImage } from "canvas";
+import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 
 const createBatterySVG = (level: number) => {
@@ -62,13 +62,12 @@ const createBatterySVG = (level: number) => {
 
 
 const svgToPng = async (svg: string, width = 60, height = 120) => {
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext("2d");
+    const buffer = await sharp(Buffer.from(svg))
+        .resize(width, height)
+        .png()
+        .toBuffer();
 
-    const img = await loadImage(`data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`);
-    ctx.drawImage(img, 0, 0, width, height);
-
-    return canvas.toBuffer("image/png");
+    return buffer;
 }
 
 export const getBatteryInfo = async () => {
