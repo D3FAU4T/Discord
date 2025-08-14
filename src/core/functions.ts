@@ -16,19 +16,3 @@ export const ErrorEmbed = (title: string = "Error", description: string): EmbedB
         })
         .setDescription(description)
         .setColor("Red");
-
-// /**
-//  * Creates and throws a validation error embed for command input validation
-//  * @param message - The validation error message
-//  */
-// export const throwValidationError = (message: string): never => {
-//     return ErrorEmbed("Validation Error", message, "Invalid Input");
-// };
-
-// /**
-//  * Creates and throws a not found error embed for missing resources
-//  * @param resource - The resource that was not found
-//  */
-// export const throwNotFoundError = (resource: string): never => {
-//     return ErrorEmbed("Not Found", `${resource} could not be found`, "Resource Not Found");
-// };
