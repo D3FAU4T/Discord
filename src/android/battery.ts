@@ -104,13 +104,16 @@ export const getBatteryInfo = async () => {
     const chargeFullInt = parseInt(chargeFull, 10);
     const currentNowInt = parseInt(currentNow, 10);
 
+    const chargeNow = (chargeFullInt * batteryPercentage) / 100;
+    const hoursRemaining = Math.round(chargeNow / Math.abs(currentNowInt));
+
     return {
         percentage: batteryPercentage,
         status: status.trim(),
         health: health.trim(),
         temp: `${Math.ceil(tempC / 10)}°C`,
         timeToFull: `${Math.ceil(parseInt(timeToFull, 10) / 60)} mins`,
-        remaining: `${Math.round(chargeFullInt / Math.abs(currentNowInt))}`,
+        hoursRemaining,
         svg: await svgToPng(createBatterySVG(batteryPercentage, status.trim() === "Charging")),
     };
 }
