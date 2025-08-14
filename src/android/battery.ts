@@ -89,22 +89,28 @@ const svgToPng = async (svgCode: string) => {
 }
 
 export const getBatteryInfo = async () => {
-    const [percentage, status, health, timeToFull, temp] = await Promise.all([
+    const [percentage, status, health, timeToFull, temp, chargeFull, currentNow] = await Promise.all([
         readFile("/sys/class/power_supply/battery/capacity", "utf-8"),
         readFile("/sys/class/power_supply/battery/status", "utf-8"),
         readFile("/sys/class/power_supply/battery/health", "utf-8"),
         readFile("/sys/class/power_supply/battery/time_to_full_now", "utf-8"),
-        readFile("/sys/class/power_supply/battery/temp", "utf-8")
+        readFile("/sys/class/power_supply/battery/temp", "utf-8"),
+        readFile("/sys/class/power_supply/battery/charge_full", "utf-8"),
+        readFile("/sys/class/power_supply/battery/current_now", "utf-8"),
     ]);
 
     const batteryPercentage = parseInt(percentage, 10);
+    const tempC = parseInt(temp, 10);
+    const chargeFullInt = parseInt(chargeFull, 10);
+    const currentNowInt = parseInt(currentNow, 10);
 
     return {
         percentage: batteryPercentage,
         status: status.trim(),
         health: health.trim(),
-        temp: `${Math.ceil(parseInt(temp, 10) / 10)}°C`,
+        temp: `${Math.ceil(tempC / 10)}°C`,
         timeToFull: `${Math.ceil(parseInt(timeToFull, 10) / 60)} mins`,
+        remaining: `${Math.round(chargeFullInt / Math.abs(currentNowInt))}`,
         svg: await svgToPng(createBatterySVG(batteryPercentage, status.trim() === "Charging")),
     };
 }

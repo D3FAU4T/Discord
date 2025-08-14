@@ -14,7 +14,7 @@ export default <Command>{
             return;
         }
 
-        const { percentage, status, health, temp, timeToFull, svg } = await getBatteryInfo();
+        const { percentage, status, health, temp, timeToFull, svg, remaining } = await getBatteryInfo();
 
         const batteryImg = new AttachmentBuilder(svg, {
             name: "battery.png",
@@ -30,7 +30,9 @@ export default <Command>{
                         `- **Status:** ${status}`,
                         `- **Health:** ${health}`,
                         `- **Temperature:** ${temp}`,
-                        `- **Full until:** ${timeToFull}`
+                        status.trim() === "Charging" ?
+                        `- **Full until:** ${timeToFull}` :
+                        `- **Remaining:** ${remaining} hours`,
                     ].join('\n'))
             )
             .setThumbnailAccessory(
