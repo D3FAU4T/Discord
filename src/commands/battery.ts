@@ -14,7 +14,7 @@ export default <Command>{
             return;
         }
 
-        const { percentage, status, health, svg } = await getBatteryInfo();
+        const { percentage, status, health, temp, timeToFull, svg } = await getBatteryInfo();
 
         const batteryImg = new AttachmentBuilder(svg, {
             name: "battery.png",
@@ -26,9 +26,11 @@ export default <Command>{
                 textDisplay => textDisplay
                     .setContent([
                         `# Battery Info`,
-                        `- Percentage: ${percentage}%`,
-                        `- Status: ${status}`,
-                        `- Health: ${health}`
+                        `- **Percentage:** ${percentage}%`,
+                        `- **Status:** ${status}`,
+                        `- **Health:** ${health}`,
+                        `- **Temperature:** ${temp}`,
+                        `- **Full until:** ${timeToFull}`
                     ].join('\n'))
             )
             .setThumbnailAccessory(
