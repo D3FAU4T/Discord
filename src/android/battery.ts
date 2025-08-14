@@ -89,11 +89,13 @@ const svgToPng = async (svgCode: string) => {
 }
 
 export const getBatteryInfo = async () => {
-    const percentage = await readFile("/sys/class/power_supply/battery/capacity", "utf-8");
-    const status = await readFile("/sys/class/power_supply/battery/status", "utf-8");
-    const health = await readFile("/sys/class/power_supply/battery/health", "utf-8");
-    const timeToFull = await readFile("/sys/class/power_supply/battery/time_to_full_now", "utf-8");
-    const temp = await readFile("/sys/class/power_supply/battery/temp", "utf-8");
+    const [percentage, status, health, timeToFull, temp] = await Promise.all([
+        readFile("/sys/class/power_supply/battery/capacity", "utf-8"),
+        readFile("/sys/class/power_supply/battery/status", "utf-8"),
+        readFile("/sys/class/power_supply/battery/health", "utf-8"),
+        readFile("/sys/class/power_supply/battery/time_to_full_now", "utf-8"),
+        readFile("/sys/class/power_supply/battery/temp", "utf-8")
+    ]);
 
     const batteryPercentage = parseInt(percentage, 10);
 
