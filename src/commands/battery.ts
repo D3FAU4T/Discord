@@ -18,7 +18,6 @@ export default <Command>{
 
         const batteryImg = new AttachmentBuilder(svg, {
             name: "battery.png",
-            description: "Battery status"
         });
 
         const section = new SectionBuilder()
@@ -38,7 +37,6 @@ export default <Command>{
             .setThumbnailAccessory(
                 thumbnail => thumbnail
                     .setURL(`attachment://${batteryImg.name}`)
-                    .setDescription("Battery status image")
             );
 
         await interaction.editReply({
