@@ -27,21 +27,13 @@ export default <Command>{
         await interaction.editReply({
             embeds: [
                 new EmbedBuilder()
-                    .setTitle("Inspirational Quote")
-                    .setDescription("An Inspirational quote scrapped from the Zenquotes Api")
+                    .setTitle(randomQuote.q)
                     .setAuthor({
-                        name: "Zenquotes.io",
+                        name: randomQuote.a,
                         iconURL: "https://cdn.discordapp.com/attachments/993276383591665796/1030632331469402175/favicon.png",
                     })
                     .setColor("Blue")
                     .setURL("https://zenquotes.io/")
-                    .setFooter({
-                        text: "Embed auto created by d3fau4tbot",
-                        iconURL: interaction.guild ? interaction.guild.iconURL() ?? undefined : undefined,
-                    })
-                    .setThumbnail("https://cdn.discordapp.com/attachments/993276383591665796/1030640368355643482/quote-icon_1627548.jpg")
-                    .setTimestamp()
-                    .addFields({ name: "Quote", value: randomQuote!.q, inline: false }, { name: "Author", value: randomQuote.a, inline: false }),
             ],
         });
     },

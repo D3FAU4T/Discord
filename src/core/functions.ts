@@ -16,3 +16,43 @@ export const ErrorEmbed = (title: string = "Error", description: string): EmbedB
         })
         .setDescription(description)
         .setColor("Red");
+
+
+export const searchGarticAnswer = async (query: string) => {
+    const text: string[] = await Bun.file('./src/Config/gos.json').json() ?? [];
+
+    let stripped = query
+        .replace(/\"/g, '')
+        .replace('​\n:point_right: ', '')
+        .replace('\n​', '')
+        .replace(/\\/g, '');
+
+    let dynamicPattern = '^' + stripped[0]?.toLowerCase();
+    stripped = stripped.slice(1).trim();
+
+    for (const word of stripped.includes('  ') ? stripped.split('  ') : stripped.split(' ​ ​')) {
+        let underscores = 0;
+
+        for (let i = 0; i < word.length; i++) {
+            if (word[i] === '-') {
+                dynamicPattern += `\\w{${underscores}}-`;
+                underscores = 0;
+            }
+
+            else if (word[i] === '_') underscores++;
+        }
+
+        dynamicPattern += `\\w{${underscores}}\\s`
+    }
+
+    if (dynamicPattern.endsWith('\\s'))
+        dynamicPattern = dynamicPattern.slice(0, -2);
+
+    const regex = new RegExp(dynamicPattern + '$', 'gi');
+    const matches = text.filter((word) => word.match(regex));
+
+    return {
+        results: matches.sort(),
+        regex: dynamicPattern + '$'
+    };
+}

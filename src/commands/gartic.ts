@@ -1,4 +1,15 @@
-import { EmbedBuilder, Locale, SlashCommandBuilder } from 'discord.js';
+import { searchGarticAnswer } from 'src/core/functions';
+
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ComponentType,
+    EmbedBuilder,
+    Locale,
+    SlashCommandBuilder
+} from 'discord.js';
+
 import type { Command } from '../typings/core';
 
 type FourStrings = [string, string, string, string];
@@ -6,11 +17,6 @@ type FourStrings = [string, string, string, string];
 type LocalesMap = {
     "en-US": FourStrings;
 } & Partial<Record<Exclude<Locale, "en-US">, FourStrings>>;
-
-const calculatePoints = (level: number): number => {
-    const M = Math.floor(level / 15);
-    return level + (5 * M * (M + 1)) / 2;
-}
 
 const calculateLevels = (targetPoints: number): number => {
     let levels = 0;
@@ -25,7 +31,19 @@ const calculateLevels = (targetPoints: number): number => {
     return levels;
 }
 
-export default <Command> {
+const buttonComponents = [
+    new ButtonBuilder().setLabel("Compact View").setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setLabel("List View").setStyle(ButtonStyle.Secondary)
+];
+
+const actionComponent = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buttonComponents.map((button, index) => {
+        button.setCustomId(`find_${index}`);
+        return button;
+    })
+);
+
+export default <Command>{
     data: new SlashCommandBuilder()
         .setName('gartic')
         .setDescription('Perform gartic-related operations')
@@ -56,11 +74,22 @@ export default <Command> {
                         .setDescriptionLocalization("pt-BR", "Digite o número do nível que você deseja calcular quantos garticos irá obter")
                         .setRequired(true)
                 )
+        )
+        .addSubcommand(subCommand =>
+            subCommand
+                .setName("find")
+                .setDescription("Get the gartic answer for a query if exists in English gos dictionary")
+                .addStringOption((Option) =>
+                    Option
+                        .setName("query")
+                        .setDescription("Paste the gartic hint here that looks like this: C _ _ _ _ _ _ _ _")
+                        .setRequired(true)
+                )
         ),
 
     async execute(interaction) {
         await interaction.deferReply();
-        const subCommand = interaction.options.getSubcommand() as 'calculate_level' | 'calculate_points';
+        const subCommand = interaction.options.getSubcommand() as 'find' | 'calculate_level' | 'calculate_points';
 
         if (subCommand === 'calculate_level') {
             const locales: LocalesMap = {
@@ -94,7 +123,7 @@ export default <Command> {
             });
         }
 
-        else {
+        else if (subCommand === 'calculate_points') {
             const locales: LocalesMap = {
                 "en-US": [
                     "Garticos Calculator",
@@ -111,7 +140,9 @@ export default <Command> {
             };
 
             const targetPoints = interaction.options.getNumber("level", true);
-            const garticosGained = calculatePoints(targetPoints);
+
+            const temp = Math.floor(targetPoints / 15);
+            const garticosGained = targetPoints + (5 * temp * (temp + 1)) / 2;
 
             const strings = locales[interaction.locale] ?? locales["en-US"];
 
@@ -126,5 +157,46 @@ export default <Command> {
                 ]
             });
         }
+
+        else if (subCommand === 'find') {
+            const word = interaction.options.getString("query", true).toUpperCase();
+
+            const { results } = await searchGarticAnswer(word);
+
+            const msg = await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: "Gartic", iconURL: "https://gartic.com/favicon.ico", url: "https://gartic.com" })
+                        .setTitle(`Possible answers for the query:\n \`${word}\``)
+                        .setDescription(results.join(',  ') || "No answers found")
+                        .setColor("Blue")
+                ],
+                components: [actionComponent]
+            });
+
+            const collector = msg.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                filter: (button) => button.user.id === interaction.user.id,
+                time: 300000 // 5 minutes
+            });
+
+            collector.on("collect", async interaction =>
+                await interaction.update({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setTitle(`Possible answers for the query:\n \`${word}\``)
+                            .setDescription(
+                                interaction.customId === 'find_1' ?
+                                    results.map((answer, index) => `${index + 1}. ${answer}`).join('\n') :
+                                    results.join(',  ')
+                            )
+                    ],
+                    components: [actionComponent]
+                })
+            );
+        }
+
+        else await interaction.editReply(`This command is no longer available. Please refresh your discord with \`CTRL + R\` or clear cache if you are on mobile.`);
+
     }
 }
