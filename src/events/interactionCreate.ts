@@ -3,6 +3,7 @@ import { EmbedBuilder } from "discord.js";
 
 export default new Event("interactionCreate", async interaction => {
     const commands = interaction.client.commands;
+    const player = interaction.client.musicPlayer;
 
     if (interaction.isChatInputCommand()) {
         const command = commands.get(interaction.commandName);
@@ -12,7 +13,10 @@ export default new Event("interactionCreate", async interaction => {
         }
 
         try {
-            await command.execute(interaction);
+            if (interaction.guild)
+                await player.context.provide({ guild: interaction.guild }, () => command.execute(interaction));
+            else
+                await command.execute(interaction);
         }
 
         catch (error) {

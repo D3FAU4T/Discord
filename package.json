@@ -9,9 +9,9 @@
         "deploy": "NODE_ENV=production tsx --env-file=.env.production.local index.ts"
     },
     "devDependencies": {
-        "@types/bun": "^1.2.20",
+        "@types/bun": "^1.2.21",
         "@types/node": "^24.3.0",
-        "tsx": "^4.20.4"
+        "tsx": "^4.20.5"
     },
     "peerDependencies": {
         "typescript": "^5.9.2"
@@ -20,7 +20,7 @@
         "@discord-player/extractor": "^7.1.0",
         "cheerio": "^1.1.2",
         "discord-player": "^7.1.0",
-        "discord.js": "^14.21.0",
+        "discord.js": "^14.22.1",
         "mongodb": "^6.18.0",
         "prettytable.js": "^1.0.1"
     },

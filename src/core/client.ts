@@ -1,6 +1,8 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { readFile, readdir, access } from 'node:fs/promises';
+import { Player, type GuildQueueEvents } from "discord-player";
+import { DefaultExtractors } from "@discord-player/extractor";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import type { Command } from "../typings/core";
 import type { demantleManager } from "../typings/demantle";
@@ -15,12 +17,20 @@ import {
 
 export class Event<Key extends keyof ClientEvents> {
     constructor(
-        public name: Key,
-        public execute: (...args: ClientEvents[Key]) => Promise<void>
+        public readonly name: Key,
+        public readonly listener: (...args: ClientEvents[Key]) => Promise<void>
+    ) { }
+}
+
+export class MusicEvent<Key extends keyof GuildQueueEvents> {
+    constructor(
+        public readonly name: Key,
+        public readonly listener: GuildQueueEvents[Key]
     ) { }
 }
 
 export class Bot extends Client<true> {
+    public musicPlayer: Player;
     public emotes: Record<string, string> = {};
     public commands: Collection<string, Command> = new Collection();
     public demantles: Collection<string, demantleManager> = new Collection();
@@ -30,6 +40,7 @@ export class Bot extends Client<true> {
     }
 
     private mongoClient: MongoClient | null = null;
+    
 
     constructor() {
         super({
@@ -52,6 +63,7 @@ export class Bot extends Client<true> {
             }
         });
 
+        this.musicPlayer = new Player(this);
         this.handleShutdown();
     }
 
@@ -66,15 +78,17 @@ export class Bot extends Client<true> {
                     deprecationErrors: true
                 },
             });
+
+            await this.mongoClient?.connect();
         }
 
         catch (e) {
             console.error('❌ Failed to connect to MongoDB:', e);
         }
 
-        await this.mongoClient?.connect();
+        await this.musicPlayer.extractors.loadMulti(DefaultExtractors);
         await this.registerFiles();
-        await this.login(process.env.discordToken!);
+        await this.login(process.env.discordToken);
     }
 
     private handleShutdown(): void {
@@ -103,7 +117,7 @@ export class Bot extends Client<true> {
             const emotesContent = await readFile(emotesPath, 'utf-8');
             this.emotes = JSON.parse(emotesContent);
         }
-        
+
         catch {
             console.warn(`Emotes file not found at ${emotesPath}. Skipping emotes loading.`);
         }
@@ -121,14 +135,11 @@ export class Bot extends Client<true> {
         };
 
         // Register commands and events concurrently
-        const [commandFiles, eventFiles] = await Promise.all([
+        const [commandFiles, eventFiles, musicFiles] = await Promise.all([
             scanDirectory(path.resolve('src', 'commands')),
-            scanDirectory(path.resolve('src', 'events'))
+            scanDirectory(path.resolve('src', 'events')),
+            scanDirectory(path.resolve('src', 'music'))
         ]);
-
-        // Add debugging for file discovery
-        console.log('📁 Command files found:', commandFiles);
-        console.log('📁 Event files found:', eventFiles);
 
         const commandPromises = commandFiles.map(async file => {
             const command = await this.import<Command>(path.resolve('src', 'commands', file));
@@ -146,8 +157,6 @@ export class Bot extends Client<true> {
                 else return true;
             })
             .map(result => result.value);
-
-        console.log('📊 Command names:', commandResults.map(cmd => cmd.name));
 
         const globalCommands = commandResults.filter(command => !(command.name in accessData));
         const guildCommands = commandResults.filter(command => command.name in accessData);
@@ -189,9 +198,20 @@ export class Bot extends Client<true> {
             const event = await this.import<Event<keyof ClientEvents>>(
                 path.resolve('src', 'events', file)
             );
-            this.on(event.name, event.execute);
+
+            this.on(event.name, event.listener);
         });
 
         await Promise.allSettled(eventPromises);
+
+        const musicPromises = musicFiles.map(async file => {
+            const musicEvent = await this.import<MusicEvent<keyof GuildQueueEvents>>(
+                path.resolve('src', 'music', file)
+            );
+
+            this.musicPlayer.events.on(musicEvent.name, musicEvent.listener);
+        });
+
+        await Promise.allSettled(musicPromises);
     }
 }

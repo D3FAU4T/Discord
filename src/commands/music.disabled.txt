@@ -1,0 +1,115 @@
+import { useMainPlayer } from "discord-player";
+import { GuildMember, SlashCommandBuilder } from "discord.js";
+import type { Command } from "src/typings/core";
+
+export default <Command>{
+    data: new SlashCommandBuilder()
+        .setName("music")
+        .setDescription("Perform music related actions")
+        .addSubcommand(subCommand =>
+            subCommand
+                .setName("query")
+                .setDescription("Request a song name to play. For better results, use links.")
+                .addStringOption(option =>
+                    option
+                        .setName("song")
+                        .setDescription("The name or link of the song to play")
+                        .setRequired(true)
+                )
+        ),
+
+    execute: async (interaction) => {
+        await interaction.deferReply();
+
+        if (!(interaction.member instanceof GuildMember))
+            return await interaction.editReply(`You must be in a server.`);
+
+        const channel = interaction.member.voice.channel;
+
+        if (!channel)
+            return await interaction.editReply(`You must be in a voice channel.`);
+
+        const player = useMainPlayer();
+        const subCommand = interaction.options.getSubcommand(true) as "query";
+
+        if (subCommand === "query") {
+            
+        }
+    },
+}
+
+new Command({
+    run: async ({ interaction, client }) => {
+        await interaction.deferReply();
+
+        try {
+            const player = useMainPlayer();
+            const voiceChannel = (interaction.member as GuildMember).voice.channel;
+            if (!voiceChannel) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription("You must be in a voice channel!")
+                        .setColor("Red")
+                ]
+            });
+
+            const permissions = voiceChannel.permissionsFor(interaction.client.user);
+
+            if (!permissions?.has("Connect")) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription(`I don't have the "Connect" permission to join the Voice channel`)
+                        .setColor("Red")
+                ]
+            });
+
+            if (!permissions.has("Speak")) return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Error: Music module")
+                        .setDescription(`I don't have the "Speak" permission to join the Voice channel`)
+                        .setColor("Red")
+                ]
+            });
+
+            const { track } = await player.play(voiceChannel, interaction.options.get("query", true).value as string, {
+                nodeOptions: {
+                    metadata: {
+                        interaction: interaction,
+                        isRadio: false,
+                        client: client
+                    },
+                    leaveOnEnd: false,
+                    leaveOnStop: false,
+                },
+                requestedBy: interaction.user
+            });
+
+            await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setDescription("Requested song added to the queue")
+                        .setColor("Random")
+                        .setAuthor({ name: `Song added`, iconURL: `https://cdn.discordapp.com/attachments/933971458496004156/1005595741198233790/My_project.png` })
+                        .setFooter({ text: "Embed auto created by d3fau4tbot" })
+                        .setTimestamp()
+                        .setURL(track.url)
+                        .setThumbnail(`https://cdn.discordapp.com/attachments/933971458496004156/1005590805756530718/Checkmark-green-tick-isolated-on-transparent-background-PNG.png`)
+                        .addFields(
+                            { name: "Song Name", value: `${track.title}`, inline: false },
+                            { name: "Duration", value: `${track.duration}`, inline: true },
+                            { name: "Requested by", value: `${track.requestedBy?.username}`, inline: true },
+                        )
+                ]
+            });
+        } catch (error) {
+            const err = error as Error;
+            await interaction.editReply({
+                embeds: [makeErrorEmbed(err)]
+            });
+        }
+
+    }
+});
