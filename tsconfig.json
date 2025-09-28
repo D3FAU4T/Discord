@@ -6,13 +6,14 @@
             "DOM"
         ],
         "target": "ESNext",
-        "module": "ESNext",
+        "module": "esnext",
         "moduleDetection": "force",
         "jsx": "react-jsx",
         "allowJs": true,
 
         // Module resolution (compatible with both Bun and Node.js)
-        "moduleResolution": "Node",
+        "moduleResolution": "node",
+        "ignoreDeprecations": "6.0",
         "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
         "noEmit": true,
