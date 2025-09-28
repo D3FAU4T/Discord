@@ -68,6 +68,7 @@ export default <Command>{
             const query = interaction.options.getString("song", true);
 
             const { track } = await player.play(channel, query, {
+                searchEngine: "SPOTIFY_SONG",
                 requestedBy: interaction.user,
                 nodeOptions: {
                     leaveOnEnd: false,

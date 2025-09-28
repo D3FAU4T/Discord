@@ -1,9 +1,13 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { readFile, readdir, access } from 'node:fs/promises';
-import { Player, type GuildQueueEvents } from "discord-player";
-import { DefaultExtractors } from "@discord-player/extractor";
 import { MongoClient, ServerApiVersion } from 'mongodb';
+
+// Discord Player
+import { Player, type GuildQueueEvents } from "discord-player";
+import { SpotifyExtractor } from "discord-player-spotify";
+import { YouTubeExtractor } from "discord-player-youtube";
+
 import type { Command } from "../typings/core";
 import type { demantleManager } from "../typings/demantle";
 
@@ -63,7 +67,7 @@ export class Bot extends Client<true> {
             }
         });
 
-        this.musicPlayer = new Player(this);
+        this.musicPlayer = new Player(this, {});
         this.handleShutdown();
     }
 
@@ -86,7 +90,9 @@ export class Bot extends Client<true> {
             console.error('❌ Failed to connect to MongoDB:', e);
         }
 
-        await this.musicPlayer.extractors.loadMulti(DefaultExtractors);
+        await this.musicPlayer.extractors.register(SpotifyExtractor, undefined);
+        await this.musicPlayer.extractors.register(YouTubeExtractor, undefined);
+
         await this.registerFiles();
         await this.login(process.env.discordToken);
     }
