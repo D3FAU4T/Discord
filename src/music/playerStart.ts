@@ -7,5 +7,4 @@ export default new MusicEvent("playerStart", (queue, track) => {
 
     if (channel && channel.isSendable())
         channel.send(`🎶 Now playing: **${track.title}** (requested by <@${track.requestedBy?.id}>)`);
-
-})
+});

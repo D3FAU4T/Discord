@@ -17,10 +17,11 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
+        "@discord-player/extractor": "^7.1.0",
+        "avconv": "^3.1.0",
         "cheerio": "^1.1.2",
         "discord-player": "^7.1.0",
         "discord-player-spotify": "^1.1.7",
-        "discord-player-youtube": "^0.5.6",
         "discord.js": "^14.22.1",
         "mediaplex": "^1.0.0",
         "mongodb": "^6.20.0",

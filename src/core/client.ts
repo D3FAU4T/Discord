@@ -4,9 +4,9 @@ import { readFile, readdir, access } from 'node:fs/promises';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 // Discord Player
+import { DefaultExtractors } from "@discord-player/extractor";
 import { Player, type GuildQueueEvents } from "discord-player";
 import { SpotifyExtractor } from "discord-player-spotify";
-import { YouTubeExtractor } from "discord-player-youtube";
 
 import type { Command } from "../typings/core";
 import type { demantleManager } from "../typings/demantle";
@@ -90,8 +90,11 @@ export class Bot extends Client<true> {
             console.error('❌ Failed to connect to MongoDB:', e);
         }
 
-        await this.musicPlayer.extractors.register(SpotifyExtractor, undefined);
-        await this.musicPlayer.extractors.register(YouTubeExtractor, undefined);
+        await this.musicPlayer.extractors.loadMulti(DefaultExtractors);
+        await this.musicPlayer.extractors.register(SpotifyExtractor, {
+            clientId: process.env.DP_SPOTIFY_CLIENT_ID,
+            clientSecret: process.env.DP_SPOTIFY_CLIENT_SECRET,
+        });
 
         await this.registerFiles();
         await this.login(process.env.discordToken);
