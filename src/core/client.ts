@@ -172,9 +172,8 @@ export class Bot extends Client<true> {
                 if (!guildIds) continue;
 
                 for (const guildId of guildIds) {
-                    if (!guildCommandMap.has(guildId)) {
+                    if (!guildCommandMap.has(guildId))
                         guildCommandMap.set(guildId, []);
-                    }
 
                     guildCommandMap.get(guildId)!.push(guildCommand);
                 }

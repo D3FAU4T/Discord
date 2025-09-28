@@ -4,6 +4,8 @@ import {
     PresenceUpdateStatus, SectionBuilder
 } from "discord.js";
 
+import {  } from "node:vm";
+
 import type { demantleDb } from "../typings/demantle";
 
 const githubRegex = /https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([\w\d]+)\/([^#\s]+)(?:#L(\d+)(?:-L(\d+))?)?/g;
@@ -20,6 +22,12 @@ export default new Event("messageCreate", async message => {
     const matches = words.filter(word => message.client.emotes[word]);
     for (const match of matches)
         await message.reply(message.client.emotes[match]!);
+
+    // Code handling
+    if (message.content.startsWith("```") && message.content.endsWith("```")) {
+        const code = message.content.slice(3, -3).trim();
+        await message.reply(`You sent a code block:\n\`\`\`\n${code}\n\`\`\``);
+    }
 
     // "Re" prefix joke handling (specific server only)
     if (message.guild.id === "1053990732958023720") {
