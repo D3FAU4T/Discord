@@ -19,7 +19,22 @@ export const ErrorEmbed = (title: string = "Error", description: string): EmbedB
 
 
 export const searchGarticAnswer = async (query: string) => {
-    const text: string[] = await Bun.file('./src/Config/gos.json').json() ?? [];
+    let text: string[] = [];
+    // Try Bun first, fallback to NodeJS if not available
+    if (typeof Bun !== "undefined" && Bun?.file) {
+        text = await Bun.file('./src/Config/gos.json').json() ?? [];
+    } else {
+        // NodeJS fallback
+        const fs = await import('node:fs/promises');
+        const path = await import('node:path');
+        try {
+            const filePath = path.resolve(__dirname, '../Config/gos.json');
+            const raw = await fs.readFile(filePath, 'utf-8');
+            text = JSON.parse(raw);
+        } catch {
+            text = [];
+        }
+    }
 
     let stripped = query
         .replace(/\"/g, '')
