@@ -1,10 +1,12 @@
 import { Event } from "../core/client";
+import { inspect } from "node:util";
 import {
     MessageFlags, PermissionFlagsBits,
     PresenceUpdateStatus, SectionBuilder
 } from "discord.js";
 
-import {  } from "node:vm";
+import vm from "node:vm";
+import { createVmContext, logs } from "../core/isolation";
 
 import type { demantleDb } from "../typings/demantle";
 
@@ -24,9 +26,52 @@ export default new Event("messageCreate", async message => {
         await message.reply(message.client.emotes[match]!);
 
     // Code handling
-    if (message.content.startsWith("```") && message.content.endsWith("```")) {
-        const code = message.content.slice(3, -3).trim();
-        await message.reply(`You sent a code block:\n\`\`\`\n${code}\n\`\`\``);
+    if (message.channel.id === "1258081117504802828" && message.content.startsWith("```") && message.content.endsWith("```")) {
+        // Detect language specifier
+        const langMatch = message.content.match(/^```(\w+)/);
+        const lang = langMatch ? langMatch[1]?.toLowerCase() : "";
+        if (lang !== "js" && lang !== "javascript") {
+            await message.reply("Only JavaScript codeblocks are allowed.");
+            return;
+        }
+        // Remove the opening codeblock (with optional language) and closing codeblock
+        const code = message.content.replace(/^```[^\n]*\n?/, "").replace(/```$/, "").trim();
+        try {
+            // Reset logs before each run
+            logs.length = 0;
+            const context = createVmContext();
+            vm.createContext(context);
+            let result = vm.runInContext(code, context, { timeout: 2000 });
+            if (typeof result !== "string")
+                result = inspect(result);
+            let output = logs.length ? logs.join("\n") : result;
+            await message.reply(`\`\`\`bash\n${output}\n\`\`\``);
+        } catch (err) {
+            await message.reply(`\`\`\`bash\nError: ${err}\n\`\`\``);
+        }
+    }
+
+    // Draco easter egg
+    if (words[0] === '!slots') {
+        const foods = ['🍕', '🍔', '🍟', '🌭', '🥪', '🥙', '🧆', '🍗', '🍖', '🥩', '🥓', '🍳', '🧇', '🥞', '🫓', '🍞', '🥐', '🥖', '🫒', '🧈', '🧀', '🍤', '🍣', '🍜', '🍲', '🍛', '🍚', '🍙', '🍘', '🍥', '🥠', '🥡'];
+        const slotMachine = `\| ${foods[Math.floor(Math.random() * foods.length)]} \| ${foods[Math.floor(Math.random() * foods.length)]} \| ${foods[Math.floor(Math.random() * foods.length)]} \|`;
+
+        const isWin = slotMachine.split('|')
+            .filter(s => s.trim() !== '')
+            .every(s => s.trim() === slotMachine.split('|')[1]?.trim());
+
+        if (isWin)
+            await message.reply(`🎉 JACKPOT! 🎉\n${slotMachine}\n<@195261052236070912> will congratulate you!`);
+        else
+            await message.reply("You got " + slotMachine + " and lost \`-100\` gambling aura points!\n-# Note: Points are purely decorative and have no real value. The bot does not keep a track of it.");
+    }
+
+    else if (words[0] === '!slost') {
+        // Author: Draco
+        if (message.author.id === "195261052236070912")
+            await message.reply(message.client.emotes['uhmdude'] ?? 'UHMDude');
+        else
+            await message.reply(message.client.emotes['diesofcringe'] ?? 'DIESOFCRINGE');
     }
 
     // "Re" prefix joke handling (specific server only)
