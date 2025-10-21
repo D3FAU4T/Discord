@@ -1,6 +1,7 @@
 import { Event } from "../core/client";
 import { inspect } from "node:util";
 import {
+    ChannelType,
     MessageFlags, PermissionFlagsBits,
     PresenceUpdateStatus, SectionBuilder
 } from "discord.js";
@@ -79,6 +80,10 @@ export default new Event("messageCreate", async message => {
         message.guild.id === "1053990732958023720"
         || message.guild.id === "1310251717807575131"
     ) {
+
+        if (message.channel.type === ChannelType.GuildText && message.channel.name === "d3mantle")
+            return;
+        
         const reWords = words.filter(word => word.toLowerCase().startsWith("re") && word.length > 2);
 
         // Check if all words start with "re" OR if there are more than 7 "re" words
