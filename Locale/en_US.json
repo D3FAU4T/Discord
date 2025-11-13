@@ -1,0 +1,13 @@
+{
+  "GARTIC_DESCRIPTION": "Perform gartic-related operations",
+  "CALC_LEVEL_DESCRIPTION": "Get the amount of points you need to do in a row to get your desired amount of garticos",
+  "CALC_LEVEL_GARTICOS_DESCRIPTION": "Type the amount of garticos you desire",
+  "GARTIC_CALC": "Garticos calculator",
+  "TARGET_GARTICOS": "Target Garticos",
+  "REQUIRED_POINTS": "Required points",
+  "BONUS_COUNTED": "Bonuses counted",
+  "GARTICOS_GAINED": "Garticos gained",
+  "CALC_POINTS_LEVEL_DESCRIPTION": "Type the level number you want to calculate garticos for",
+  "CALC_POINTS_DESCRIPTION": "Get the amount of garticos you will gain at X level",
+  "TARGET_LEVEL": "Target level"
+}

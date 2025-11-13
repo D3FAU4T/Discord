@@ -1,0 +1,13 @@
+{
+  "GARTIC_DESCRIPTION": "Realizar operações relacionadas a gartic",
+  "CALC_LEVEL_DESCRIPTION": "Obtenha à quantidade de pontos que você precisa fazer para ganhar os garticos na mesma partida",
+  "CALC_POINTS_DESCRIPTION": "Saiba a quantidade de garticos que você ganhará em um determinado nível",
+  "CALC_POINTS_LEVEL_DESCRIPTION": "Digite o número do nível que você deseja calcular quantos garticos irá obter",
+  "CALC_LEVEL_GARTICOS_DESCRIPTION": "Digite a quantidade de garticos que deseja",
+  "GARTIC_CALC": "Calculadora de Garticos",
+  "TARGET_GARTICOS": "Garticos que você deseja atingir",
+  "TARGET_LEVEL": "Nível que você deseja atingir",
+  "REQUIRED_POINTS": "Pontos necessários de atingir",
+  "GARTICOS_GAINED": "Garticos ganhos",
+  "BONUS_COUNTED": "Todos os bônus são contados"
+}
