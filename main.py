@@ -22,6 +22,7 @@ intents = Intents(
 
 bot = InteractionBot(intents=intents)
 bot.d3mantles = {} # type: ignore
+bot.wos_games = {} # type: ignore
 bot.db_collection = None # type: ignore
 bot.i18n.load("Locale")
 bot.load_extensions("Commands")

@@ -91,6 +91,88 @@ class OnMessageCog(Cog):
                 word_without_re = words[0][2:]
                 await message.reply(f"To {word_without_re} again 🤡")
 
+        # WOS handling
+        if len(self.bot.wos_games) > 0 and message.channel.id in self.bot.wos_games:  # type: ignore
+            wos_game = self.bot.wos_games[message.channel.id]  # type: ignore
+
+            if (
+                    len(self.emoji_regex.findall(message.content)) > 0
+                    or len(message.attachments) > 0
+                    or "https://" in message.content
+                    or len(words) != 1
+            ):
+                return
+
+            guess_word = words[0].lower()
+
+            # Invalid guess
+            if guess_word not in wos_game["all_words"]:
+                await message.delete()
+                return
+
+            async def generate_wos_display(highlight_word=None):
+                """Generate the WOS game display with optional highlighting"""
+                col1 = wos_game["level"].get('col1', [])
+                col2 = wos_game["level"].get('col2', [])
+                col3 = wos_game["level"].get('col3', [])
+                
+                max_rows = max(len(col1), len(col2), len(col3))
+                
+                masked_display = ''
+                for i in range(max_rows):
+                    words_row = [
+                        col1[i] if i < len(col1) else '',
+                        col2[i] if i < len(col2) else '',
+                        col3[i] if i < len(col3) else ''
+                    ]
+                    
+                    formatted_words = []
+                    for word in words_row:
+                        if word.lower() in wos_game["revealed_words"]:
+                            if highlight_word and word.lower() == highlight_word:
+                                formatted_words.append(f"**{word.lower()}**")
+                            else:
+                                formatted_words.append(word.lower())
+                        else:
+                            formatted_words.append(''.join('x' if c != ' ' else ' ' for c in word))
+                    
+                    row = f"{formatted_words[0]:<10} {formatted_words[1]:<10} {formatted_words[2]:<10}"
+                    masked_display += row + '\n'
+                
+                scrambled_letters = wos_game["valid_letters"].copy()
+                random.shuffle(scrambled_letters)
+                letters_display = ' '.join(scrambled_letters).upper()
+                
+                return f"```\nLetters: {letters_display}\n\n{masked_display}```"
+
+            # Already guessed
+            if guess_word in wos_game["revealed_words"]:
+                await message.delete()
+                content = await generate_wos_display(highlight_word=guess_word)
+                wos_game["message"] = await wos_game["message"].edit(content=content)
+                return
+
+            perms_to_del = perms.manage_messages or perms.administrator
+            if not perms_to_del:
+                await message.channel.send(
+                    content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
+                return
+
+            wos_game["guesses"].append(guess_word)
+            wos_game["revealed_words"].add(guess_word)
+
+            # Win condition - all words guessed
+            is_game_won = set(wos_game["guesses"]) == wos_game["all_words"]
+
+            await message.delete()
+            
+            if is_game_won:
+                del self.bot.wos_games[message.channel.id]  # type: ignore
+                await message.channel.send("🎉 **All Words Guessed!**")
+            else:
+                content = await generate_wos_display()
+                wos_game["message"] = await wos_game["message"].edit(content=content)
+
         # D3mantle handling
         if len(self.bot.d3mantles) > 0 and message.channel.id in self.bot.d3mantles:  # type: ignore
             demantle = self.bot.d3mantles[message.channel.id]  # type: ignore
