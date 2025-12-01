@@ -71,9 +71,24 @@ async def wos(interaction: ApplicationCommandInteraction):
         else:
             await button_interaction.response.send_message(content="Game is not in progress.", ephemeral=True)
     
+    async def move_down_callback(button_interaction: MessageInteraction):
+        if channel_id in interaction.bot.wos_games:  # type: ignore
+            wos_game = interaction.bot.wos_games[channel_id]  # type: ignore
+            old_message = wos_game["message"]
+            await button_interaction.response.defer()
+            new_message = await button_interaction.channel.send(content=old_message.content, view=view)
+            await old_message.delete()
+            wos_game["message"] = new_message
+        else:
+            await button_interaction.response.send_message(content="Game is not in progress.", ephemeral=True)
+    
     give_up_button = Button(label="Give Up", style=ButtonStyle.red, custom_id="wos_give_up")
     give_up_button.callback = give_up_callback
     view.add_item(give_up_button)
+    
+    move_down_button = Button(label="Move Down", style=ButtonStyle.blurple, custom_id="wos_move_down")
+    move_down_button.callback = move_down_callback
+    view.add_item(move_down_button)
     
     game_message = await interaction.edit_original_response(content=f"```\nLetters: {letters_display}\n\n{masked_display}```", view=view)
     

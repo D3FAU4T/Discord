@@ -78,19 +78,6 @@ class OnMessageCog(Cog):
             except:
                 pass
 
-        # "Re" prefix joke handling (specific server only)
-        if message.guild.id in [1310251717807575131]:
-            if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
-                return
-            re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
-            if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
-                await message.add_reaction("🤡")
-                word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
-                await message.reply(f"To:\n{word_list}")
-            elif len(words) == 1 and len(re_words) == 1:
-                word_without_re = words[0][2:]
-                await message.reply(f"To {word_without_re} again 🤡")
-
         # WOS handling
         if len(self.bot.wos_games) > 0 and message.channel.id in self.bot.wos_games:  # type: ignore
             wos_game = self.bot.wos_games[message.channel.id]  # type: ignore
@@ -166,12 +153,13 @@ class OnMessageCog(Cog):
 
             await message.delete()
             
+            content = await generate_wos_display()
+            if wos_game["message"] is not None:
+                wos_game["message"] = await wos_game["message"].edit(content=content)
+            
             if is_game_won:
                 del self.bot.wos_games[message.channel.id]  # type: ignore
                 await message.channel.send("🎉 **All Words Guessed!**")
-            else:
-                content = await generate_wos_display()
-                wos_game["message"] = await wos_game["message"].edit(content=content)
 
         # D3mantle handling
         if len(self.bot.d3mantles) > 0 and message.channel.id in self.bot.d3mantles:  # type: ignore
@@ -278,6 +266,19 @@ class OnMessageCog(Cog):
                     new_content = f"<@{message.author.id}> The word `{words[0]}` has already been guessed!\n{game_table}"
 
                 demantle["message"] = await demantle["message"].edit(content=new_content)
+
+        # "Re" prefix joke handling (specific server only)
+        if message.guild.id in [1310251717807575131]:
+            if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
+                return
+            re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
+            if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
+                await message.add_reaction("🤡")
+                word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
+                await message.reply(f"To:\n{word_list}")
+            elif len(words) == 1 and len(re_words) == 1:
+                word_without_re = words[0][2:]
+                await message.reply(f"To {word_without_re} again 🤡")
 
         print(f"[{message.guild.name}] {message.author.name}: {message.content}")
 
