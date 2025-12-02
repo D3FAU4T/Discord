@@ -78,9 +78,9 @@ class OnMessageCog(Cog):
             except:
                 pass
 
-        # WOS handling
-        if len(self.bot.wos_games) > 0 and message.channel.id in self.bot.wos_games:  # type: ignore
-            wos_game = self.bot.wos_games[message.channel.id]  # type: ignore
+        # WOD handling
+        if len(self.bot.wod_games) > 0 and message.channel.id in self.bot.wod_games:  # type: ignore
+            wod_game = self.bot.wod_games[message.channel.id]  # type: ignore
 
             if (
                     len(self.emoji_regex.findall(message.content)) > 0
@@ -93,15 +93,15 @@ class OnMessageCog(Cog):
             guess_word = words[0].lower()
 
             # Invalid guess
-            if guess_word not in wos_game["all_words"]:
+            if guess_word not in wod_game["all_words"]:
                 await message.delete()
                 return
 
-            async def generate_wos_display(highlight_word=None):
-                """Generate the WOS game display with optional highlighting"""
-                col1 = wos_game["level"].get('col1', [])
-                col2 = wos_game["level"].get('col2', [])
-                col3 = wos_game["level"].get('col3', [])
+            async def generate_wod_display(highlight_word=None):
+                """Generate the WOD game display with optional highlighting"""
+                col1 = wod_game["level"].get('col1', [])
+                col2 = wod_game["level"].get('col2', [])
+                col3 = wod_game["level"].get('col3', [])
                 
                 max_rows = max(len(col1), len(col2), len(col3))
                 
@@ -115,7 +115,7 @@ class OnMessageCog(Cog):
                     
                     formatted_words = []
                     for word in words_row:
-                        if word.lower() in wos_game["revealed_words"]:
+                        if word.lower() in wod_game["revealed_words"]:
                             if highlight_word and word.lower() == highlight_word:
                                 formatted_words.append(f"**{word.lower()}**")
                             else:
@@ -126,17 +126,17 @@ class OnMessageCog(Cog):
                     row = f"{formatted_words[0]:<10} {formatted_words[1]:<10} {formatted_words[2]:<10}"
                     masked_display += row + '\n'
                 
-                scrambled_letters = wos_game["valid_letters"].copy()
+                scrambled_letters = wod_game["valid_letters"].copy()
                 random.shuffle(scrambled_letters)
                 letters_display = ' '.join(scrambled_letters).upper()
                 
                 return f"```\nLetters: {letters_display}\n\n{masked_display}```"
 
             # Already guessed
-            if guess_word in wos_game["revealed_words"]:
+            if guess_word in wod_game["revealed_words"]:
                 await message.delete()
-                content = await generate_wos_display(highlight_word=guess_word)
-                wos_game["message"] = await wos_game["message"].edit(content=content)
+                content = await generate_wod_display(highlight_word=guess_word)
+                wod_game["message"] = await wod_game["message"].edit(content=content)
                 return
 
             perms_to_del = perms.manage_messages or perms.administrator
@@ -145,20 +145,24 @@ class OnMessageCog(Cog):
                     content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
                 return
 
-            wos_game["guesses"].append(guess_word)
-            wos_game["revealed_words"].add(guess_word)
+            wod_game["guesses"].append(guess_word)
+            wod_game["revealed_words"].add(guess_word)
 
             # Win condition - all words guessed
-            is_game_won = set(wos_game["guesses"]) == wos_game["all_words"]
+            is_game_won = set(wod_game["guesses"]) == wod_game["all_words"]
 
             await message.delete()
             
-            content = await generate_wos_display()
-            if wos_game["message"] is not None:
-                wos_game["message"] = await wos_game["message"].edit(content=content)
+            content = await generate_wod_display()
+            if wod_game["message"] is not None:
+                wod_game["message"] = await wod_game["message"].edit(content=content)
             
             if is_game_won:
-                del self.bot.wos_games[message.channel.id]  # type: ignore
+                del self.bot.wod_games[message.channel.id]  # type: ignore
+                
+                if not self.bot.wod_games:  # type: ignore
+                    await self.bot.change_presence(status=Status.idle, activity=None)
+                
                 await message.channel.send("🎉 **All Words Guessed!**")
 
         # D3mantle handling
