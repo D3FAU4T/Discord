@@ -21,13 +21,21 @@ class WODCog(commands.Cog):
         await interaction.response.defer()
 
         with open(os.path.join("Config", "levels.json"), 'r', encoding='utf-8') as f:
-            raw: dict[str, list] = json.load(f)
+            data: dict = json.load(f)
+        
+        usernames: dict[str, str] = data.get('usernames', {})
+        raw: dict[str, list] = data.get('levels', {})
 
         levels: list = []
-        for v in raw.values():
-            levels.extend(v)
+        creator_map: dict = {}
+        for creator_id, creator_levels in raw.items():
+            for level in creator_levels:
+                levels.append(level)
+                creator_map[id(level)] = creator_id
 
         random_level: dict[str, list[str]] = random.choice(levels)
+        creator_id = creator_map.get(id(random_level), "Unknown")
+        creator_name = usernames.get(creator_id, "Unknown")
         
         col1 = random_level.get('col1', [])
         col2 = random_level.get('col2', [])
@@ -86,6 +94,7 @@ class WODCog(commands.Cog):
             "revealed_words": set(),
             "message": game_message,
             "valid_word": valid_word,
+            "creator_name": creator_name,
         }
 
         await self.bot.change_presence(
@@ -112,6 +121,8 @@ class WODCog(commands.Cog):
             )
             return
 
+        creator_name = wod_game.get("creator_name", "Unknown")
+        
         del self.bot.wod_games[interaction.channel.id]  # type: ignore
         
         if not self.bot.wod_games:  # type: ignore
@@ -120,7 +131,7 @@ class WODCog(commands.Cog):
         await interaction.edit_original_response(
             embed=Embed(
                 title="WOD: Give Up",
-                description="Game ended. Better luck next time!",
+                description=f"Game ended. Better luck next time!\n\n**Level by:** {creator_name}",
                 colour=Colour.from_rgb(255, 255, 255)
             )
         )

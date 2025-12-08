@@ -158,12 +158,14 @@ class OnMessageCog(Cog):
                 wod_game["message"] = await wod_game["message"].edit(content=content)
             
             if is_game_won:
+                creator_name = wod_game.get("creator_name", "Unknown")
+                
                 del self.bot.wod_games[message.channel.id]  # type: ignore
                 
                 if not self.bot.wod_games:  # type: ignore
                     await self.bot.change_presence(status=Status.idle, activity=None)
                 
-                await message.channel.send("🎉 **All Words Guessed!**")
+                await message.channel.send(f"🎉 **All Words Guessed!**\n**Level by:** {creator_name}")
 
         # D3mantle handling
         if len(self.bot.d3mantles) > 0 and message.channel.id in self.bot.d3mantles:  # type: ignore
