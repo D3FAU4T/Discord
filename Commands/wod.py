@@ -1,8 +1,31 @@
 import os
 import json
 import random
-from disnake import Activity, ActivityType, ApplicationCommandInteraction, Colour, Embed, Status
 from disnake.ext import commands
+from disnake import (
+    Activity,
+    ActivityType,
+    ApplicationCommandInteraction,
+    OptionChoice,
+    Colour,
+    Embed,
+    Option,
+    OptionType,
+    Status
+)
+
+def get_author_choices():
+    """Dynamically load author choices from levels.json"""
+    try:
+        with open(os.path.join("Config", "levels.json"), 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        usernames = data.get('usernames', {})
+        return [
+            OptionChoice(name=username, value=user_id)
+            for user_id, username in usernames.items()
+        ]
+    except:
+        return []
 
 class WODCog(commands.Cog):
     def __init__(self, bot: commands.InteractionBot):
@@ -12,12 +35,24 @@ class WODCog(commands.Cog):
         name="wod",
         description="Play a game of WOD"
     )
-    async def wod(self, interaction: ApplicationCommandInteraction):
+    async def wod(self, _interaction: ApplicationCommandInteraction):
         # Base group command; subcommands below
         pass
 
-    @wod.sub_command(name="custom", description="Start a new WOD game with custom levels")
-    async def custom(self, interaction: ApplicationCommandInteraction):
+    @wod.sub_command(
+            name="custom",
+            description="Start a new WOD game with custom levels",
+            options=[
+                Option(
+                    name="author",
+                    description="The author of the custom levels to use",
+                    required=False,
+                    type=OptionType.string,
+                    choices=get_author_choices()
+                )
+            ]
+    )
+    async def custom(self, interaction: ApplicationCommandInteraction, author: str | None = None):
         await interaction.response.defer()
 
         with open(os.path.join("Config", "levels.json"), 'r', encoding='utf-8') as f:
@@ -26,15 +61,53 @@ class WODCog(commands.Cog):
         usernames: dict[str, str] = data.get('usernames', {})
         raw: dict[str, list] = data.get('levels', {})
 
-        levels: list = []
-        creator_map: dict = {}
-        for creator_id, creator_levels in raw.items():
-            for level in creator_levels:
-                levels.append(level)
-                creator_map[id(level)] = creator_id
+        # If author is specified, validate it's a real author
+        if author:
+            if author not in raw:
+                await interaction.edit_original_response(
+                    embed=Embed(
+                        title="WOD Error",
+                        description=f"Invalid author selected.",
+                        colour=Colour.red()
+                    )
+                )
+                return
+            
+            if not raw[author]:
+                await interaction.edit_original_response(
+                    embed=Embed(
+                        title="WOD Error",
+                        description=f"No levels found for author {usernames.get(author, author)}.",
+                        colour=Colour.red()
+                    )
+                )
+                return
 
-        random_level: dict[str, list[str]] = random.choice(levels)
-        creator_id = creator_map.get(id(random_level), "Unknown")
+            levels: list = raw[author]
+            creator_id = author
+            random_level: dict[str, list[str]] = random.choice(levels)
+        else:
+            # Otherwise, use all levels
+            levels: list = []
+            creator_map: dict = {}
+            for creator_id_key, creator_levels in raw.items():
+                for level in creator_levels:
+                    levels.append(level)
+                    creator_map[id(level)] = creator_id_key
+            
+            if not levels:
+                await interaction.edit_original_response(
+                    embed=Embed(
+                        title="WOD Error",
+                        description="No levels available.",
+                        colour=Colour.red()
+                    )
+                )
+                return
+            
+            random_level: dict[str, list[str]] = random.choice(levels)
+            creator_id = creator_map.get(id(random_level), "Unknown")
+        
         creator_name = usernames.get(creator_id, "Unknown")
         
         col1 = random_level.get('col1', [])
