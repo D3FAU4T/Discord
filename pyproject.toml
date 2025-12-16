@@ -1,0 +1,31 @@
+[project]
+name = "discord"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "aiohappyeyeballs==2.6.1",
+    "aiohttp==3.13.2",
+    "aiosignal==1.4.0",
+    "attrs==25.4.0",
+    "beautifulsoup4==4.14.3",
+    "certifi==2025.11.12",
+    "charset-normalizer==3.4.4",
+    "disnake==2.11.0",
+    "dnspython==2.8.0",
+    "frozenlist==1.8.0",
+    "idna==3.11",
+    "multidict==6.7.0",
+    "prettytable==3.17.0",
+    "propcache==0.4.1",
+    "pymongo==4.15.5",
+    "python-dotenv==1.2.1",
+    "regex==2025.11.3",
+    "requests==2.32.5",
+    "soupsieve==2.8",
+    "typing-extensions==4.15.0",
+    "urllib3==2.6.1",
+    "wcwidth==0.2.14",
+    "yarl==1.22.0",
+]
