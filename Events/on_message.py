@@ -34,7 +34,14 @@ class OnMessageCog(Cog):
         # Emotes handling
         for word in set(words):
             if word in self.emotes:
-                await message.reply(self.emotes[word])
+                if message.reference and message.reference.message_id:
+                    try:
+                        referenced_message = await message.channel.fetch_message(message.reference.message_id)
+                        await referenced_message.reply(self.emotes[word])
+                    except:
+                        await message.reply(self.emotes[word])
+                else:
+                    await message.reply(self.emotes[word])
 
         # Draco easter egg
         if words and words[0] == '!slots':
