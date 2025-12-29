@@ -19,6 +19,13 @@ class OnMessageCog(Cog):
         self.emoji_regex = regex.compile(r'[\p{Emoji_Presentation}\p{Emoji}\u200d]+', flags=regex.UNICODE)
         self.mention_regex = regex.compile(r"^<@\d+>")
         self.github_regex = regex.compile(r"https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([\w\d]+)\/([^#\s]+)(?:#L(\d+)(?:-L(\d+))?)?")
+        
+        # Albie Weekes jokes - load from JSON and shuffle
+        with open(os.path.join("Config", "albie_weekes_jokes.json"), 'r') as jokes_file:
+            jokes_data: dict = json.loads(jokes_file.read())
+            self.albie_jokes: list[str] = jokes_data.get("jokes", [])
+        random.shuffle(self.albie_jokes)
+        self.albie_joke_index = 0
 
     @Cog.listener()
     async def on_message(self, message: Message):
@@ -284,39 +291,14 @@ class OnMessageCog(Cog):
         if message.guild.id in [1310251717807575131, 871594906907451402]:
             # Albie Weekes joke
             if words[0] == 'albie' and words[1] == 'weekes':
-                jokes = [
-                    "then I'll be DAMNED! <:KEKW:1455135592353370132>",
-                    "and I'll be stuck at Level 1 broom speed for the rest of eternity! :sob:",
-                    "and I'll be wondering if his owl got intercepted by a Ranrok loyalist! :thinking:",
-                    "and I'll be cringing over the Xbox controller :triumph:",
-                    "then I'll begone! :wave:",
-                    "and I'll be fixing Voldemort's :nose:",
-                    "and I'll be back for another upgrade!",
-                    "NOOOO, AVEDA KEDAVRA! 🪄 ⚡",
-                    "and I'll die out of cringe if you repeat that again :sob:",
-                    "and I'll be casting ✨Revelio✨ every five seconds!",
-                    "and I'll be watching Draco DIESOFCRINGE because I'm about to Giggle, Wiggle, and Jiggle! 💃",
-                    "and I'll be telling Draco that the broom shop is actually run by Angels! 😈",
-                    "and I'll be giving Draco a broom that only works if he says \"I love Angels\" three times! 🧹✨",
-                    "and I'll be banishing all the angels from Hogsmeade so Draco can finally shop in peace! 🖤😈",
-                    "and I'll be teaching Nugs a spell that makes everyone in the server Giggle, Wiggle, and Jiggle simultaneously! 🪄💃",
-                    "and I'll be telling Draco \"ANGEL I NEED YOUR HELP\" just to see him lose it! 👼🏃",
-                    "and I'll be helping Nugs restock her supermarket :blush:",
-                    "and I'll be upgrading Nugs' broom so she can fly all the way back to visit Bosnia in record time! 🇧🇦💨",
-                    "and I'll be protecting Nugs' supermarket from Goblins while she's busy winning in Gears 5! ⚙️🛡️",
-                    "and I'll be saying \"hvala\" to Nugs for being the most bubbly witch in the server! 🌸✨",
-                    "and I'll be setting up a pew-pew target range for Nugs right outside Spintwitches! 🎯🔫",
-                    "and I'll be sending Nugs a basket of German sweets and a free broom upgrade just because she's the best! 🍬🧹",
-                    "and I'll be CRUCIO-ING your framerate until it dies! ⚡",
-                    "**ENOUGH!** If I hear \"Albie Weekes\" one more time, I'm calling in a Hammer of Dawn from Gears 5 on this entire text channel! 🛰️💥",
-                    "and I'll be giving Nugs a tactical pew-pew broom for her FPS games so she never misses a flick-shot! 🔫🦉",
-                    "and I'll be jumping off the Astronomy Tower if I have to process one more Albie joke! 🌌💀",
-                    "and I'll be letting Draco cast Crucio on my CPU just to feel something other than this level of cringe! ⚡🧠",
-                    "If I hear his name again, I'm hiding in Nugs' supermarket freezer and I'm NEVER coming out! 🛒❄️",
-                    "Albie Weekes? More like Albie **DELETING** this entire server so I don't have to process another Albie joke! 💻🔥"
-                ]
-
-                await message.reply(random.choice(jokes))
+                await message.reply(self.albie_jokes[self.albie_joke_index])
+                
+                # Move to next joke
+                self.albie_joke_index += 1
+                if self.albie_joke_index >= len(self.albie_jokes):
+                    # Reshuffle and reset when we've gone through all jokes
+                    random.shuffle(self.albie_jokes)
+                    self.albie_joke_index = 0
 
             # "Re" prefix joke handling
             if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
