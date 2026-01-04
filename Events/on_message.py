@@ -4,15 +4,43 @@ import regex
 import random
 import asyncio
 import requests
+import math
 from pymongo import ReturnDocument
 from disnake import Message, MessageFlags, Status, AllowedMentions, ChannelType
 from disnake.ui import Section, TextDisplay, Thumbnail
 from disnake.ext.commands import Cog
 
+def split_words_into_columns(words: list[str]) -> tuple[list[str], list[str], list[str]]:
+    """Split a flat list of words into 3 columns based on array length.
+    
+    Args:
+        words: Flat list of words sorted by length then alphabetically
+        
+    Returns:
+        Tuple of (column1, column2, column3) lists
+    """
+    array_length = len(words)
+    
+    # Calculate split index based on array length
+    if array_length < 21:
+        if array_length > 14:
+            split_index = math.ceil((array_length - 4) / 2)
+        else:
+            split_index = math.ceil(array_length / 3)
+    else:
+        split_index = 8
+    
+    # Split into 3 columns
+    column1 = words[0:split_index]
+    column2 = words[split_index:2 * split_index]
+    column3 = words[2 * split_index:]
+    
+    return column1, column2, column3
+
 class OnMessageCog(Cog):
     def __init__(self, bot):
         self.bot = bot
-        with open(os.path.join("Config", "emotes.json"), 'r') as emote_file:
+        with open(os.path.join("Config", "emotes.json"), 'r', encoding='utf-8') as emote_file:
             self.emotes: dict[str, str] = json.loads(emote_file.read())
 
         # Regexes
@@ -21,11 +49,10 @@ class OnMessageCog(Cog):
         self.github_regex = regex.compile(r"https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([\w\d]+)\/([^#\s]+)(?:#L(\d+)(?:-L(\d+))?)?")
         
         # Albie Weekes jokes - load from JSON and shuffle
-        with open(os.path.join("Config", "albie_weekes_jokes.json"), 'r') as jokes_file:
+        with open(os.path.join("Config", "albie_weekes_jokes.json"), 'r', encoding='utf-8') as jokes_file:
             jokes_data: dict = json.loads(jokes_file.read())
             self.albie_jokes: list[str] = jokes_data.get("jokes", [])
         random.shuffle(self.albie_jokes)
-        self.albie_joke_index = 0
 
     @Cog.listener()
     async def on_message(self, message: Message):
@@ -113,9 +140,8 @@ class OnMessageCog(Cog):
 
             async def generate_wod_display(highlight_word=None):
                 """Generate the WOD game display with optional highlighting"""
-                col1 = wod_game["level"].get('col1', [])
-                col2 = wod_game["level"].get('col2', [])
-                col3 = wod_game["level"].get('col3', [])
+                # Split the flat word array into 3 columns
+                col1, col2, col3 = split_words_into_columns(wod_game["level"])
                 
                 max_rows = max(len(col1), len(col2), len(col3))
                 
@@ -291,14 +317,16 @@ class OnMessageCog(Cog):
         if message.guild.id in [1310251717807575131, 871594906907451402]:
             # Albie Weekes joke
             if words[0] == 'albie' and words[1] == 'weekes':
-                await message.reply(self.albie_jokes[self.albie_joke_index])
-                
-                # Move to next joke
-                self.albie_joke_index += 1
-                if self.albie_joke_index >= len(self.albie_jokes):
-                    # Reshuffle and reset when we've gone through all jokes
+                # Refill and shuffle if empty
+                if not self.albie_jokes:
+                    with open(os.path.join("Config", "albie_weekes_jokes.json"), 'r') as jokes_file:
+                        jokes_data: dict = json.loads(jokes_file.read())
+                        self.albie_jokes = jokes_data.get("jokes", [])
                     random.shuffle(self.albie_jokes)
-                    self.albie_joke_index = 0
+                
+                # Pop and reply with joke
+                joke = self.albie_jokes.pop()
+                await message.reply(joke)
 
             # "Re" prefix joke handling
             if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":

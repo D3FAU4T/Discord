@@ -1,7 +1,9 @@
 import os
+import copy
 from pymongo import MongoClient
 from disnake import Intents, Status
 from disnake.ext.commands import InteractionBot
+from disnake.app_commands import SlashCommand
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env.production.local")
@@ -33,6 +35,58 @@ if MONGODB_TOKEN:
     bot.db_collection = db["Demantle"] # type: ignore
 
 bot.load_extension("Events.on_message")
+
+# Monkey patch to filter subcommands based on guild_ids defined in extras
+_original_ordered_unsynced = bot._ordered_unsynced_commands
+
+def _custom_ordered_unsynced_commands(test_guilds=None):
+    """Custom implementation that filters subcommands based on their extras.guild_ids."""
+    global_cmds, guilds = _original_ordered_unsynced(test_guilds)
+    
+    subcommand_restrictions = {}
+    for cmd_name, cmd in bot.all_slash_commands.items():
+        if hasattr(cmd, 'children') and cmd.children:
+            for sub_name, subcommand in cmd.children.items():
+                if hasattr(subcommand, 'extras') and subcommand.extras:
+                    guild_ids = subcommand.extras.get('guild_ids')
+                    if guild_ids:
+                        if cmd_name not in subcommand_restrictions:
+                            subcommand_restrictions[cmd_name] = {}
+                        subcommand_restrictions[cmd_name][sub_name] = guild_ids
+    
+    # Filter subcommands for each guild
+    for guild_id, cmd_list in guilds.items():
+        new_cmd_list = []
+        
+        for cmd in cmd_list:
+            if not isinstance(cmd, SlashCommand):
+                new_cmd_list.append(cmd)
+                continue
+            
+            # Check if this command has subcommand restrictions
+            if cmd.name in subcommand_restrictions:
+                cmd_copy = copy.deepcopy(cmd)
+                
+                original_options = list(cmd_copy.options)
+                cmd_copy.options = []
+                
+                for option in original_options:
+                    restrictions = subcommand_restrictions[cmd.name]
+                    if option.name in restrictions:
+                        if guild_id in restrictions[option.name]:
+                            cmd_copy.options.append(option)
+                    else:
+                        cmd_copy.options.append(option)
+                
+                new_cmd_list.append(cmd_copy)
+            else:
+                new_cmd_list.append(cmd)
+        
+        guilds[guild_id] = new_cmd_list
+    
+    return global_cmds, guilds
+
+bot._ordered_unsynced_commands = _custom_ordered_unsynced_commands
 
 @bot.event
 async def on_ready():
