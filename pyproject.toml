@@ -6,11 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "aiohappyeyeballs==2.6.1",
-    "aiohttp==3.13.2",
+    "aiohttp==3.13.3",
     "aiosignal==1.4.0",
     "attrs==25.4.0",
     "beautifulsoup4==4.14.3",
-    "certifi==2025.11.12",
+    "certifi==2026.1.4",
     "charset-normalizer==3.4.4",
     "disnake==2.11.0",
     "dnspython==2.8.0",
