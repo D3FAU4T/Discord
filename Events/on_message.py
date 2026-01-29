@@ -6,7 +6,7 @@ import asyncio
 import requests
 import math
 from pymongo import ReturnDocument
-from disnake import Message, MessageFlags, Status, AllowedMentions, ChannelType
+from disnake import Message, MessageFlags, Permissions, Status, AllowedMentions, ChannelType
 from disnake.ui import Section, TextDisplay, Thumbnail
 from disnake.ext.commands import Cog
 
@@ -54,19 +54,8 @@ class OnMessageCog(Cog):
             self.albie_jokes: list[str] = jokes_data.get("jokes", [])
         random.shuffle(self.albie_jokes)
 
-    @Cog.listener()
-    async def on_message(self, message: Message):
-        if message.author.bot or not message.guild:
-            return
-
-        perms = message.channel.permissions_for(message.guild.me)
-        if not perms.send_messages:
-            return
-
-        words = message.content.lower().split()
-
-        # Emotes handling
-        for word in set(words):
+    async def handle_emotes(self, message: Message):
+        for word in set(message.content.lower().split()):
             if word in self.emotes:
                 if message.reference and message.reference.message_id:
                     try:
@@ -77,244 +66,265 @@ class OnMessageCog(Cog):
                 else:
                     await message.reply(self.emotes[word])
 
-        # Draco easter egg
-        if words and words[0] == '!slots':
-            foods = ['🍕', '🍔', '🍟', '🌭', '🥪', '🥙', '🧆', '🍗', '🍖', '🥩', '🥓', '🍳', '🧇', '🥞', '🫓', '🍞', '🥐', '🥖', '🫒', '🧈', '🧀', '🍤', '🍣', '🍜', '🍲', '🍛', '🍚', '🍙', '🍘', '🍥', '🥠', '🥡']
-            slot_machine = f"| {random.choice(foods)} | {random.choice(foods)} | {random.choice(foods)} |"
-            parts = [p.strip() for p in slot_machine.split('|') if p.strip()]
-            is_win = len(set(parts)) == 1
-            if is_win:
-                await message.reply(f"🎉 JACKPOT! 🎉\n{slot_machine}\n<@195261052236070912> will congratulate you!")
-            else:
-                await message.reply(f"You got {slot_machine} and lost `-100` gambling aura points!\n-# Note: Points are purely decorative and have no real value. The bot does not keep a track of it.")
-        elif words and words[0] == '!slost':
-            emote = 'UHMDude' if message.author.id == "195261052236070912" else 'DIESOFCRINGE'
-            await message.reply(self.emotes.get(emote.lower(), emote))
+    async def handle_slots(self, message: Message):
+        """Handle !slots command"""
+        foods = ['🍕', '🍔', '🍟', '🌭', '🥪', '🥙', '🧆', '🍗', '🍖', '🥩', '🥓', '🍳', '🧇', '🥞', '🫓', '🍞', '🥐', '🥖', '🫒', '🧈', '🧀', '🍤', '🍣', '🍜', '🍲', '🍛', '🍚', '🍙', '🍘', '🍥', '🥠', '🥡']
+        slot_machine = f"| {random.choice(foods)} | {random.choice(foods)} | {random.choice(foods)} |"
+        parts = [p.strip() for p in slot_machine.split('|') if p.strip()]
+        is_win = len(set(parts)) == 1
+        if is_win:
+            await message.reply(f"🎉 JACKPOT! 🎉\n{slot_machine}\n<@195261052236070912> will congratulate you!")
+        else:
+            await message.reply(f"You got {slot_machine} and lost `-100` gambling aura points!\n-# Note: Points are purely decorative and have no real value. The bot does not keep a track of it.")
 
-        # Github Link handling
+    async def handle_slost(self, message: Message):
+        """Handle !slost command"""
+        emote = 'UHMDude' if message.author.id == "195261052236070912" else 'DIESOFCRINGE'
+        await message.reply(self.emotes.get(emote.lower(), emote))
+
+    async def handle_github_link(self, message: Message):
+        """Handle GitHub link sharing"""
         github_match = self.github_regex.search(message.content)
-        if github_match:
-            user, repo, commit, file_path, line_start_str, line_end_str = github_match.groups()
-            if not all([user, repo, commit, file_path]):
-                return
-            raw_url = f'https://raw.githubusercontent.com/{user}/{repo}/{commit}/{file_path}'
-            try:
-                resp = await asyncio.to_thread(requests.get, raw_url)
-                if not resp.ok:
-                    raise Exception(f'Fetch failed with status {resp.status_code}')
-                code = resp.text
-                lines = code.split('\n')
-                line_start = int(line_start_str) if line_start_str else None
-                line_end = int(line_end_str) if line_end_str else line_start
-                if line_start is not None:
-                    start = max(line_start - 1, 0)
-                    end = line_end if line_end is not None else start + 1
-                    snippet = '\n'.join(lines[start:end])
-                else:
-                    snippet = code
-                lang = file_path.split('.')[-1] if '.' in file_path else ''
-                max_length = 1900
-                preview = snippet[:max_length] + '\n...' if len(snippet) > max_length else snippet
-                await message.reply(f'```{lang}\n{preview}\n```', allowed_mentions=AllowedMentions.none())
-            except:
-                pass
+        if not github_match:
+            return
+        
+        user, repo, commit, file_path, line_start_str, line_end_str = github_match.groups()
+        if not all([user, repo, commit, file_path]):
+            return
+        
+        raw_url = f'https://raw.githubusercontent.com/{user}/{repo}/{commit}/{file_path}'
+        try:
+            resp = await asyncio.to_thread(requests.get, raw_url)
+            if not resp.ok:
+                raise Exception(f'Fetch failed with status {resp.status_code}')
+            code = resp.text
+            lines = code.split('\n')
+            line_start = int(line_start_str) if line_start_str else None
+            line_end = int(line_end_str) if line_end_str else line_start
+            if line_start is not None:
+                start = max(line_start - 1, 0)
+                end = line_end if line_end is not None else start + 1
+                snippet = '\n'.join(lines[start:end])
+            else:
+                snippet = code
+            lang = file_path.split('.')[-1] if '.' in file_path else ''
+            max_length = 1900
+            preview = snippet[:max_length] + '\n...' if len(snippet) > max_length else snippet
+            await message.reply(f'```{lang}\n{preview}\n```', allowed_mentions=AllowedMentions.none())
+        except:
+            pass
 
-        # WOD handling
-        if len(self.bot.wod_games) > 0 and message.channel.id in self.bot.wod_games:  # type: ignore
-            wod_game = self.bot.wod_games[message.channel.id]  # type: ignore
+    async def handle_wod_game(self, message: Message, words: list[str], perms: Permissions):
+        """Handle Word of the Day game"""
+        if len(self.bot.wod_games) == 0 or message.channel.id not in self.bot.wod_games:  # type: ignore
+            return False
+        
+        wod_game = self.bot.wod_games[message.channel.id]  # type: ignore
 
-            if (
-                    len(self.emoji_regex.findall(message.content)) > 0
-                    or len(message.attachments) > 0
-                    or "https://" in message.content
-                    or len(words) != 1
-            ):
-                return
+        if (
+                len(self.emoji_regex.findall(message.content)) > 0
+                or len(message.attachments) > 0
+                or "https://" in message.content
+                or len(words) != 1
+        ):
+            return False
 
-            guess_word = words[0].lower()
+        guess_word = words[0].lower()
 
-            # Invalid guess
-            if guess_word not in wod_game["all_words"]:
-                await message.delete()
-                return
-
-            async def generate_wod_display(highlight_word=None):
-                """Generate the WOD game display with optional highlighting"""
-                # Split the flat word array into 3 columns
-                col1, col2, col3 = split_words_into_columns(wod_game["level"])
-                
-                max_rows = max(len(col1), len(col2), len(col3))
-                
-                masked_display = ''
-                for i in range(max_rows):
-                    words_row = [
-                        col1[i] if i < len(col1) else '',
-                        col2[i] if i < len(col2) else '',
-                        col3[i] if i < len(col3) else ''
-                    ]
-                    
-                    formatted_words = []
-                    for word in words_row:
-                        if word.lower() in wod_game["revealed_words"]:
-                            if highlight_word and word.lower() == highlight_word:
-                                formatted_words.append(f"**{word.lower()}**")
-                            else:
-                                formatted_words.append(word.lower())
-                        else:
-                            formatted_words.append(''.join('x' if c != ' ' else ' ' for c in word))
-                    
-                    row = f"{formatted_words[0]:<10} {formatted_words[1]:<10} {formatted_words[2]:<10}"
-                    masked_display += row + '\n'
-                
-                scrambled_letters = wod_game["valid_letters"].copy()
-                random.shuffle(scrambled_letters)
-                letters_display = ' '.join(scrambled_letters).upper()
-                
-                return f"```\nLetters: {letters_display}\n\n{masked_display}```"
-
-            # Already guessed
-            if guess_word in wod_game["revealed_words"]:
-                await message.delete()
-                content = await generate_wod_display(highlight_word=guess_word)
-                wod_game["message"] = await wod_game["message"].edit(content=content)
-                return
-
-            perms_to_del = perms.manage_messages or perms.administrator
-            if not perms_to_del:
-                await message.channel.send(
-                    content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
-                return
-
-            wod_game["guesses"].append(guess_word)
-            wod_game["revealed_words"].add(guess_word)
-
-            # Win condition - all words guessed
-            is_game_won = set(wod_game["guesses"]) == wod_game["all_words"]
-
+        # Invalid guess
+        if guess_word not in wod_game["all_words"]:
             await message.delete()
+            return True
+
+        async def generate_wod_display(highlight_word=None):
+            """Generate the WOD game display with optional highlighting"""
+            # Split the flat word array into 3 columns
+            col1, col2, col3 = split_words_into_columns(wod_game["level"])
             
-            content = await generate_wod_display()
-            if wod_game["message"] is not None:
-                wod_game["message"] = await wod_game["message"].edit(content=content)
+            max_rows = max(len(col1), len(col2), len(col3))
             
-            if is_game_won:
-                creator_name = wod_game.get("creator_name", "Unknown")
-                
-                del self.bot.wod_games[message.channel.id]  # type: ignore
-                
-                if not self.bot.wod_games:  # type: ignore
-                    await self.bot.change_presence(status=Status.idle, activity=None)
-                
-                await message.channel.send(f"🎉 **All Words Guessed!**\n**Level by:** {creator_name}")
-
-        # D3mantle handling
-        if len(self.bot.d3mantles) > 0 and message.channel.id in self.bot.d3mantles:  # type: ignore
-            demantle = self.bot.d3mantles[message.channel.id]  # type: ignore
-
-            if (
-                    len(self.emoji_regex.findall(message.content)) > 0
-                    or len(message.attachments) > 0
-                    or "https://" in message.content
-                    or len(words) != 1
-                    or message.author.id in demantle["ignore_ids"]
-            ):
-                return
-
-            perms_to_del = perms.manage_messages or perms.administrator
-
-            if not perms_to_del:
-                await message.channel.send(
-                    content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
-
-            guess_result = demantle["game"].guess(words[0], message.author.name)
-
-            # Win condition
-            if guess_result["success"] and words[0] == demantle["game"].word:
-                updated_stats = None
-
-                if self.bot.db_collection is not None:
-                    updated_stats = self.bot.db_collection.find_one_and_update(
-                        {"userId": str(message.author.id)},
-                        {"$inc": {"wins": 1}},
-                        upsert=True,
-                        return_document=ReturnDocument.AFTER
-                    )
-
-                wins = "Cannot fetch from database"
-
-                if updated_stats and "wins" in updated_stats:
-                    wins = updated_stats["wins"]
-                else:
-                    await message.channel.send(
-                        "An error occurred while updating your stats. Please report this issue to the developer.")
-
-                if demantle["message"]:
-                    await demantle["message"].edit(guess_result["table"])
-
-                # Build the content text
-                content_lines = [
-                    f"# {message.author.display_name} 🎉",
-                    f"🏆 **Word**: {demantle["game"].word}",
-                    f"🏅 **Wins**: `{wins}`",
-                    f"🔢 **Number of guesses**: `{len(demantle["game"].guesses)}`"
+            masked_display = ''
+            for i in range(max_rows):
+                words_row = [
+                    col1[i] if i < len(col1) else '',
+                    col2[i] if i < len(col2) else '',
+                    col3[i] if i < len(col3) else ''
                 ]
+                
+                formatted_words = []
+                for word in words_row:
+                    if word.lower() in wod_game["revealed_words"]:
+                        if highlight_word and word.lower() == highlight_word:
+                            formatted_words.append(f"**{word.lower()}**")
+                        else:
+                            formatted_words.append(word.lower())
+                    else:
+                        formatted_words.append(''.join('x' if c != ' ' else ' ' for c in word))
+                
+                row = f"{formatted_words[0]:<10} {formatted_words[1]:<10} {formatted_words[2]:<10}"
+                masked_display += row + '\n'
+            
+            scrambled_letters = wod_game["valid_letters"].copy()
+            random.shuffle(scrambled_letters)
+            letters_display = ' '.join(scrambled_letters).upper()
+            
+            return f"```\nLetters: {letters_display}\n\n{masked_display}```"
 
-                content = "\n".join(content_lines)
+        # Already guessed
+        if guess_word in wod_game["revealed_words"]:
+            await message.delete()
+            content = await generate_wod_display(highlight_word=guess_word)
+            wod_game["message"] = await wod_game["message"].edit(content=content)
+            return True
 
-                section = Section(
-                    TextDisplay(content=content),
-                    accessory=Thumbnail(media=message.author.display_avatar.url),
+        perms_to_del = perms.manage_messages or perms.administrator
+        if not perms_to_del:
+            await message.channel.send(
+                content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
+            return True
+
+        wod_game["guesses"].append(guess_word)
+        wod_game["revealed_words"].add(guess_word)
+
+        # Win condition - all words guessed
+        is_game_won = set(wod_game["guesses"]) == wod_game["all_words"]
+
+        await message.delete()
+        
+        content = await generate_wod_display()
+        if wod_game["message"] is not None:
+            wod_game["message"] = await wod_game["message"].edit(content=content)
+        
+        if is_game_won:
+            creator_name = wod_game.get("creator_name", "Unknown")
+            
+            del self.bot.wod_games[message.channel.id]  # type: ignore
+            
+            if not self.bot.wod_games:  # type: ignore
+                await self.bot.change_presence(status=Status.idle, activity=None)
+            
+            await message.channel.send(f"🎉 **All Words Guessed!**\n**Level by:** {creator_name}")
+        
+        return True
+
+    async def handle_d3mantle_game(self, message: Message, words: list[str], perms: Permissions):
+        """Handle D3mantle game"""
+        if len(self.bot.d3mantles) == 0 or message.channel.id not in self.bot.d3mantles:  # type: ignore
+            return False
+        
+        demantle = self.bot.d3mantles[message.channel.id]  # type: ignore
+
+        if (
+                len(self.emoji_regex.findall(message.content)) > 0
+                or len(message.attachments) > 0
+                or "https://" in message.content
+                or len(words) != 1
+                or message.author.id in demantle["ignore_ids"]
+        ):
+            return False
+
+        perms_to_del = perms.manage_messages or perms.administrator
+
+        if not perms_to_del:
+            await message.channel.send(
+                content="I need the `Manage Messages` permission to delete your guesses for a smooth experience.")
+            return True
+
+        guess_result = demantle["game"].guess(words[0], message.author.name)
+
+        # Win condition
+        if guess_result["success"] and words[0] == demantle["game"].word:
+            updated_stats = None
+
+            if self.bot.db_collection is not None:
+                updated_stats = self.bot.db_collection.find_one_and_update(
+                    {"userId": str(message.author.id)},
+                    {"$inc": {"wins": 1}},
+                    upsert=True,
+                    return_document=ReturnDocument.AFTER
                 )
 
+            wins = "Cannot fetch from database"
+
+            if updated_stats and "wins" in updated_stats:
+                wins = updated_stats["wins"]
+            else:
                 await message.channel.send(
-                    content=None,
-                    components=[section],
-                    flags=MessageFlags(
-                        is_components_v2=True
-                    )
+                    "An error occurred while updating your stats. Please report this issue to the developer.")
+
+            if demantle["message"]:
+                await demantle["message"].edit(guess_result["table"])
+
+            # Build the content text
+            content_lines = [
+                f"# {message.author.display_name} 🎉",
+                f"🏆 **Word**: {demantle["game"].word}",
+                f"🏅 **Wins**: `{wins}`",
+                f"🔢 **Number of guesses**: `{len(demantle["game"].guesses)}`"
+            ]
+
+            content = "\n".join(content_lines)
+
+            section = Section(
+                TextDisplay(content=content),
+                accessory=Thumbnail(media=message.author.display_avatar.url),
+            )
+
+            await message.channel.send(
+                content=None,
+                components=[section],
+                flags=MessageFlags(
+                    is_components_v2=True
+                )
+            )
+
+            del self.bot.d3mantles[message.channel.id]  # type: ignore
+
+            if len(self.bot.d3mantles) == 0:  # type: ignore
+                await self.bot.change_presence(
+                    activity=None,
+                    status=Status.idle
                 )
 
-                del self.bot.d3mantles[message.channel.id]  # type: ignore
+        # If message is successful but no table cached
+        elif guess_result["success"] and demantle["message"] is None:
+            await message.delete()
+            demantle["message"] = await message.channel.send(guess_result["table"])
 
-                if len(self.bot.d3mantles) == 0:  # type: ignore
-                    await self.bot.change_presence(
-                        activity=None,
-                        status=Status.idle
-                    )
+        # Any guess after first: If guess is successful and first table cached
+        elif guess_result["success"] and demantle["message"]:
+            await message.delete()
+            demantle["message"] = await demantle["message"].edit(guess_result["table"])
 
-            # If message is successful but no table cached
-            elif guess_result["success"] and demantle["message"] is None:
-                await message.delete()
-                demantle["message"] = await message.channel.send(guess_result["table"])
+        # First guess: Invalid guess
+        elif guess_result["success"] and not demantle["message"]:
+            author_id = message.author.id
+            await message.delete()
+            demantle["message"] = await message.channel.send(f"<@{author_id}> I have no idea what that is X\\_X")
 
-            # Any guess after first: If guess is successful and first table cached
-            elif guess_result["success"] and demantle["message"]:
-                await message.delete()
-                demantle["message"] = await demantle["message"].edit(guess_result["table"])
+        elif not guess_result.get("success") and demantle.get("message"):
+            await message.delete()
+            original_content = demantle["message"].content or ""
 
-            # First guess: Invalid guess
-            elif guess_result["success"] and not demantle["message"]:
-                author_id = message.author.id
-                await message.delete()
-                demantle["message"] = await message.channel.send(f"<@{author_id}> I have no idea what that is X\\_X")
+            lines = original_content.split("\n")
+            table_start_index = next((i for i, line in enumerate(lines) if not self.mention_regex.match(line)), -1)
+            game_table = "\n".join(lines[table_start_index:]) if table_start_index != -1 else original_content
 
-            elif not guess_result.get("success") and demantle.get("message"):
-                await message.delete()
-                original_content = demantle["message"].content or ""
+            if guess_result.get("error") == "invalid_guess":
+                new_content = f"<@{message.author.id}> I have no idea what `{words[0]}` is X\\_X\n{game_table}"
+            else:
+                new_content = f"<@{message.author.id}> The word `{words[0]}` has already been guessed!\n{game_table}"
 
-                lines = original_content.split("\n")
-                table_start_index = next((i for i, line in enumerate(lines) if not self.mention_regex.match(line)), -1)
-                game_table = "\n".join(lines[table_start_index:]) if table_start_index != -1 else original_content
+            demantle["message"] = await demantle["message"].edit(content=new_content)
 
-                if guess_result.get("error") == "invalid_guess":
-                    new_content = f"<@{message.author.id}> I have no idea what `{words[0]}` is X\\_X\n{game_table}"
-                else:
-                    new_content = f"<@{message.author.id}> The word `{words[0]}` has already been guessed!\n{game_table}"
+        return True
 
-                demantle["message"] = await demantle["message"].edit(content=new_content)
+    async def handle_special_responses(self, message: Message, words: list[str]):
+        """Handle special responses for specific servers (Albie jokes, 're' prefix jokes)"""
+        if message.guild and message.guild.id not in [1310251717807575131, 871594906907451402]:
+            return
 
-        # Server: Nugs, personal
-        if message.guild.id in [1310251717807575131, 871594906907451402]:
+        if len(words) == 2:
             # Albie Weekes joke
             if words[0] == 'albie' and words[1] == 'weekes':
                 # Refill and shuffle if empty
@@ -323,24 +333,65 @@ class OnMessageCog(Cog):
                         jokes_data: dict = json.loads(jokes_file.read())
                         self.albie_jokes = jokes_data.get("jokes", [])
                     random.shuffle(self.albie_jokes)
-                
+
                 # Pop and reply with joke
                 joke = self.albie_jokes.pop()
                 await message.reply(joke)
-
-            # "Re" prefix joke handling
-            if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
+                return
+            
+            # ALKIE WEEBES
+            if words[0] == 'alkie' and words[1] == 'weebes':
+                await message.reply(f"{self.emotes.get('uhmdude', '')} My freund, grow up some hair on your broom and man up to say ALBIE WEEKES!")
                 return
 
-            re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
+        # "Re" prefix joke handling
+        if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
+            return
 
-            if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
-                await message.add_reaction("🤡")
-                word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
-                await message.reply(f"To:\n{word_list}")
-            elif len(words) == 1 and len(re_words) == 1:
-                word_without_re = words[0][2:]
-                await message.reply(f"To {word_without_re} again 🤡")
+        re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
+
+        if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
+            await message.add_reaction("🤡")
+            word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
+            await message.reply(f"To:\n{word_list}")
+        elif len(words) == 1 and len(re_words) == 1:
+            word_without_re = words[0][2:]
+            await message.reply(f"To {word_without_re} again 🤡")
+
+    @Cog.listener()
+    async def on_message(self, message: Message):
+        if message.author.bot or not message.guild:
+            return
+
+        perms = message.channel.permissions_for(message.guild.me)
+        if not perms.send_messages:
+            return
+
+        words = message.content.lower().split()
+        
+        if len(message.attachments) == 0:
+            # Emotes handling
+            await self.handle_emotes(message)
+
+            # Special responses (Albie jokes, "re" prefix jokes)
+            await self.handle_special_responses(message, words)
+
+        # Draco easter egg - Slots command
+        if words and words[0] == '!slots':
+            await self.handle_slots(message)
+        elif words and words[0] == '!slost':
+            await self.handle_slost(message)
+
+        # Github Link handling
+        await self.handle_github_link(message)
+
+        # WOD handling
+        if await self.handle_wod_game(message, words, perms):
+            return
+
+        # D3mantle handling
+        if await self.handle_d3mantle_game(message, words, perms):
+            return
 
         print(f"[{message.guild.name}] {message.author.name}: {message.content}")
 
