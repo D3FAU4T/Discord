@@ -5,7 +5,6 @@
     "867522091490607134": "D3FAU4T",
     "730182734705721354": "kensea1",
     "868320974184001586": "forestpenguins",
-    "1006373310126362624": "chantellylace",
     "509826164190216233": "arch_a_tri",
     "444734227112787968": "neo_the8th"
   },
@@ -48,7 +47,6 @@
         "broad",
         "bunya",
         "dobra",
-        "noyau",
         "radon",
         "randy",
         "rayon",
@@ -59,6 +57,7 @@
         "abound",
         "around",
         "brandy",
+        "byroad",
         "boundary"
       ],
       [
@@ -81,14 +80,18 @@
         "awoke",
         "endow",
         "kendo",
+        "knead",
         "naked",
         "noted",
         "oaten",
+        "owned",
         "taken",
         "toked",
         "token",
         "toned",
+        "towed",
         "tweak",
+        "waned",
         "woken",
         "atoned",
         "awoken",
@@ -118,6 +121,7 @@
         "bash",
         "bras",
         "burb",
+        "burr",
         "burs",
         "bush",
         "rash",
@@ -126,8 +130,10 @@
         "sura",
         "ursa",
         "barbs",
+        "brash",
         "brush",
         "burbs",
+        "burrs",
         "bursa",
         "shrub",
         "busbar",
@@ -137,6 +143,7 @@
       [
         "core",
         "corf",
+        "eros",
         "foes",
         "fore",
         "orcs",
@@ -231,6 +238,7 @@
         "price",
         "reign",
         "ripen",
+        "cringe",
         "pincer",
         "pinier",
         "prince",
@@ -262,6 +270,7 @@
       ],
       [
         "elfin",
+        "felon",
         "filer",
         "finer",
         "flier",
@@ -272,6 +281,7 @@
         "liner",
         "loner",
         "oiler",
+        "olein",
         "oriel",
         "rifle",
         "urine",
@@ -303,6 +313,7 @@
         "along",
         "anion",
         "aping",
+        "galop",
         "lapin",
         "lingo",
         "logia",
@@ -336,6 +347,7 @@
         "leapt",
         "lepta",
         "letup",
+        "lutea",
         "palea",
         "petal",
         "plate",
@@ -367,6 +379,7 @@
         "sheik",
         "shier",
         "shire",
+        "shirk",
         "shrew",
         "skier",
         "weirs",
@@ -398,6 +411,7 @@
         "rein",
         "ring",
         "zein",
+        "zine",
         "zing",
         "eerie",
         "genie",
@@ -411,8 +425,10 @@
         "energize"
       ],
       [
+        "miso",
         "mist",
         "moos",
+        "moot",
         "most",
         "mots",
         "must",
@@ -529,6 +545,7 @@
         "darts",
         "dorms",
         "dorsa",
+        "drams",
         "drats",
         "marts",
         "moats",
@@ -546,11 +563,13 @@
       ],
       [
         "hoops",
+        "hoots",
         "photo",
         "poohs",
         "shoot",
         "snoop",
         "snoot",
+        "sooth",
         "spoon",
         "stoop",
         "toons",
@@ -561,6 +580,7 @@
       [
         "amigo",
         "giros",
+        "gismo",
         "grams",
         "imago",
         "roams",
@@ -571,12 +591,14 @@
         "isogram"
       ],
       [
+        "anomy",
         "arson",
         "manor",
         "mason",
         "mayor",
         "moans",
         "moray",
+        "morns",
         "mynas",
         "norms",
         "rayon",
@@ -597,6 +619,7 @@
         "ethyl",
         "gooey",
         "helot",
+        "hooey",
         "hotel",
         "hotly",
         "ology",
@@ -645,6 +668,7 @@
       ],
       [
         "emirs",
+        "memes",
         "memos",
         "meres",
         "mimeo",
@@ -699,7 +723,7 @@
         "tilde",
         "tiled",
         "detail",
-        "dilate",
+        "tailed",
         "citadel",
         "dialect"
       ],
@@ -743,6 +767,7 @@
         "chary",
         "clary",
         "hairy",
+        "larch",
         "lyric",
         "rival",
         "riyal",
@@ -799,6 +824,7 @@
         "great",
         "raged",
         "rated",
+        "rayed",
         "ready",
         "tardy",
         "tared",
@@ -814,6 +840,7 @@
       ],
       [
         "agent",
+        "aglet",
         "angel",
         "angle",
         "gault",
@@ -824,6 +851,7 @@
         "latte",
         "leant",
         "lunge",
+        "lutea",
         "taunt",
         "ulnae",
         "unlet",
@@ -855,6 +883,7 @@
         "haws",
         "sack",
         "wash",
+        "awash",
         "hacks",
         "hawks",
         "schwa",
@@ -873,6 +902,7 @@
         "decal",
         "decay",
         "delay",
+        "dicey",
         "ideal",
         "laced",
         "layed",
@@ -963,6 +993,7 @@
         "nixed",
         "oxide",
         "domino",
+        "mooned",
         "monoxide"
       ],
       [
@@ -1060,8 +1091,10 @@
         "sysop",
         "hyssop",
         "siphon",
+        "syphon",
         "siphons",
         "sonship",
+        "syphons",
         "hypnosis"
       ],
       [
@@ -1104,6 +1137,7 @@
         "hooligan"
       ],
       [
+        "ancho",
         "chain",
         "china",
         "chino",
@@ -1128,6 +1162,7 @@
         "mooed",
         "noted",
         "timed",
+        "tined",
         "toned",
         "domino",
         "minted",
@@ -1139,6 +1174,7 @@
         "motioned"
       ],
       [
+        "etui",
         "rate",
         "raze",
         "rite",
@@ -1287,6 +1323,7 @@
         "citric",
         "citrus",
         "critic",
+        "rustic",
         "circuit",
         "critics",
         "circuits"
@@ -1297,7 +1334,6 @@
         "amend",
         "anted",
         "dated",
-        "maden",
         "maned",
         "manta",
         "mated",
@@ -1432,14 +1468,17 @@
         "boned",
         "debit",
         "noted",
+        "tined",
         "toned",
         "betide",
+        "debone",
         "denote",
         "ebonite",
         "obedient"
       ],
       [
         "alone",
+        "anole",
         "canoe",
         "cecal",
         "clean",
@@ -1500,6 +1539,7 @@
         "fiend",
         "fined",
         "niece",
+        "tined",
         "deceit",
         "decent",
         "defect",
@@ -1572,6 +1612,7 @@
       ],
       [
         "acorn",
+        "axion",
         "cairn",
         "caner",
         "canoe",
@@ -1585,6 +1626,7 @@
         "xenic",
         "xeric",
         "anoxic",
+        "carnie",
         "cornea",
         "orexin",
         "anorexic"
@@ -1616,6 +1658,7 @@
         "moper",
         "opium",
         "prime",
+        "primo",
         "immure",
         "impure",
         "memoir",
@@ -1896,6 +1939,7 @@
         "moon",
         "muon",
         "pond",
+        "udon",
         "undo",
         "updo",
         "upon",
@@ -1961,6 +2005,7 @@
         "ired",
         "ride",
         "rude",
+        "rued",
         "direr",
         "drier",
         "hider",
@@ -2028,7 +2073,9 @@
         "minor",
         "mound",
         "mourn",
+        "odium",
         "robin",
+        "round",
         "unbid",
         "boudin",
         "morbid",
@@ -2037,6 +2084,7 @@
       ],
       [
         "acetyl",
+        "chalet",
         "chilly",
         "halite",
         "lacily",
@@ -2144,6 +2192,7 @@
       [
         "center",
         "centre",
+        "cretin",
         "cringe",
         "entice",
         "entire",
@@ -2237,15 +2286,20 @@
       [
         "abler",
         "baler",
+        "baric",
         "blare",
         "blear",
         "brace",
+        "brail",
         "caber",
         "cable",
         "clear",
         "lacer",
         "libra",
         "relic",
+        "bailer",
+        "cabler",
+        "caribe",
         "eclair",
         "lacier",
         "caliber",
@@ -2253,6 +2307,7 @@
       ],
       [
         "along",
+        "galls",
         "glans",
         "goals",
         "llano",
@@ -2267,8 +2322,10 @@
       ],
       [
         "asked",
+        "askew",
         "eased",
         "keyed",
+        "sawed",
         "seedy",
         "sewed",
         "wades",
@@ -2290,6 +2347,7 @@
         "lieu",
         "lobe",
         "lube",
+        "boule",
         "obeli",
         "oblique"
       ],
@@ -2327,6 +2385,7 @@
       ],
       [
         "dirt",
+        "dory",
         "doth",
         "riot",
         "tidy",
@@ -2426,6 +2485,7 @@
         "jest",
         "jets",
         "rest",
+        "rets",
         "seer",
         "sere",
         "tees",
@@ -2529,6 +2589,7 @@
         "exulting"
       ],
       [
+        "anomy",
         "damns",
         "donas",
         "mason",
@@ -2699,6 +2760,7 @@
         "claver",
         "eclair",
         "lacier",
+        "rectal",
         "relict",
         "retail",
         "rictal",
@@ -2751,6 +2813,7 @@
         "earthen",
         "haunter",
         "hearten",
+        "unearth",
         "urethane"
       ],
       [
@@ -2772,6 +2835,7 @@
         "genii",
         "indie",
         "nitid",
+        "tined",
         "tinge",
         "ignite",
         "indite",
@@ -2859,6 +2923,7 @@
         "loan",
         "loch",
         "only",
+        "ancho",
         "loach",
         "lynch",
         "nacho",
@@ -2867,6 +2932,7 @@
       [
         "amino",
         "amply",
+        "anomy",
         "imply",
         "inlay",
         "lapin",
@@ -2922,6 +2988,7 @@
         "limo",
         "loci",
         "loco",
+        "loom",
         "lulu",
         "mill",
         "moil",
@@ -2969,6 +3036,7 @@
         "nitre",
         "rater",
         "reran",
+        "terra",
         "train",
         "trier",
         "trine",
@@ -3074,6 +3142,7 @@
         "prion",
         "prior",
         "rancor",
+        "carrion",
         "capricorn"
       ],
       [
@@ -3090,6 +3159,7 @@
         "clone",
         "hence",
         "leech",
+        "leone",
         "echelon"
       ],
       [
@@ -3168,6 +3238,7 @@
         "book",
         "boom",
         "boor",
+        "kook",
         "mark",
         "moor",
         "okra",
@@ -3207,6 +3278,7 @@
         "direst",
         "doters",
         "driest",
+        "droits",
         "editor",
         "rioted",
         "sorted",
@@ -3371,7 +3443,10 @@
         "stored",
         "stride",
         "strode",
+        "triode",
         "editors",
+        "storied",
+        "triodes",
         "steroid"
       ],
       [
@@ -3418,6 +3493,7 @@
         "eking",
         "inane",
         "inked",
+        "kiang",
         "knead",
         "naked",
         "ending",
@@ -3430,6 +3506,7 @@
         "cadent",
         "canted",
         "danced",
+        "deaden",
         "decade",
         "decant",
         "decent",
@@ -3462,6 +3539,7 @@
         "bole",
         "bowl",
         "cell",
+        "cowl",
         "lobe",
         "well",
         "below",
@@ -3486,32 +3564,13 @@
         "dock",
         "doge",
         "egad",
+        "goad",
         "cadge",
         "caged",
         "caked",
         "coked",
         "gecko",
         "dockage"
-      ],
-      [
-        "code",
-        "coed",
-        "cone",
-        "cued",
-        "deco",
-        "done",
-        "dune",
-        "judo",
-        "node",
-        "nude",
-        "once",
-        "undo",
-        "coned",
-        "dunce",
-        "junco",
-        "ounce",
-        "jounce",
-        "jounced"
       ],
       [
         "beery",
@@ -3753,6 +3812,7 @@
       [
         "acing",
         "actin",
+        "aight",
         "aitch",
         "antic",
         "chain",
@@ -3814,6 +3874,7 @@
         "oped",
         "pied",
         "puce",
+        "updo",
         "codec",
         "coped",
         "coupe",
@@ -3853,6 +3914,7 @@
         "cation",
         "maniac",
         "manioc",
+        "mantic",
         "anatomic"
       ],
       [
@@ -4264,6 +4326,7 @@
         "ileum",
         "ilium",
         "linen",
+        "linin",
         "lumen",
         "minim",
         "illume",
@@ -4308,6 +4371,7 @@
         "trips",
         "esprit",
         "priest",
+        "ripest",
         "sprite",
         "stripe",
         "tripes"
@@ -4323,6 +4387,7 @@
         "reals",
         "roles",
         "rolls",
+        "sella",
         "solar",
         "rosella"
       ],
@@ -4487,6 +4552,7 @@
         "hangs",
         "hanks",
         "khans",
+        "kiang",
         "kings",
         "knish",
         "shank",
@@ -4654,10 +4720,12 @@
         "bream",
         "namer",
         "prune",
+        "ramen",
         "remap",
         "rumen",
         "umber",
         "umbra",
+        "unarm",
         "unbar",
         "urban",
         "barmen",
@@ -4790,6 +4858,7 @@
       ],
       [
         "conspire",
+        "insource",
         "necrosis",
         "neurosis",
         "pouncers",
@@ -4894,11 +4963,14 @@
       [
         "hour",
         "hums",
+        "moor",
         "moos",
         "mush",
         "ohms",
         "oohs",
         "ours",
+        "rhos",
+        "roms",
         "room",
         "rums",
         "rush",
@@ -4907,12 +4979,14 @@
         "sumo",
         "hours",
         "humor",
+        "moors",
         "rooms",
         "humors",
         "humour",
         "shroom",
         "humours",
-        "humorous"
+        "humorous",
+        "roos"
       ],
       [
         "adds",
@@ -4923,7 +4997,8 @@
         "seas",
         "assed",
         "sades",
-        "deadass"
+        "deadass",
+        "sade"
       ],
       [
         "citer",
@@ -4936,21 +5011,28 @@
         "quiet",
         "quire",
         "quite",
+        "recti",
         "trice",
         "truce",
         "uteri",
         "cirque",
-        "critique"
+        "critique",
+        "requit"
       ],
       [
         "attic",
         "cacti",
         "caste",
         "cites",
+        "etics",
         "state",
+        "tacet",
         "tacit",
+        "tacts",
         "taste",
+        "tatie",
         "teats",
+        "tecta",
         "acetic",
         "attics",
         "static",
@@ -4958,29 +5040,38 @@
         "catties",
         "tactics",
         "tacties",
-        "ecstatic"
+        "ecstatic",
+        "tietac"
       ],
       [
         "adorn",
         "argon",
         "arson",
+        "donas",
         "dorsa",
         "drags",
         "gonad",
         "grads",
         "grand",
         "grans",
+        "groan",
+        "nagor",
         "orang",
         "organ",
         "radon",
         "roads",
+        "roans",
         "sonar",
         "adorns",
+        "argons",
         "dragon",
         "gonads",
         "groans",
+        "orangs",
         "organs",
-        "dragons"
+        "radons",
+        "dragons",
+        "sarong"
       ],
       [
         "paste",
@@ -5003,12 +5094,14 @@
         "potato",
         "teapot",
         "teapots",
-        "potatoes"
+        "potatoes",
+        "aptest"
       ],
       [
         "awash",
         "chain",
         "chais",
+        "chana",
         "chaws",
         "chias",
         "china",
@@ -5017,14 +5110,19 @@
         "swain",
         "waacs",
         "wains",
+        "ascian",
         "ashcan",
         "chains",
         "chinas",
-        "chainsaw"
+        "sancai",
+        "chainsaw",
+        "winch"
       ],
       [
         "bless",
+        "boles",
         "bones",
+        "enols",
         "lobes",
         "loses",
         "noble",
@@ -5041,7 +5139,8 @@
         "lesson",
         "nobles",
         "boneless",
-        "noblesse"
+        "noblesse",
+        "leone"
       ],
       [
         "heron",
@@ -5076,18 +5175,24 @@
         "canings",
         "sacking",
         "snaking",
-        "snacking"
+        "snacking",
+        "kiang"
       ],
       [
         "agone",
         "anger",
         "argon",
+        "ergon",
+        "genoa",
         "goner",
         "groan",
+        "nagor",
         "orang",
         "organ",
         "range",
-        "orange"
+        "onager",
+        "orange",
+        "renga"
       ],
       [
         "aryl",
@@ -5121,10 +5226,12 @@
         "taro",
         "thro",
         "taxor",
-        "thorax"
+        "thorax",
+        "tahr"
       ],
       [
         "ankle",
+        "elans",
         "kales",
         "lakes",
         "lanes",
@@ -5132,7 +5239,8 @@
         "leans",
         "snake",
         "sneak",
-        "ankles"
+        "ankles",
+        "slake"
       ],
       [
         "below",
@@ -5154,9 +5262,11 @@
         "erode",
         "redox",
         "xerox",
-        "xeroxed"
+        "xeroxed",
+        "dere"
       ],
       [
+        "eros",
         "exes",
         "ores",
         "oxes",
@@ -5167,7 +5277,8 @@
         "sore",
         "sexer",
         "xerox",
-        "xeroxes"
+        "xeroxes",
+        "rexes"
       ],
       [
         "copes",
@@ -5198,7 +5309,8 @@
         "mower",
         "romeo",
         "hooker",
-        "homework"
+        "homework",
+        "moor"
       ],
       [
         "giron",
@@ -5209,7 +5321,8 @@
         "ignore",
         "orexin",
         "region",
-        "xeroxing"
+        "xeroxing",
+        "ergon"
       ],
       [
         "gloom",
@@ -5226,15 +5339,24 @@
       [
         "emote",
         "genes",
+        "genet",
         "gents",
         "gnome",
         "meets",
+        "mento",
         "meson",
+        "metes",
+        "monte",
         "notes",
+        "omens",
         "onset",
+        "seton",
+        "smote",
         "steno",
         "stone",
+        "teems",
         "teens",
+        "tense",
         "tomes",
         "tones",
         "tongs",
@@ -5243,7 +5365,8 @@
         "gnomes",
         "genomes",
         "segment",
-        "gemstone"
+        "gemstone",
+        "toneme"
       ],
       [
         "adios",
@@ -5252,32 +5375,44 @@
         "binds",
         "bison",
         "bonds",
+        "danio",
         "dinos",
         "bonsai",
-        "obsidian"
+        "danios",
+        "obsidian",
+        "donas"
       ],
       [
+        "agios",
         "arils",
+        "galls",
+        "gills",
         "girls",
+        "giros",
         "glair",
         "goals",
         "grail",
         "grill",
         "lairs",
+        "largo",
         "liars",
         "liras",
+        "logia",
         "loris",
         "orals",
         "rails",
         "rials",
+        "roils",
         "rolls",
         "solar",
         "glairs",
+        "gloria",
         "grails",
         "grills",
         "sailor",
         "gorilla",
-        "gorillas"
+        "gorillas",
+        "sigla"
       ],
       [
         "chimp",
@@ -5296,10 +5431,12 @@
         "eaten",
         "elate",
         "lathe",
+        "leant",
         "leapt",
         "lepta",
         "neath",
         "panel",
+        "paten",
         "penal",
         "petal",
         "plane",
@@ -5312,7 +5449,8 @@
         "platen",
         "heeltap",
         "heptane",
-        "elephant"
+        "elephant",
+        "peahen"
       ],
       [
         "aggro",
@@ -5335,17 +5473,21 @@
         "galore",
         "gargle",
         "logger",
-        "gargoyle"
+        "gargoyle",
+        "largo"
       ],
       [
         "ester",
         "peers",
         "peter",
+        "preen",
         "rents",
         "reset",
+        "sneer",
         "spent",
         "spree",
         "steep",
+        "steer",
         "strep",
         "teens",
         "tense",
@@ -5354,11 +5496,14 @@
         "enters",
         "pester",
         "peters",
+        "preset",
         "repent",
+        "resent",
         "tenser",
         "present",
         "repents",
-        "serpent"
+        "serpent",
+        "stern"
       ],
       [
         "exons",
@@ -5369,7 +5514,8 @@
         "pones",
         "poxes",
         "unsex",
-        "xenopus"
+        "xenopus",
+        "xenops"
       ],
       [
         "fins",
@@ -5385,7 +5531,8 @@
         "sniff",
         "snuff",
         "puffin",
-        "puffins"
+        "puffins",
+        "niffs"
       ],
       [
         "eons",
@@ -5396,42 +5543,66 @@
         "nose",
         "ones",
         "open",
+        "opes",
         "oxen",
         "oxes",
         "pens",
         "peon",
         "peso",
+        "pone",
         "pons",
         "pose",
         "exons",
         "expos",
         "opens",
         "peons",
+        "pones",
         "poxes",
-        "xenops"
+        "xenops",
+        "sone"
       ],
       [
+        "estro",
         "osier",
         "otter",
+        "resit",
+        "riots",
+        "rites",
         "roost",
         "roots",
+        "roset",
+        "rotes",
         "store",
+        "tetri",
         "tiers",
         "tires",
         "titer",
         "titre",
+        "toots",
+        "tores",
+        "torse",
         "torso",
         "torte",
+        "torts",
+        "toter",
+        "totes",
         "tries",
+        "trios",
+        "trite",
         "otiose",
         "otters",
+        "sitter",
         "titers",
         "titres",
         "tooter",
         "tortes",
+        "toters",
+        "triose",
         "risotto",
+        "sootier",
         "tooters",
-        "tortoise"
+        "tortoise",
+        "trots"
       ],
       [
         "lures",
@@ -5450,7 +5621,8 @@
         "turtle",
         "ulster",
         "utters",
-        "turtles"
+        "turtles",
+        "tules"
       ],
       [
         "games",
@@ -5459,9 +5631,11 @@
         "image",
         "mages",
         "pages",
+        "paise",
         "images",
         "magpie",
-        "magpies"
+        "magpies",
+        "sigma"
       ],
       [
         "apply",
@@ -5470,6 +5644,7 @@
         "palps",
         "palsy",
         "pasty",
+        "patsy",
         "platy",
         "plays",
         "pulps",
@@ -5484,7 +5659,8 @@
         "supply",
         "uplays",
         "upstay",
-        "platypus"
+        "platypus",
+        "typal"
       ],
       [
         "atoms",
@@ -5510,15 +5686,22 @@
         "preps",
         "pries",
         "prise",
+        "prose",
+        "repos",
+        "resip",
         "ropes",
         "spire",
         "spoor",
         "spore",
+        "oopsie",
         "oppose",
         "pipers",
+        "sipper",
         "opposer",
         "propose",
-        "porpoise"
+        "soppier",
+        "porpoise",
+        "spier"
       ],
       [
         "ably",
@@ -5557,21 +5740,34 @@
         "saber",
         "zebra",
         "brazes",
-        "zebras"
+        "zebras",
+        "sabre"
       ],
       [
+        "bider",
+        "breed",
+        "bride",
         "brief",
         "brine",
         "defer",
+        "diner",
+        "eider",
+        "ender",
         "fiber",
         "fiend",
         "fined",
+        "finer",
         "fired",
         "freed",
         "fried",
+        "infer",
+        "rebid",
         "binder",
         "brined",
+        "defier",
         "define",
+        "denier",
+        "fender",
         "finder",
         "friend",
         "inbred",
@@ -5580,7 +5776,8 @@
         "briefed",
         "debrief",
         "refined",
-        "befriend"
+        "befriend",
+        "reined"
       ],
       [
         "ether",
@@ -5589,9 +5786,16 @@
         "inter",
         "niter",
         "nitre",
+        "peter",
+        "petri",
+        "preen",
         "print",
+        "retie",
+        "ripen",
+        "thein",
         "their",
         "there",
+        "thine",
         "three",
         "trine",
         "tripe",
@@ -5603,10 +5807,12 @@
         "repent",
         "neither",
         "therein",
-        "nephrite"
+        "nephrite",
+        "thrip"
       ],
       [
         "etyma",
+        "haems",
         "haste",
         "hasty",
         "hates",
@@ -5617,16 +5823,25 @@
         "mayst",
         "meats",
         "meaty",
+        "metas",
         "myths",
+        "samey",
+        "satem",
+        "seamy",
         "shame",
+        "state",
         "steam",
         "tames",
+        "taste",
         "tasty",
         "teams",
+        "teats",
         "thyme",
         "yeast",
+        "mattes",
         "steamy",
-        "amethyst"
+        "amethyst",
+        "theta"
       ],
       [
         "ashier",
@@ -5649,7 +5864,8 @@
         "preship",
         "sharpie",
         "shipper",
-        "sapphire"
+        "sapphire",
+        "phaser"
       ],
       [
         "agent",
@@ -5660,30 +5876,51 @@
         "range",
         "terga",
         "argent",
-        "garnet"
+        "garnet",
+        "renga"
       ],
       [
+        "aisle",
         "aspic",
+        "calps",
         "capes",
         "claps",
         "clasp",
         "clips",
         "epics",
+        "ileac",
         "laces",
+        "lapis",
+        "lapse",
+        "leaps",
         "paces",
+        "pails",
+        "paise",
+        "pales",
+        "peals",
+        "picas",
         "piles",
         "place",
+        "pleas",
+        "plies",
+        "scale",
         "scalp",
         "scape",
+        "sepal",
+        "sepic",
         "slice",
         "space",
+        "spica",
         "spice",
+        "espial",
         "lipase",
         "places",
+        "plaice",
         "plaics",
         "splice",
         "plaices",
-        "special"
+        "special",
+        "spiel"
       ],
       [
         "ache",
@@ -5697,6 +5934,7 @@
         "etch",
         "hate",
         "heat",
+        "hoya",
         "oath",
         "taco",
         "tech",
@@ -5706,7 +5944,8 @@
         "teach",
         "theca",
         "yacht",
-        "chayote"
+        "chayote",
+        "octa"
       ],
       [
         "arcus",
@@ -5719,9 +5958,11 @@
         "drats",
         "ducat",
         "ducts",
+        "duras",
         "turds",
         "ducats",
-        "custard"
+        "custard",
+        "durst"
       ],
       [
         "heir",
@@ -5732,16 +5973,20 @@
         "isle",
         "leis",
         "lies",
+        "lire",
+        "riel",
         "rile",
         "rise",
         "sire",
+        "heils",
         "heirs",
         "hires",
         "riles",
         "shier",
         "shire",
         "slier",
-        "relish"
+        "relish",
+        "riels"
       ],
       [
         "boner",
@@ -5752,7 +5997,9 @@
         "owner",
         "robin",
         "rowen",
-        "brownie"
+        "bonier",
+        "brownie",
+        "inorb"
       ],
       [
         "evils",
@@ -5767,18 +6014,32 @@
         "viler",
         "livers",
         "silver",
-        "sliver"
+        "sliver",
+        "vleis"
       ],
       [
         "filer",
         "filet",
         "flier",
+        "flirt",
+        "flite",
         "flour",
         "flute",
         "forte",
         "lifer",
+        "liter",
+        "litre",
+        "louie",
+        "oiler",
+        "oriel",
+        "outer",
+        "outre",
         "refit",
+        "relit",
         "rifle",
+        "route",
+        "tiler",
+        "triol",
         "uteri",
         "filter",
         "fluter",
@@ -5786,23 +6047,37 @@
         "futile",
         "ireful",
         "lifter",
+        "loiter",
         "outlie",
+        "toiler",
         "trifle",
         "outfire",
         "outlier",
-        "fluorite"
+        "fluorite",
+        "utile"
       ],
       [
         "arson",
         "bairn",
         "barns",
+        "baron",
         "basin",
         "bison",
         "boars",
         "brain",
+        "brawn",
         "brown",
+        "brows",
+        "inorb",
+        "irons",
+        "noirs",
+        "noris",
+        "rains",
+        "roans",
         "robin",
+        "rosin",
         "rowan",
+        "sarin",
         "swain",
         "wains",
         "warns",
@@ -5813,7 +6088,8 @@
         "robins",
         "rowans",
         "rainbow",
-        "rainbows"
+        "rainbows",
+        "sonar"
       ],
       [
         "aisle",
@@ -5822,25 +6098,38 @@
         "clast",
         "cleat",
         "eclat",
+        "etics",
+        "ileac",
+        "islet",
         "laces",
         "least",
         "scale",
+        "setal",
         "slate",
         "slice",
         "stale",
         "steal",
+        "stile",
         "tails",
+        "talcs",
+        "tales",
+        "teals",
+        "telic",
         "tesla",
         "tiles",
         "castle",
         "cleats",
         "elastic",
         "laciest",
-        "latices"
+        "latices",
+        "ticals"
       ],
       [
         "earls",
+        "kales",
         "lakes",
+        "lapse",
+        "laser",
         "leaks",
         "leaps",
         "paler",
@@ -5853,36 +6142,58 @@
         "pearl",
         "pears",
         "pleas",
+        "reals",
         "reaps",
+        "sepal",
+        "slake",
         "spare",
         "spark",
         "speak",
         "spear",
         "pearls",
-        "sparkle"
+        "sparkle",
+        "slaker"
       ],
       [
+        "nests",
+        "nonet",
         "noses",
         "notes",
         "nouns",
         "onset",
+        "seton",
         "snout",
         "souse",
         "steno",
         "stone",
         "stuns",
+        "suets",
+        "tenon",
         "tones",
+        "tonne",
         "tunes",
         "unset",
+        "nonets",
+        "nonuse",
         "onsets",
         "onuses",
+        "seston",
+        "setons",
         "snouts",
         "sonnet",
         "stenos",
         "stones",
         "sunset",
+        "tenons",
+        "tonnes",
+        "unnest",
+        "unsent",
+        "neuston",
+        "nonuses",
+        "outness",
         "sonnets",
-        "sunstone"
+        "sunstone",
+        "unsets"
       ],
       [
         "acker",
@@ -5893,7 +6204,8 @@
         "break",
         "caber",
         "creak",
-        "backer"
+        "backer",
+        "reback"
       ],
       [
         "aahs",
@@ -5917,6 +6229,7 @@
         "meaner",
         "namers",
         "ramens",
+        "ranees",
         "rename",
         "resume",
         "rumens",
@@ -5930,7 +6243,8 @@
         "measure",
         "renames",
         "surname",
-        "username"
+        "username",
+        "unseam"
       ],
       [
         "carls",
@@ -5944,6 +6258,9 @@
         "crash",
         "halos",
         "hoars",
+        "horas",
+        "larch",
+        "loach",
         "lochs",
         "orals",
         "orcas",
@@ -5952,7 +6269,8 @@
         "solar",
         "carols",
         "corals",
-        "scholar"
+        "scholar",
+        "oscar"
       ],
       [
         "court",
@@ -6025,6 +6343,7 @@
       [
         "bani",
         "barn",
+        "biro",
         "boar",
         "born",
         "bran",
@@ -6032,18 +6351,22 @@
         "brow",
         "iron",
         "noir",
+        "nori",
         "rain",
         "roan",
         "warn",
         "wino",
         "worn",
         "bairn",
+        "baron",
         "brain",
         "brawn",
         "brown",
+        "inorb",
         "robin",
         "rowan",
-        "rainbow"
+        "rainbow",
+        "rani"
       ],
       [
         "bated",
@@ -6064,53 +6387,69 @@
         "hutted",
         "abutted",
         "butthead",
-        "headbutt"
+        "headbutt",
+        "daube"
       ],
       [
         "acmes",
         "caste",
         "cites",
         "emits",
+        "etics",
         "items",
+        "james",
         "maces",
         "mates",
         "meats",
         "metas",
         "micas",
         "mites",
+        "satem",
         "smite",
         "steam",
         "tames",
         "teams",
         "times",
+        "jetsam",
+        "mastic",
         "misact",
         "misate",
         "miseat",
         "sematic",
-        "majestic"
+        "majestic",
+        "tajes"
       ],
       [
         "darn",
         "dart",
+        "dona",
         "door",
         "drat",
+        "nota",
         "odor",
         "onto",
+        "rand",
         "rant",
         "road",
+        "roan",
         "rood",
         "root",
+        "rota",
         "tarn",
         "taro",
         "toad",
+        "toon",
         "torn",
+        "toro",
+        "trad",
         "adorn",
         "donor",
         "radon",
         "rondo",
         "donator",
         "odorant",
-        "tornado"
+        "tornado",
+        "trod"
       ],
       [
         "hoop",
@@ -6133,6 +6472,8 @@
         "dorsa",
         "draws",
         "drops",
+        "praos",
+        "proas",
         "prods",
         "prows",
         "rasps",
@@ -6150,7 +6491,8 @@
         "words",
         "wraps",
         "swords",
-        "password"
+        "password",
+        "sward"
       ],
       [
         "dunes",
@@ -6167,6 +6509,7 @@
         "suspend"
       ],
       [
+        "ceric",
         "colic",
         "icier",
         "oiler",
@@ -6178,7 +6521,8 @@
         "icicle",
         "oilier",
         "recoil",
-        "licorice"
+        "licorice",
+        "oleic"
       ],
       [
         "asses",
@@ -6192,25 +6536,35 @@
         "gasses",
         "lasses",
         "gasless",
-        "glasses"
+        "glasses",
+        "slags"
       ],
       [
+        "anise",
         "antes",
         "antis",
+        "azine",
+        "entia",
         "inset",
         "nisei",
         "saint",
         "satin",
         "stain",
         "stein",
+        "tenia",
+        "tians",
+        "tinea",
         "tines",
         "zetas",
         "seizin",
         "zaniest",
-        "sanitize"
+        "sanitize",
+        "zines"
       ],
       [
+        "ailed",
         "aimed",
+        "alcid",
         "amide",
         "camel",
         "clade",
@@ -6218,7 +6572,9 @@
         "clime",
         "decal",
         "ideal",
+        "ileac",
         "laced",
+        "lamed",
         "limed",
         "maced",
         "malic",
@@ -6230,7 +6586,8 @@
         "malice",
         "claimed",
         "decimal",
-        "medical"
+        "medical",
+        "medial"
       ],
       [
         "agree",
@@ -6238,6 +6595,7 @@
         "anger",
         "angle",
         "eager",
+        "eagle",
         "genre",
         "glare",
         "glean",
@@ -6250,10 +6608,13 @@
         "range",
         "regal",
         "renal",
+        "angler",
         "enrage",
+        "genera",
         "leaner",
         "enlarge",
-        "general"
+        "general",
+        "renga"
       ],
       [
         "atoms",
@@ -6292,15 +6653,21 @@
         "bashful"
       ],
       [
+        "felts",
         "files",
         "filet",
         "flies",
+        "flite",
         "flits",
+        "islet",
         "lefts",
         "lifts",
         "tiles",
         "filets",
-        "itself"
+        "fliest",
+        "itself",
+        "stifle",
+        "stile"
       ],
       [
         "cited",
@@ -6322,8 +6689,10 @@
         "civet",
         "coven",
         "covet",
+        "envoi",
         "evict",
         "ionic",
+        "ontic",
         "tonic",
         "voice",
         "incite",
@@ -6332,12 +6701,15 @@
         "notice",
         "novice",
         "invoice",
-        "eviction"
+        "eviction",
+        "ovine"
       ],
       [
         "cache",
         "catch",
+        "cecal",
         "cheat",
+        "chela",
         "cleat",
         "cloth",
         "coach",
@@ -6346,16 +6718,22 @@
         "helot",
         "hotel",
         "lathe",
+        "leach",
+        "loach",
         "loath",
+        "octal",
         "teach",
         "theca",
         "thole",
+        "cachet",
+        "chalet",
         "loathe",
         "locate",
         "ocelot",
         "cochlea",
         "catechol",
-        "chocolate"
+        "chocolate",
+        "thecal"
       ],
       [
         "areal",
@@ -6375,7 +6753,8 @@
         "parley",
         "player",
         "replay",
-        "paralyze"
+        "paralyze",
+        "pyral"
       ],
       [
         "ennui",
@@ -6385,9 +6764,11 @@
         "inure",
         "niter",
         "nitre",
+        "tetri",
         "titer",
         "titre",
         "trine",
+        "trite",
         "tuner",
         "unite",
         "untie",
@@ -6398,30 +6779,45 @@
         "intern",
         "nutter",
         "nuttier",
-        "nutrient"
+        "nutrient",
+        "uniter"
       ],
       [
+        "estro",
+        "mento",
         "meson",
         "metro",
+        "monte",
+        "morns",
+        "morse",
+        "norms",
         "notes",
         "omens",
         "onset",
         "rents",
+        "roset",
+        "rotes",
         "senor",
+        "seton",
+        "smote",
         "snore",
         "steno",
         "stern",
         "stone",
+        "store",
         "storm",
         "tenor",
         "tomes",
         "toner",
+        "tones",
+        "tores",
         "mentor",
         "sermon",
         "tenors",
         "toners",
         "mentors",
-        "monster"
+        "monster",
+        "torse"
       ],
       [
         "actin",
@@ -6464,16 +6860,19 @@
       [
         "anted",
         "defat",
+        "entia",
         "faint",
         "fated",
         "feint",
         "fetid",
         "fiend",
         "fined",
+        "tenia",
         "tined",
         "detain",
         "defiant",
-        "fainted"
+        "fainted",
+        "tinea"
       ],
       [
         "piing",
@@ -6488,7 +6887,8 @@
         "sitting",
         "spiting",
         "pittings",
-        "spitting"
+        "spitting",
+        "siping"
       ],
       [
         "piing",
@@ -6500,7 +6900,8 @@
         "sinning",
         "sniping",
         "pinnings",
-        "spinning"
+        "spinning",
+        "siping"
       ],
       [
         "awing",
@@ -6529,11 +6930,13 @@
         "hangul",
         "lingua",
         "hauling",
-        "laughing"
+        "laughing",
+        "inula"
       ],
       [
         "count",
         "cuing",
+        "incog",
         "ingot",
         "tonic",
         "tunic",
@@ -6545,43 +6948,61 @@
         "toning",
         "tuning",
         "unction",
-        "counting"
+        "counting",
+        "ontic"
       ],
       [
         "aider",
         "aired",
         "atria",
+        "dater",
         "irate",
         "rated",
+        "tared",
         "tiara",
         "tired",
         "trade",
         "triad",
         "tried",
-        "radiate"
+        "tirade",
+        "radiate",
+        "tread"
       ],
       [
         "agent",
+        "aglet",
+        "agone",
         "alone",
         "along",
         "angel",
         "angle",
+        "anole",
+        "atone",
         "eagle",
         "eaten",
         "elate",
         "genet",
+        "genoa",
         "glean",
+        "gloat",
         "leant",
+        "lento",
+        "leone",
+        "longa",
+        "longe",
+        "notal",
         "oaten",
         "talon",
         "tango",
+        "gelato",
         "gentle",
         "goatee",
         "lateen",
         "negate",
         "tangle",
         "elegant",
-        "elongate"
+        "elongate",
+        "tonal"
       ],
       [
         "apter",
@@ -6602,7 +7023,8 @@
         "retape",
         "tamper",
         "temper",
-        "permeate"
+        "permeate",
+        "tepee"
       ],
       [
         "ennui",
@@ -6620,12 +7042,15 @@
         "unpin",
         "using",
         "ennuis",
+        "ensign",
         "genius",
         "supine",
         "unpegs",
         "unpins",
+        "ensuing",
         "penguin",
-        "penguins"
+        "penguins",
+        "negus"
       ],
       [
         "alive",
@@ -6637,6 +7062,8 @@
         "ileac",
         "loave",
         "louie",
+        "oculi",
+        "oleic",
         "olive",
         "ovule",
         "quail",
@@ -6648,11 +7075,14 @@
         "caique",
         "clique",
         "vacuole",
-        "equivocal"
+        "equivocal",
+        "voila"
       ],
       [
+        "agios",
         "amigo",
         "bogus",
+        "gibus",
         "gismo",
         "gumbo",
         "iambs",
@@ -6664,7 +7094,8 @@
         "gumbos",
         "subgum",
         "subimago",
-        "ambiguous"
+        "ambiguous",
+        "imagos"
       ],
       [
         "agama",
@@ -6682,21 +7113,27 @@
         "ragman",
         "samara",
         "anagram",
-        "anagrams"
+        "anagrams",
+        "grana"
       ],
       [
         "civet",
         "clove",
+        "coley",
         "covet",
         "covey",
         "evict",
+        "lotic",
         "lytic",
+        "oleic",
         "olive",
+        "telic",
         "voice",
         "voile",
         "volte",
         "violet",
-        "velocity"
+        "velocity",
+        "volti"
       ],
       [
         "kines",
@@ -6725,9 +7162,12 @@
         "tick",
         "tine",
         "incite",
-        "kinetic"
+        "kinetic",
+        "nite"
       ],
       [
+        "eerie",
+        "genes",
         "genie",
         "genre",
         "green",
@@ -6737,23 +7177,33 @@
         "resin",
         "rings",
         "rinse",
+        "risen",
+        "seine",
+        "serin",
+        "siege",
+        "singe",
         "siren",
         "genies",
         "genres",
         "greens",
         "reigns",
+        "renege",
         "resign",
+        "serine",
         "signer",
         "singer",
         "greenie",
         "energies",
         "energise",
-        "greenies"
+        "greenies",
+        "sneer"
       ],
       [
         "guild",
+        "linum",
         "lupin",
         "pling",
+        "ulmin",
         "unlid",
         "duping",
         "impugn",
@@ -6762,11 +7212,14 @@
         "ungild",
         "dumping",
         "lumping",
-        "dumpling"
+        "dumpling",
+        "umping"
       ],
       [
+        "autos",
         "expat",
         "expos",
+        "joust",
         "paste",
         "pates",
         "peats",
@@ -6774,18 +7227,25 @@
         "poets",
         "pouts",
         "poxes",
+        "saute",
         "septa",
         "setup",
+        "sexto",
         "spate",
+        "spout",
+        "stoup",
+        "tajes",
         "tapes",
         "taupe",
         "taxes",
+        "topes",
         "upjet",
         "upset",
         "expats",
         "taupes",
         "upjets",
-        "juxtapose"
+        "juxtapose",
+        "tuxes"
       ],
       [
         "lardy",
@@ -6809,7 +7269,8 @@
         "bluets",
         "bustle",
         "sublet",
-        "subtle"
+        "subtle",
+        "tules"
       ],
       [
         "caper",
@@ -6833,7 +7294,8 @@
         "ocelot",
         "oocyte",
         "ecology",
-        "cetology"
+        "cetology",
+        "cooey"
       ],
       [
         "beryl",
@@ -6869,15 +7331,20 @@
       ],
       [
         "aeons",
+        "aloes",
         "alone",
+        "anole",
         "elans",
+        "enols",
         "lanes",
+        "lases",
         "leans",
         "loans",
         "loses",
         "nasal",
         "noels",
         "noses",
+        "oases",
         "sales",
         "salon",
         "salsa",
@@ -6888,7 +7355,8 @@
         "nasals",
         "salons",
         "season",
-        "seasonal"
+        "seasonal",
+        "sloes"
       ],
       [
         "carol",
@@ -6897,9 +7365,11 @@
         "claim",
         "clamp",
         "clomp",
+        "copal",
         "copra",
         "coral",
         "cramp",
+        "crimp",
         "macro",
         "malic",
         "micro",
@@ -6911,7 +7381,8 @@
         "lipoma",
         "primal",
         "oilcamp",
-        "proclaim"
+        "proclaim",
+        "primo"
       ],
       [
         "apron",
@@ -6930,7 +7401,8 @@
         "paneer",
         "peahen",
         "reopen",
-        "earphone"
+        "earphone",
+        "paeon"
       ],
       [
         "douser",
@@ -6941,15 +7413,20 @@
         "hurdle",
         "hurled",
         "louder",
+        "loured",
+        "lushed",
+        "lusher",
         "resold",
         "roused",
         "rushed",
+        "shored",
         "should",
         "shroud",
         "soured",
         "holders",
         "hurdles",
-        "shoulder"
+        "shoulder",
+        "solder"
       ],
       [
         "bleats",
@@ -6957,9 +7434,12 @@
         "blouse",
         "bluest",
         "bluets",
+        "boules",
         "bustle",
         "obelus",
+        "oblast",
         "obtuse",
+        "osteal",
         "salute",
         "solute",
         "stable",
@@ -6969,17 +7449,28 @@
         "tables",
         "usable",
         "sublate",
-        "absolute"
+        "absolute",
+        "solate"
       ],
       [
+        "estro",
+        "fores",
         "forte",
         "forts",
         "foyer",
         "frets",
         "frost",
         "retro",
+        "roset",
+        "rotes",
+        "serry",
+        "sorer",
+        "sorry",
         "store",
         "story",
+        "tores",
+        "torrs",
+        "torse",
         "forest",
         "fortes",
         "foster",
@@ -6988,11 +7479,13 @@
         "oyster",
         "resort",
         "retros",
+        "rosery",
         "roster",
         "softer",
         "sorter",
         "storey",
-        "forestry"
+        "forestry",
+        "yores"
       ],
       [
         "dhows",
@@ -7012,12 +7505,16 @@
         "besot",
         "bores",
         "brose",
+        "estro",
         "robes",
+        "roset",
         "rotes",
         "sober",
         "store",
+        "tores",
         "sorbet",
-        "strobe"
+        "strobe",
+        "torse"
       ],
       [
         "chert",
@@ -7045,7 +7542,8 @@
         "airgun",
         "raging",
         "urging",
-        "arguing"
+        "arguing",
+        "agrin"
       ],
       [
         "acnes",
@@ -7066,7 +7564,8 @@
         "cranes",
         "nacres",
         "canners",
-        "scanner"
+        "scanner",
+        "crena"
       ],
       [
         "acute",
@@ -7078,24 +7577,33 @@
         "crape",
         "crate",
         "crept",
+        "cruet",
         "cuter",
         "eruct",
         "pacer",
+        "pater",
         "prate",
+        "react",
         "recap",
+        "recta",
         "taper",
+        "taupe",
         "truce",
         "acuter",
         "carpet",
+        "curate",
         "precut",
         "teacup",
-        "capture"
+        "capture",
+        "trace"
       ],
       [
         "cones",
+        "coney",
         "copen",
         "copes",
         "copse",
+        "cosey",
         "nosey",
         "opens",
         "peons",
@@ -7105,7 +7613,8 @@
         "scone",
         "scope",
         "sepoy",
-        "syncope"
+        "syncope",
+        "posey"
       ],
       [
         "faint",
@@ -7129,16 +7638,30 @@
         "clerk",
         "ocker",
         "locker",
-        "relock"
+        "relock",
+        "reck"
       ],
       [
         "acres",
+        "arose",
         "arrow",
         "cares",
+        "ceros",
+        "corer",
         "cores",
         "cower",
+        "craws",
         "crews",
+        "crows",
+        "orcas",
+        "oscar",
         "races",
+        "rares",
+        "rawer",
+        "rears",
+        "resaw",
+        "resow",
+        "roars",
         "scare",
         "score",
         "screw",
@@ -7148,11 +7671,17 @@
         "wears",
         "worse",
         "arrows",
+        "carers",
+        "corers",
         "cowers",
+        "racers",
+        "scarce",
+        "scarer",
         "scorer",
         "soccer",
         "worser",
-        "scarecrow"
+        "scarecrow",
+        "sorer"
       ],
       [
         "denar",
@@ -7174,6 +7703,7 @@
         "pranked"
       ],
       [
+        "agrin",
         "aping",
         "grain",
         "pinna",
@@ -7184,7 +7714,8 @@
         "raking",
         "parking",
         "ranking",
-        "pranking"
+        "pranking",
+        "kiang"
       ],
       [
         "edge",
@@ -7195,12 +7726,14 @@
         "lend",
         "need",
         "ledge",
-        "legend"
+        "legend",
+        "geld"
       ],
       [
         "gills",
         "glens",
         "ingle",
+        "lenis",
         "liens",
         "limes",
         "limns",
@@ -7210,6 +7743,7 @@
         "miens",
         "miles",
         "mines",
+        "nelis",
         "singe",
         "slime",
         "smell",
@@ -7218,7 +7752,8 @@
         "single",
         "mingles",
         "selling",
-        "smelling"
+        "smelling",
+        "nills"
       ],
       [
         "agues",
@@ -7235,6 +7770,7 @@
       [
         "bider",
         "bides",
+        "biers",
         "birds",
         "bride",
         "dries",
@@ -7244,17 +7780,27 @@
         "biders",
         "brides",
         "debris",
-        "rebids"
+        "rebids",
+        "bries"
       ],
       [
+        "abler",
+        "baler",
         "beach",
         "beech",
         "belch",
+        "blare",
+        "blear",
         "brace",
+        "caber",
+        "cable",
         "cheer",
+        "chela",
         "clear",
         "creel",
+        "haler",
         "lacer",
+        "larch",
         "leach",
         "leech",
         "reach",
@@ -7263,11 +7809,13 @@
         "bleach",
         "breach",
         "breech",
+        "cabler",
         "cereal",
         "healer",
         "herbal",
         "leacher",
-        "bleacher"
+        "bleacher",
+        "rebec"
       ],
       [
         "inept",
@@ -7279,9 +7827,11 @@
         "unite",
         "untie",
         "pointe",
-        "poutine"
+        "poutine",
+        "pinot"
       ],
       [
+        "osier",
         "piers",
         "piper",
         "pipes",
@@ -7293,6 +7843,9 @@
         "preps",
         "pries",
         "prise",
+        "prose",
+        "repos",
+        "resip",
         "ropes",
         "spire",
         "spoor",
@@ -7300,15 +7853,19 @@
         "oopsie",
         "oppose",
         "pipers",
+        "sipper",
         "opposer",
         "propose",
-        "porpoise"
+        "soppier",
+        "porpoise",
+        "spier"
       ],
       [
         "acai",
         "acta",
         "alga",
         "caca",
+        "clag",
         "gait",
         "gala",
         "gilt",
@@ -7318,7 +7875,8 @@
         "cacti",
         "taiga",
         "lactic",
-        "galactic"
+        "galactic",
+        "laic"
       ],
       [
         "cave",
@@ -7340,7 +7898,8 @@
         "vases",
         "visas",
         "vises",
-        "passive"
+        "passive",
+        "sipes"
       ],
       [
         "dong",
@@ -7357,12 +7916,14 @@
       [
         "doer",
         "dole",
+        "dour",
         "duel",
         "euro",
         "lode",
         "lord",
         "lore",
         "loud",
+        "lour",
         "lure",
         "redo",
         "rode",
@@ -7374,15 +7935,19 @@
         "lured",
         "older",
         "ruled",
-        "louder"
+        "louder",
+        "loured",
+        "urde"
       ],
       [
         "evil",
         "gale",
         "gall",
         "gave",
+        "geal",
         "gill",
         "give",
+        "glei",
         "ilea",
         "live",
         "vagi",
@@ -7390,21 +7955,26 @@
         "vile",
         "agile",
         "alive",
+        "gavel",
+        "ileal",
         "legal",
         "villa",
         "vagile",
-        "village"
+        "village",
+        "veil"
       ],
       [
         "atom",
         "boat",
+        "camo",
         "coat",
         "coma",
         "comb",
         "moat",
         "taco",
         "tomb",
-        "combat"
+        "combat",
+        "octa"
       ],
       [
         "creeps",
@@ -7419,7 +7989,8 @@
         "scepter",
         "sceptre",
         "specter",
-        "spectre"
+        "spectre",
+        "recept"
       ],
       [
         "artist",
@@ -7433,7 +8004,8 @@
         "triacs",
         "triads",
         "drastic",
-        "distract"
+        "distract",
+        "strati"
       ],
       [
         "achar",
@@ -7475,6 +8047,7 @@
       ],
       [
         "enlit",
+        "gilet",
         "glint",
         "ingle",
         "inlet",
@@ -7483,7 +8056,8 @@
         "title",
         "engilt",
         "tingle",
-        "letting"
+        "letting",
+        "intel"
       ],
       [
         "artsy",
@@ -7561,6 +8135,7 @@
         "lute",
         "sett",
         "shut",
+        "slue",
         "stet",
         "suet",
         "test",
@@ -7568,18 +8143,31 @@
         "tuts",
         "lutes",
         "hustle",
+        "shtetl",
         "sleuth",
-        "shuttle"
+        "shuttle",
+        "tules"
       ],
       [
         "court",
         "crush",
         "crust",
         "hocus",
+        "hours",
         "hurts",
+        "rotch",
+        "roust",
+        "routs",
+        "scour",
         "scout",
         "short",
+        "shout",
+        "south",
         "strut",
+        "torch",
+        "torts",
+        "torus",
+        "tours",
         "troth",
         "trout",
         "trust",
@@ -7592,7 +8180,8 @@
         "trouts",
         "truths",
         "tutors",
-        "shortcut"
+        "shortcut",
+        "trots"
       ],
       [
         "drill",
@@ -7618,9 +8207,12 @@
         "riling",
         "gilling",
         "rilling",
-        "grilling"
+        "grilling",
+        "grig"
       ],
       [
+        "hales",
+        "halts",
         "haste",
         "hates",
         "heals",
@@ -7628,7 +8220,11 @@
         "lathe",
         "laths",
         "latte",
+        "leash",
         "least",
+        "setal",
+        "shale",
+        "shalt",
         "slate",
         "stale",
         "state",
@@ -7641,7 +8237,9 @@
         "latest",
         "lathes",
         "lattes",
-        "stealth"
+        "shtetl",
+        "stealth",
+        "teals"
       ],
       [
         "nuder",
@@ -7677,23 +8275,29 @@
         "awned",
         "tawed",
         "waned",
-        "wanted"
+        "wanted",
+        "awed"
       ],
       [
         "epic",
         "espy",
+        "fisc",
         "ices",
         "pecs",
         "pics",
         "pies",
+        "pise",
         "spec",
         "yips",
         "epics",
+        "sepic",
         "spice",
         "spicy",
-        "specify"
+        "specify",
+        "sipe"
       ],
       [
+        "awee",
         "awes",
         "ease",
         "ewes",
@@ -7711,7 +8315,8 @@
         "woes",
         "mease",
         "meows",
-        "awesome"
+        "awesome",
+        "emos"
       ],
       [
         "erhu",
@@ -7724,7 +8329,8 @@
         "urge",
         "huger",
         "hunger",
-        "rehung"
+        "rehung",
+        "huer"
       ],
       [
         "fare",
@@ -7733,7 +8339,9 @@
         "fear",
         "feat",
         "feet",
+        "feta",
         "fete",
+        "frat",
         "free",
         "fret",
         "raft",
@@ -7747,7 +8355,8 @@
         "after",
         "eater",
         "refute",
-        "feature"
+        "feature",
+        "urea"
       ],
       [
         "begin",
@@ -7808,24 +8417,38 @@
         "cater",
         "cedar",
         "crate",
+        "dater",
         "raced",
         "rated",
+        "react",
+        "recta",
+        "tacet",
+        "tared",
         "tater",
+        "tecta",
+        "tetra",
         "trace",
         "tract",
+        "trade",
         "treat",
         "redact",
         "tarted",
         "tetrad",
         "traced",
-        "detract"
+        "detract",
+        "tread"
       ],
       [
         "chin",
+        "chon",
         "coin",
         "conk",
+        "gonk",
+        "hick",
+        "hock",
         "honk",
         "icon",
+        "ikon",
         "inch",
         "king",
         "nick",
@@ -7835,7 +8458,8 @@
         "chino",
         "incog",
         "coking",
-        "choking"
+        "choking",
+        "kino"
       ],
       [
         "ensile",
@@ -7887,6 +8511,9 @@
         "inflate",
         "latrine",
         "nitrate",
+        "nitrite",
+        "ratline",
+        "reliant",
         "retinal",
         "tailfin",
         "tartine",
@@ -7896,7 +8523,8 @@
         "inertial",
         "inflater",
         "antilifer",
-        "infiltrate"
+        "infiltrate",
+        "trenail"
       ],
       [
         "brig",
@@ -7930,7 +8558,8 @@
         "feats",
         "fetas",
         "yeast",
-        "safety"
+        "safety",
+        "tase"
       ],
       [
         "beets",
@@ -7996,22 +8625,37 @@
         "cited",
         "citer",
         "cried",
+        "decry",
         "deity",
+        "dicer",
+        "dicey",
+        "dirty",
         "edict",
         "idler",
+        "liter",
         "litre",
         "lyric",
         "lytic",
+        "recti",
+        "redly",
         "relic",
         "relit",
+        "riced",
+        "riled",
+        "telic",
+        "tilde",
+        "tiled",
         "tiler",
         "tired",
         "trice",
+        "tried",
         "credit",
         "direct",
         "direly",
+        "relict",
         "tiredly",
-        "directly"
+        "directly",
+        "yield"
       ],
       [
         "nonets",
@@ -8071,11 +8715,14 @@
         "confirms"
       ],
       [
+        "abler",
         "alive",
         "areal",
         "avail",
+        "baler",
         "blare",
         "blear",
+        "brail",
         "brave",
         "labia",
         "larva",
@@ -8091,7 +8738,8 @@
         "larvae",
         "verbal",
         "viable",
-        "variable"
+        "variable",
+        "labra"
       ],
       [
         "antis",
@@ -8105,7 +8753,8 @@
         "statin",
         "taints",
         "titans",
-        "instant"
+        "instant",
+        "tians"
       ],
       [
         "merit",
@@ -8125,11 +8774,14 @@
         "primitive"
       ],
       [
+        "elemi",
         "elide",
+        "imide",
         "imped",
         "impel",
         "limed",
         "lipid",
+        "medii",
         "piled",
         "plied",
         "delime",
@@ -8141,7 +8793,8 @@
         "milled",
         "implied",
         "impelled",
-        "millipede"
+        "millipede",
+        "pilled"
       ],
       [
         "cited",
@@ -8164,7 +8817,8 @@
         "pieced",
         "enticed",
         "incepted",
-        "centipede"
+        "centipede",
+        "tepee"
       ],
       [
         "gees",
@@ -8187,7 +8841,8 @@
         "recto",
         "retro",
         "rector",
-        "correct"
+        "correct",
+        "rote"
       ],
       [
         "aitch",
@@ -8199,7 +8854,8 @@
         "curia",
         "hutia",
         "triac",
-        "haircut"
+        "haircut",
+        "chiru"
       ],
       [
         "into",
@@ -8213,13 +8869,16 @@
         "tint",
         "tone",
         "tote",
+        "inion",
         "innit",
+        "ninon",
         "nonet",
         "tenon",
         "tonne",
         "intent",
         "intone",
-        "intention"
+        "intention",
+        "nite"
       ],
       [
         "nest",
@@ -8240,7 +8899,8 @@
         "tunes",
         "unset",
         "sunset",
-        "unsets"
+        "unsets",
+        "tuns"
       ],
       [
         "biro",
@@ -8263,7 +8923,8 @@
         "uric",
         "tulip",
         "uplit",
-        "culprit"
+        "culprit",
+        "picul"
       ],
       [
         "arums",
@@ -8272,6 +8933,7 @@
         "drams",
         "drats",
         "drums",
+        "duras",
         "marts",
         "ramus",
         "smart",
@@ -8279,7 +8941,9 @@
         "trams",
         "turds",
         "datums",
-        "mustard"
+        "durmast",
+        "mustard",
+        "durst"
       ],
       [
         "ceil",
@@ -8306,7 +8970,8 @@
         "tract",
         "trait",
         "triac",
-        "artifact"
+        "artifact",
+        "artic"
       ],
       [
         "acuter",
@@ -8348,16 +9013,19 @@
       [
         "bergs",
         "burrs",
+        "burse",
         "grubs",
         "grues",
         "rebus",
+        "rubes",
         "surer",
         "surge",
         "urger",
         "urges",
         "burger",
         "urgers",
-        "burgers"
+        "burgers",
+        "suber"
       ],
       [
         "aqua",
@@ -8370,7 +9038,8 @@
         "aurum",
         "maqui",
         "maria",
-        "aquarium"
+        "aquarium",
+        "muir"
       ],
       [
         "aced",
@@ -8412,7 +9081,8 @@
         "trial",
         "fairly",
         "ratify",
-        "frailty"
+        "frailty",
+        "artily"
       ],
       [
         "airy",
@@ -8458,14 +9128,17 @@
         "aphid",
         "canid",
         "chain",
+        "chana",
         "china",
+        "cnida",
         "naiad",
         "nicad",
         "panda",
         "panic",
         "pinch",
         "daphnia",
-        "handicap"
+        "handicap",
+        "dacha"
       ],
       [
         "capture",
@@ -8495,6 +9168,7 @@
         "cacas",
         "napas",
         "nipas",
+        "paans",
         "pacas",
         "pains",
         "panic",
@@ -8511,7 +9185,8 @@
         "sancai",
         "picnics",
         "capsicin",
-        "capsaicin"
+        "capsaicin",
+        "paisa"
       ],
       [
         "bathe",
@@ -8534,12 +9209,15 @@
         "hereat",
         "rebate",
         "reheat",
-        "breathe"
+        "breathe",
+        "bather"
       ],
       [
         "alert",
         "alter",
         "earth",
+        "eater",
+        "elate",
         "ether",
         "hater",
         "heart",
@@ -8557,7 +9235,8 @@
         "reheat",
         "relate",
         "leather",
-        "ethereal"
+        "ethereal",
+        "haler"
       ],
       [
         "lemon",
@@ -8568,7 +9247,8 @@
         "omens",
         "lemons",
         "melons",
-        "solemn"
+        "solemn",
+        "enols"
       ],
       [
         "actor",
@@ -8582,16 +9262,21 @@
         "covet",
         "crate",
         "crave",
+        "orate",
+        "ovate",
         "overt",
         "react",
+        "recta",
         "trace",
         "trove",
         "voter",
         "avocet",
+        "coater",
         "octave",
         "vector",
         "overact",
-        "overcoat"
+        "overcoat",
+        "recto"
       ],
       [
         "amber",
@@ -8605,7 +9290,8 @@
         "realm",
         "blamer",
         "marble",
-        "ramble"
+        "ramble",
+        "abler"
       ],
       [
         "antis",
@@ -8621,7 +9307,8 @@
         "sanity",
         "tiyins",
         "inanity",
-        "insanity"
+        "insanity",
+        "tinny"
       ],
       [
         "anis",
@@ -8633,10 +9320,12 @@
         "inane",
         "nines",
         "inanes",
-        "insane"
+        "insane",
+        "sienna"
       ],
       [
         "agent",
+        "anent",
         "anger",
         "apter",
         "gaper",
@@ -8645,34 +9334,22 @@
         "grate",
         "great",
         "pager",
+        "paten",
         "pater",
         "prate",
+        "range",
         "taper",
         "terga",
         "argent",
         "enrapt",
         "entrap",
+        "gannet",
         "garnet",
         "parent",
         "trepan",
         "regnant",
-        "pregnant"
-      ],
-      [
-        "alum",
-        "lain",
-        "limn",
-        "luma",
-        "mail",
-        "main",
-        "maul",
-        "nail",
-        "ulna",
-        "unai",
-        "liman",
-        "manul",
-        "ulmin",
-        "alumni"
+        "pregnant",
+        "renga"
       ],
       [
         "alum",
@@ -8690,7 +9367,9 @@
         "linum",
         "manul",
         "ulmin",
-        "alumni"
+        "alumni",
+        "lumina",
+        "luna"
       ],
       [
         "agora",
@@ -8709,6 +9388,7 @@
       [
         "bier",
         "brie",
+        "burs",
         "ires",
         "ribs",
         "rise",
@@ -8721,13 +9401,16 @@
         "sure",
         "user",
         "biers",
+        "bries",
         "burse",
         "rebus",
         "rubes",
+        "suber",
         "bruise",
         "buries",
         "busier",
-        "rubies"
+        "rubies",
+        "urbs"
       ],
       [
         "dough",
@@ -8745,6 +9428,7 @@
         "coly",
         "cone",
         "cony",
+        "enol",
         "lone",
         "noel",
         "once",
@@ -8754,7 +9438,8 @@
         "coney",
         "cycle",
         "cyclo",
-        "cyclone"
+        "cyclone",
+        "leno"
       ],
       [
         "calve",
@@ -8829,14 +9514,19 @@
         "glinting",
         "lighting",
         "tingling",
-        "lightning"
+        "lightning",
+        "tining"
       ],
       [
+        "doors",
         "doves",
         "drove",
         "erode",
+        "odors",
         "overs",
+        "reeds",
         "rodeo",
+        "roods",
         "roved",
         "roves",
         "serve",
@@ -8846,13 +9536,16 @@
         "verse",
         "verso",
         "devore",
+        "droves",
         "erodes",
         "overdo",
         "rodeos",
         "served",
         "soever",
         "versed",
-        "overdose"
+        "overdoes",
+        "overdose",
+        "sered"
       ],
       [
         "armlets",
@@ -8897,7 +9590,8 @@
         "parotic",
         "proctal",
         "topical",
-        "tropical"
+        "tropical",
+        "rictal"
       ],
       [
         "felid",
@@ -8915,12 +9609,14 @@
         "weird",
         "wider",
         "wield",
+        "wifie",
         "wired",
         "wried",
         "rifled",
         "wilder",
         "wilier",
-        "wildfire"
+        "wildfire",
+        "wiled"
       ],
       [
         "everts",
@@ -8981,7 +9677,8 @@
         "globe",
         "longe",
         "noble",
-        "belong"
+        "belong",
+        "enol"
       ],
       [
         "achy",
@@ -8996,7 +9693,8 @@
         "ancho",
         "havoc",
         "nacho",
-        "anchovy"
+        "anchovy",
+        "cyano"
       ],
       [
         "cent",
@@ -9028,6 +9726,7 @@
         "suspicious"
       ],
       [
+        "alps",
         "awls",
         "laps",
         "laws",
@@ -9048,7 +9747,8 @@
         "pawls",
         "warps",
         "wraps",
-        "sprawl"
+        "sprawl",
+        "salp"
       ],
       [
         "mates",
@@ -9059,7 +9759,8 @@
         "tajes",
         "tames",
         "teams",
-        "jetsam"
+        "jetsam",
+        "james"
       ],
       [
         "aloft",
@@ -9088,6 +9789,7 @@
         "allure",
         "avenue",
         "baleen",
+        "baller",
         "beaver",
         "bullae",
         "enable",
@@ -9105,11 +9807,13 @@
         "rubella",
         "unlevel",
         "unravel",
-        "vulnerable"
+        "vulnerable",
+        "urbane"
       ],
       [
         "aced",
         "ache",
+        "ahed",
         "cede",
         "chad",
         "dace",
@@ -9122,7 +9826,8 @@
         "aahed",
         "ached",
         "ahead",
-        "headache"
+        "headache",
+        "dacha"
       ],
       [
         "peers",
@@ -9134,7 +9839,8 @@
         "spore",
         "spree",
         "repose",
-        "operose"
+        "operose",
+        "spoor"
       ],
       [
         "coco",
@@ -9177,7 +9883,8 @@
         "vina",
         "vint",
         "vita",
-        "ovation"
+        "ovation",
+        "vino"
       ],
       [
         "pegs",
@@ -9190,7 +9897,8 @@
         "sipe",
         "guise",
         "pipes",
-        "guppies"
+        "guppies",
+        "pise"
       ],
       [
         "alate",
@@ -9205,7 +9913,8 @@
         "muleta",
         "tamale",
         "lemmata",
-        "malamute"
+        "malamute",
+        "ulama"
       ],
       [
         "bight",
@@ -9301,16 +10010,19 @@
         "pence",
         "tempo",
         "tempt",
+        "tenet",
         "totem",
         "cement",
         "coempt",
         "metope",
         "potent",
         "potmen",
+        "toneme",
         "topmen",
         "compete",
         "contempt",
-        "competent"
+        "competent",
+        "topee"
       ],
       [
         "aster",
@@ -9337,13 +10049,16 @@
         "heist",
         "hoist",
         "homes",
+        "hoots",
         "items",
         "mites",
         "moist",
         "moose",
         "moths",
         "omits",
+        "shite",
         "shoot",
+        "smite",
         "smote",
         "those",
         "times",
@@ -9352,7 +10067,8 @@
         "smooth",
         "somite",
         "soothe",
-        "smoothie"
+        "smoothie",
+        "sooth"
       ],
       [
         "estrin",
@@ -9373,7 +10089,8 @@
         "tinges",
         "trines",
         "resting",
-        "stinger"
+        "stinger",
+        "triens"
       ],
       [
         "amuses",
@@ -9419,11 +10136,13 @@
         "xylocarp"
       ],
       [
+        "ergon",
         "euros",
         "genus",
         "goner",
         "gores",
         "gorse",
+        "grues",
         "nurse",
         "ogres",
         "rogue",
@@ -9439,7 +10158,8 @@
         "rogues",
         "rouens",
         "rouges",
-        "surgeon"
+        "surgeon",
+        "negus"
       ],
       [
         "acted",
@@ -9454,6 +10174,7 @@
         "edict",
         "tided",
         "addict",
+        "caddie",
         "decade",
         "deceit",
         "decide",
@@ -9462,7 +10183,8 @@
         "edited",
         "ideate",
         "ideated",
-        "dedicate"
+        "dedicate",
+        "dacite"
       ],
       [
         "acted",
@@ -9525,16 +10247,19 @@
       [
         "acned",
         "acted",
+        "anted",
         "cadet",
         "caned",
         "ceded",
         "dance",
+        "dated",
         "enact",
         "ended",
         "cadent",
         "canted",
         "cetane",
         "danced",
+        "deaden",
         "decade",
         "decant",
         "decent",
@@ -9543,13 +10268,18 @@
         "tended",
         "enacted",
         "decadent",
-        "decanted"
+        "decanted",
+        "eaten"
       ],
       [
+        "emmet",
         "emote",
+        "mento",
         "meter",
         "metre",
         "metro",
+        "monte",
+        "moron",
         "motor",
         "romeo",
         "tenor",
@@ -9566,7 +10296,8 @@
         "mootmen",
         "motormen",
         "metronome",
-        "monotreme"
+        "monotreme",
+        "roneo"
       ],
       [
         "galop",
@@ -9583,10 +10314,12 @@
         "aptly",
         "atopy",
         "galop",
+        "gloat",
         "gloop",
         "glyph",
         "goopy",
         "hoagy",
+        "hotly",
         "loath",
         "loopy",
         "ology",
@@ -9594,13 +10327,15 @@
         "phyla",
         "platy",
         "pygal",
+        "typal",
         "apolog",
         "gloopy",
         "hoopla",
         "otalgy",
         "phytol",
         "apology",
-        "pathology"
+        "pathology",
+        "yahoo"
       ],
       [
         "amate",
@@ -9677,7 +10412,8 @@
         "kiang",
         "kinky",
         "yakking",
-        "kayaking"
+        "kayaking",
+        "naga"
       ],
       [
         "holon",
@@ -9718,30 +10454,38 @@
         "skier",
         "inkers",
         "reskin",
-        "sinker"
+        "sinker",
+        "serin"
       ],
       [
+        "ceder",
+        "cered",
         "cider",
         "coder",
+        "comer",
         "cored",
         "credo",
         "creed",
+        "creme",
         "cried",
         "crime",
         "decor",
         "deice",
+        "dicer",
         "dimer",
         "eider",
         "erode",
         "medic",
         "micro",
+        "mired",
         "moire",
         "rimed",
         "deicer",
         "dormie",
         "recode",
         "dormice",
-        "mediocre"
+        "mediocre",
+        "riced"
       ],
       [
         "exon",
@@ -9776,8 +10520,10 @@
         "exemplify"
       ],
       [
+        "biter",
         "brine",
         "bruin",
+        "brunt",
         "brute",
         "burnt",
         "inert",
@@ -9796,7 +10542,8 @@
         "uteri",
         "burnet",
         "uniter",
-        "turbine"
+        "turbine",
+        "tribune"
       ],
       [
         "gamers",
@@ -9851,7 +10598,8 @@
         "spim",
         "prims",
         "prism",
-        "shrimp"
+        "shrimp",
+        "phis"
       ],
       [
         "abase",
@@ -9940,7 +10688,8 @@
         "bores",
         "brose",
         "robes",
-        "sober"
+        "sober",
+        "eros"
       ],
       [
         "hare",
@@ -9995,7 +10744,8 @@
         "envoi",
         "koine",
         "ovine",
-        "invoke"
+        "invoke",
+        "ikon"
       ],
       [
         "cleft",
@@ -10087,7 +10837,8 @@
         "abode",
         "adobe",
         "badge",
-        "bodega"
+        "bodega",
+        "doge"
       ],
       [
         "hang",
@@ -10137,9 +10888,11 @@
         "oatmeal"
       ],
       [
+        "aeons",
         "axons",
         "exons",
         "expos",
+        "heaps",
         "hones",
         "hoops",
         "hopes",
@@ -10149,15 +10902,18 @@
         "phase",
         "pheon",
         "phone",
+        "pones",
         "poohs",
         "poxes",
+        "shape",
         "shone",
         "snoop",
         "spoon",
         "hoaxes",
         "pheons",
         "phones",
-        "saxophone"
+        "saxophone",
+        "xenops"
       ],
       [
         "egrets",
@@ -10180,7 +10936,8 @@
         "roquets",
         "torques",
         "requotes",
-        "grotesque"
+        "grotesque",
+        "toques"
       ],
       [
         "desex",
@@ -10192,6 +10949,7 @@
         "duxes",
         "etude",
         "exude",
+        "outed",
         "sexto",
         "steed",
         "suede",
@@ -10203,7 +10961,8 @@
         "tuxedo",
         "detoxes",
         "tuxedos",
-        "tuxedoes"
+        "tuxedoes",
+        "sexed"
       ],
       [
         "abet",
@@ -10226,7 +10985,8 @@
         "label",
         "table",
         "ballet",
-        "teqball"
+        "teqball",
+        "blat"
       ],
       [
         "horn",
@@ -10241,10 +11001,12 @@
         "horizon"
       ],
       [
+        "clod",
         "cold",
         "conk",
         "cook",
         "cool",
+        "cowl",
         "dock",
         "down",
         "know",
@@ -10261,7 +11023,8 @@
         "colon",
         "condo",
         "woold",
-        "lockdown"
+        "lockdown",
+        "loon"
       ],
       [
         "creep",
@@ -10329,18 +11092,26 @@
         "gaslight"
       ],
       [
+        "acker",
         "afire",
         "baker",
+        "baric",
         "biker",
         "brace",
+        "brack",
         "brake",
         "break",
         "brick",
         "brief",
+        "caber",
+        "ceria",
         "creak",
         "facer",
+        "faker",
         "farce",
         "fiber",
+        "frack",
+        "freak",
         "backer",
         "bicker",
         "biface",
@@ -10349,7 +11120,8 @@
         "fabric",
         "reback",
         "backfire",
-        "fireback"
+        "fireback",
+        "kefir"
       ],
       [
         "elfin",
@@ -10406,6 +11178,7 @@
         "ceros",
         "corer",
         "cores",
+        "cosey",
         "coyer",
         "score",
         "serry",
@@ -10415,7 +11188,8 @@
         "rosery",
         "scorer",
         "scryer",
-        "sorcery"
+        "sorcery",
+        "yores"
       ],
       [
         "genus",
@@ -10452,7 +11226,8 @@
         "vines",
         "vleis",
         "livens",
-        "snivel"
+        "snivel",
+        "slive"
       ],
       [
         "linos",
@@ -10496,7 +11271,8 @@
         "seiche",
         "voices",
         "seviche",
-        "cohesive"
+        "cohesive",
+        "cosie"
       ],
       [
         "giron",
@@ -10641,6 +11417,7 @@
         "coirs",
         "curia",
         "curio",
+        "cursi",
         "orcas",
         "savor",
         "scour",
@@ -10656,7 +11433,8 @@
         "saviour",
         "various",
         "ovarious",
-        "voracious"
+        "voracious",
+        "oscar"
       ],
       [
         "agendum",
@@ -10706,7 +11484,8 @@
         "busily",
         "ovibos",
         "obvious",
-        "obviously"
+        "obviously",
+        "soily"
       ],
       [
         "aphid",
@@ -10724,7 +11503,8 @@
         "shady",
         "shaya",
         "aphids",
-        "dysphagia"
+        "dysphagia",
+        "ayahs"
       ],
       [
         "dies",
@@ -10741,13 +11521,16 @@
         "diets",
         "edits",
         "sited",
-        "tides"
+        "tides",
+        "ides"
       ],
       [
+        "ates",
         "date",
         "east",
         "eats",
         "etas",
+        "sade",
         "sate",
         "seat",
         "seta",
@@ -10757,7 +11540,8 @@
         "dates",
         "sated",
         "stade",
-        "stead"
+        "stead",
+        "tase"
       ],
       [
         "ares",
@@ -10816,7 +11600,8 @@
         "roset",
         "rotes",
         "store",
-        "torse"
+        "torse",
+        "tores"
       ],
       [
         "acorn",
@@ -10885,7 +11670,8 @@
         "field",
         "filed",
         "flied",
-        "filmed"
+        "filmed",
+        "limed"
       ],
       [
         "estro",
@@ -10899,7 +11685,8 @@
         "resort",
         "retros",
         "roster",
-        "sorter"
+        "sorter",
+        "tores"
       ],
       [
         "eight",
@@ -10916,7 +11703,8 @@
         "regift",
         "fighter",
         "freight",
-        "refight"
+        "refight",
+        "grift"
       ],
       [
         "eons",
@@ -10961,7 +11749,8 @@
         "stake",
         "steak",
         "takes",
-        "teaks"
+        "teaks",
+        "ates"
       ],
       [
         "aper",
@@ -11095,7 +11884,8 @@
         "miter",
         "mitre",
         "remit",
-        "timer"
+        "timer",
+        "emir"
       ],
       [
         "eels",
@@ -11230,7 +12020,8 @@
         "wiled",
         "wigged",
         "wiggle",
-        "wiggled"
+        "wiggled",
+        "lewd"
       ],
       [
         "eggs",
@@ -11330,7 +12121,8 @@
         "gurgle",
         "juggle",
         "lugger",
-        "juggler"
+        "juggler",
+        "grue"
       ],
       [
         "degu",
@@ -11526,10 +12318,12 @@
         "chaya",
         "child",
         "claim",
+        "dacha",
         "daily",
         "dimly",
         "hadal",
         "haily",
+        "halid",
         "halma",
         "hylic",
         "madly",
@@ -11541,7 +12335,8 @@
         "dahlia",
         "diamyl",
         "malady",
-        "chlamydia"
+        "chlamydia",
+        "milch"
       ],
       [
         "hiply",
@@ -11556,7 +12351,8 @@
         "slyish",
         "splish",
         "sylphs",
-        "syphilis"
+        "syphilis",
+        "pissy"
       ],
       [
         "garner",
@@ -11592,7 +12388,8 @@
         "onager",
         "orange",
         "orogen",
-        "oregano"
+        "oregano",
+        "agone"
       ],
       [
         "ergon",
@@ -11621,7 +12418,8 @@
         "piston",
         "pitons",
         "points",
-        "spinto"
+        "spinto",
+        "pinot"
       ],
       [
         "ceder",
@@ -11647,6 +12445,7 @@
       ],
       [
         "crude",
+        "cruds",
         "cruse",
         "crush",
         "curds",
@@ -11666,7 +12465,8 @@
         "ruched",
         "ruches",
         "rushed",
-        "crushed"
+        "crushed",
+        "sherd"
       ],
       [
         "chess",
@@ -11689,7 +12489,8 @@
         "ruches",
         "rushes",
         "ushers",
-        "crushes"
+        "crushes",
+        "ruses"
       ],
       [
         "ackee",
@@ -11793,6 +12594,7 @@
       ],
       [
         "brush",
+        "burse",
         "bused",
         "debus",
         "drubs",
@@ -11803,6 +12605,7 @@
         "huers",
         "rebus",
         "redub",
+        "rubes",
         "sherd",
         "shred",
         "shrub",
@@ -11812,7 +12615,8 @@
         "redubs",
         "rushed",
         "surbed",
-        "brushed"
+        "brushed",
+        "suber"
       ],
       [
         "abed",
@@ -11840,6 +12644,7 @@
       [
         "brush",
         "burrs",
+        "burse",
         "erhus",
         "herbs",
         "huers",
@@ -11850,10 +12655,12 @@
         "usher",
         "busher",
         "rusher",
-        "brusher"
+        "brusher",
+        "rubes"
       ],
       [
         "brush",
+        "burse",
         "buses",
         "erhus",
         "herbs",
@@ -11873,7 +12680,8 @@
         "subers",
         "ushers",
         "brushes",
-        "bushers"
+        "bushers",
+        "rubes"
       ],
       [
         "alates",
@@ -11896,7 +12704,8 @@
         "saltate",
         "tamales",
         "seatmate",
-        "stalemate"
+        "stalemate",
+        "malate"
       ],
       [
         "brings",
@@ -11952,7 +12761,8 @@
         "whinges",
         "whizzes",
         "winches",
-        "zwischenzug"
+        "zwischenzug",
+        "incuse"
       ],
       [
         "cere",
@@ -12048,6 +12858,7 @@
         "their",
         "throe",
         "titer",
+        "tithe",
         "titre",
         "torte",
         "toter",
@@ -12062,7 +12873,8 @@
         "thorite",
         "thother",
         "hitherto",
-        "thitherto"
+        "thitherto",
+        "troth"
       ],
       [
         "lassi",
@@ -12130,6 +12942,7 @@
         "amniotic",
         "cationic",
         "cinnamic",
+        "coaction",
         "continuo",
         "inaction",
         "mountain",
@@ -12144,7 +12957,8 @@
         "commination",
         "comminution",
         "communicant",
-        "communication"
+        "communication",
+        "nonatomic"
       ],
       [
         "peril",
@@ -12157,6 +12971,8 @@
         "preps",
         "pries",
         "prise",
+        "resip",
+        "riels",
         "riles",
         "slier",
         "spiel",
@@ -12165,19 +12981,23 @@
         "pipers",
         "pliers",
         "ripple",
+        "sipper",
         "ripples",
-        "slipper"
+        "slipper",
+        "spier"
       ],
       [
         "ennui",
         "genus",
         "guise",
+        "negus",
         "nines",
         "penis",
         "pines",
         "pings",
         "singe",
         "snipe",
+        "spine",
         "suing",
         "unpeg",
         "unpin",
@@ -12189,11 +13009,13 @@
         "unpins",
         "ensuing",
         "penguin",
-        "penguins"
+        "penguins",
+        "supine"
       ],
       [
         "opes",
         "opts",
+        "peso",
         "pest",
         "pets",
         "poet",
@@ -12206,19 +13028,23 @@
         "step",
         "stop",
         "toes",
+        "tope",
         "tops",
         "pesto",
         "poets",
         "popes",
         "poppet",
-        "poppets"
+        "poppets",
+        "topes"
       ],
       [
         "comet",
         "coned",
         "count",
+        "demon",
         "donut",
         "dunce",
+        "mento",
         "mound",
         "mount",
         "muted",
@@ -12233,13 +13059,16 @@
         "counted",
         "demount",
         "mounted",
-        "document"
+        "document",
+        "monte"
       ]
     ],
     "730182734705721354": [
       [
+        "inula",
         "lunar",
         "quail",
+        "quart",
         "quilt",
         "quint",
         "trail",
@@ -12255,7 +13084,8 @@
         "ritual",
         "urinal",
         "quintal",
-        "tranquil"
+        "tranquil",
+        "tuina"
       ],
       [
         "reeve",
@@ -12276,11 +13106,13 @@
       [
         "auric",
         "cairn",
+        "carny",
         "clary",
         "curia",
         "curly",
         "incur",
         "inlay",
+        "inula",
         "lunar",
         "lyric",
         "rainy",
@@ -12290,41 +13122,54 @@
         "unary",
         "unlay",
         "lunacy",
+        "lunary",
         "racily",
         "uncial",
         "uracil",
         "urinal",
-        "culinary"
+        "culinary",
+        "lycra"
       ],
       [
         "belts",
         "besot",
         "blots",
+        "boles",
         "bolts",
         "bores",
         "brose",
+        "estro",
         "lobes",
         "lores",
         "loser",
         "robes",
+        "roble",
         "roles",
+        "roset",
+        "rotes",
         "sober",
         "stole",
         "store",
+        "telos",
+        "toles",
         "tores",
         "bolter",
         "sorbet",
         "strobe",
         "bolster",
         "bolters",
-        "lobster"
+        "lobster",
+        "torse"
       ],
       [
         "eight",
+        "enlit",
         "gilet",
         "glint",
         "hinge",
+        "ingle",
         "inlet",
+        "intel",
         "legit",
         "light",
         "lithe",
@@ -12333,9 +13178,11 @@
         "thein",
         "thing",
         "tinge",
+        "engilt",
         "length",
         "tingle",
-        "lighten"
+        "lighten",
+        "thine"
       ],
       [
         "axles",
@@ -12356,6 +13203,7 @@
       ],
       [
         "least",
+        "lutea",
         "lutes",
         "saute",
         "setal",
@@ -12365,9 +13213,12 @@
         "tales",
         "teals",
         "tesla",
-        "salute"
+        "salute",
+        "tules"
       ],
       [
+        "inned",
+        "tined",
         "tweed",
         "twine",
         "widen",
@@ -12379,12 +13230,14 @@
         "dentine",
         "entwine",
         "twinned",
-        "entwined"
+        "entwined",
+        "wined"
       ],
       [
         "cited",
         "deice",
         "edict",
+        "inned",
         "niece",
         "deceit",
         "decent",
@@ -12397,10 +13250,12 @@
         "dentine",
         "enticed",
         "incented",
-        "indecent"
+        "indecent",
+        "tined"
       ],
       [
         "event",
+        "inned",
         "dentin",
         "devein",
         "endive",
@@ -12413,7 +13268,8 @@
         "vented",
         "dentine",
         "evident",
-        "invented"
+        "invented",
+        "tined"
       ],
       [
         "bares",
@@ -12429,7 +13285,8 @@
         "share",
         "shear",
         "basher",
-        "rehabs"
+        "rehabs",
+        "sabre"
       ],
       [
         "aches",
@@ -12447,7 +13304,8 @@
         "shear",
         "arches",
         "chaser",
-        "search"
+        "search",
+        "chars"
       ],
       [
         "arsed",
@@ -12467,7 +13325,8 @@
         "shred",
         "dasher",
         "shader",
-        "shared"
+        "shared",
+        "sherd"
       ],
       [
         "fares",
@@ -12514,6 +13373,8 @@
         "arose",
         "hares",
         "hears",
+        "heros",
+        "hoars",
         "hoers",
         "horse",
         "rheas",
@@ -12521,13 +13382,15 @@
         "shear",
         "shore",
         "ashore",
-        "hoarse"
+        "hoarse",
+        "horas"
       ],
       [
         "hares",
         "harps",
         "heaps",
         "hears",
+        "pares",
         "parse",
         "pears",
         "phase",
@@ -12541,15 +13404,18 @@
         "spear",
         "phaser",
         "phrase",
-        "shaper"
+        "shaper",
+        "raphes"
       ],
       [
         "acing",
+        "awing",
         "chain",
         "china",
         "whack",
         "winch",
         "aching",
+        "acking",
         "caking",
         "cawing",
         "waking",
@@ -12557,15 +13423,18 @@
         "chinwag",
         "hacking",
         "hawking",
-        "whacking"
+        "whacking",
+        "kiang"
       ],
       [
+        "agrin",
         "align",
         "glair",
         "gnarl",
         "grail",
         "grain",
         "grill",
+        "inula",
         "lunar",
         "ruing",
         "ulnar",
@@ -12575,30 +13444,42 @@
         "ruling",
         "urinal",
         "lingual",
-        "alluring"
+        "railgun",
+        "alluring",
+        "unrig"
       ],
       [
+        "anils",
         "arils",
+        "inula",
+        "lairs",
         "liars",
         "liras",
         "lunar",
+        "lunas",
         "nails",
         "rails",
         "rains",
         "rials",
         "ruins",
+        "sarin",
         "slain",
         "snail",
         "snarl",
         "ulnar",
+        "insula",
+        "lunars",
         "urinal",
         "insular",
-        "urinals"
+        "urinals",
+        "ulnas"
       ],
       [
         "cries",
         "execs",
+        "rexes",
         "rices",
+        "rives",
         "scree",
         "serve",
         "sever",
@@ -12615,9 +13496,11 @@
         "revise",
         "sexier",
         "service",
-        "cervixes"
+        "cervixes",
+        "sexer"
       ],
       [
+        "erhus",
         "heirs",
         "heist",
         "hires",
@@ -12637,17 +13520,23 @@
         "uteri",
         "suiter",
         "theirs",
-        "hirsute"
+        "hirsute",
+        "huers"
       ],
       [
         "again",
+        "agate",
+        "agave",
         "agent",
+        "antae",
         "avian",
+        "entia",
         "giant",
         "given",
         "naive",
         "naïve",
         "taiga",
+        "tenia",
         "tinge",
         "vegan",
         "vitae",
@@ -12655,12 +13544,15 @@
         "eating",
         "ingate",
         "native",
+        "taenia",
+        "tagine",
         "vagina",
         "vaginae",
         "vantage",
         "vintage",
         "navigate",
-        "vaginate"
+        "vaginate",
+        "tinea"
       ],
       [
         "blips",
@@ -12672,6 +13564,7 @@
         "lysis",
         "pissy",
         "ploys",
+        "polys",
         "silos",
         "slips",
         "slobs",
@@ -12683,7 +13576,8 @@
         "biopsy",
         "spoils",
         "bossily",
-        "possibly"
+        "possibly",
+        "sibyl"
       ],
       [
         "fiery",
@@ -12704,6 +13598,7 @@
       [
         "feint",
         "fines",
+        "hefts",
         "heist",
         "hints",
         "inset",
@@ -12719,18 +13614,22 @@
         "fetish",
         "finest",
         "infest",
-        "fishnet"
+        "fishnet",
+        "thein"
       ],
       [
         "aches",
         "cafes",
         "cakes",
         "chafe",
+        "chais",
         "chase",
         "chefs",
+        "chias",
         "chief",
         "faces",
         "fakes",
+        "hacek",
         "hacks",
         "hakes",
         "hikes",
@@ -12740,7 +13639,8 @@
         "sheik",
         "chafes",
         "chiefs",
-        "fishcake"
+        "fishcake",
+        "haiks"
       ],
       [
         "coned",
@@ -12756,29 +13656,36 @@
       ],
       [
         "about",
+        "aloin",
         "baton",
         "biota",
         "bloat",
         "blunt",
+        "boult",
         "built",
+        "inula",
         "notal",
+        "oubit",
         "talon",
         "tonal",
         "unlit",
         "until",
         "albino",
+        "latino",
         "obtain",
         "unbolt",
         "bailout",
         "bitonal",
         "butanol",
         "ablution",
-        "abutilon"
+        "abutilon",
+        "tuina"
       ],
       [
         "beds",
         "bees",
         "bode",
+        "debs",
         "does",
         "dose",
         "exes",
@@ -12791,7 +13698,8 @@
         "dexes",
         "obese",
         "sexed",
-        "seedbox"
+        "seedbox",
+        "oxes"
       ]
     ],
     "868320974184001586": [
@@ -12806,31 +13714,41 @@
         "tiara",
         "uteri",
         "requit",
-        "taqueria"
+        "taqueria",
+        "quarte"
       ],
       [
         "beer",
         "berm",
         "burr",
+        "cere",
+        "cree",
         "cube",
         "curb",
         "cure",
         "ecru",
         "mere",
         "rube",
+        "creme",
         "crumb",
         "cuber",
         "curer",
         "ember",
         "merer",
+        "rebec",
         "recur",
         "umber",
         "cumber",
-        "cerebrum"
+        "cerebrum",
+        "recure"
       ],
       [
+        "inion",
+        "innit",
+        "ionic",
         "joint",
         "nonce",
+        "nonet",
         "tenon",
         "tonic",
         "tonne",
@@ -12840,7 +13758,8 @@
         "intone",
         "noetic",
         "notice",
-        "injection"
+        "injection",
+        "ontic"
       ],
       [
         "count",
@@ -12853,9 +13772,11 @@
         "nuncio",
         "injunct",
         "unction",
-        "junction"
+        "junction",
+        "ontic"
       ],
       [
+        "erhus",
         "hurts",
         "strut",
         "trues",
@@ -12867,7 +13788,8 @@
         "truest",
         "truths",
         "utters",
-        "shutter"
+        "shutter",
+        "huers"
       ],
       [
         "ales",
@@ -12881,13 +13803,15 @@
         "hales",
         "heals",
         "leash",
-        "shale"
+        "shale",
+        "shea"
       ],
       [
         "aunt",
         "darn",
         "dart",
         "drat",
+        "dura",
         "rand",
         "rant",
         "runt",
@@ -12896,7 +13820,8 @@
         "turd",
         "turn",
         "daunt",
-        "tundra"
+        "tundra",
+        "trad"
       ],
       [
         "alibi",
@@ -12912,7 +13837,8 @@
         "slabs",
         "alibis",
         "basils",
-        "basilisk"
+        "basilisk",
+        "lassi"
       ],
       [
         "aides",
@@ -12926,7 +13852,8 @@
         "asides",
         "daises",
         "disease",
-        "seaside"
+        "seaside",
+        "assed"
       ],
       [
         "alarms",
@@ -12936,6 +13863,8 @@
         "dreams",
         "elands",
         "learns",
+        "madres",
+        "maenad",
         "marled",
         "namers",
         "realms",
@@ -12944,7 +13873,8 @@
         "alarmed",
         "landers",
         "slander",
-        "salamander"
+        "salamander",
+        "ramens"
       ],
       [
         "genu",
@@ -12974,7 +13904,8 @@
         "canoe",
         "coven",
         "ocean",
-        "concave"
+        "concave",
+        "novae"
       ],
       [
         "arbor",
@@ -12986,22 +13917,29 @@
         "radar",
         "aboard",
         "abroad",
-        "labrador"
+        "labrador",
+        "labra"
       ],
       [
+        "anils",
         "dials",
         "duals",
+        "dulia",
+        "inula",
         "lands",
         "lauds",
         "lunas",
         "nails",
         "slain",
         "snail",
+        "ulnad",
+        "ulnas",
         "insula",
         "island",
         "unlaid",
         "unsaid",
-        "sundial"
+        "sundial",
+        "unlid"
       ],
       [
         "aimer",
@@ -13027,6 +13965,7 @@
         "eternal",
         "hearten",
         "hectare",
+        "hellcat",
         "leather",
         "lectern",
         "reteach",
@@ -13035,7 +13974,8 @@
         "enthrall",
         "ethereal",
         "lancelet",
-        "chanterelle"
+        "chanterelle",
+        "leacher"
       ],
       [
         "among",
@@ -13043,10 +13983,12 @@
         "groan",
         "mango",
         "manor",
+        "nagor",
         "orang",
         "organ",
         "roman",
-        "frogman"
+        "frogman",
+        "ngoma"
       ],
       [
         "enema",
@@ -13073,6 +14015,8 @@
       ],
       [
         "ills",
+        "illy",
+        "lily",
         "loos",
         "oils",
         "oily",
@@ -13082,12 +14026,15 @@
         "solo",
         "soul",
         "lousy",
+        "olios",
         "quill",
+        "quoll",
         "silly",
         "sully",
         "quills",
         "lousily",
-        "soliloquy"
+        "soliloquy",
+        "soily"
       ],
       [
         "dirts",
@@ -13098,7 +14045,8 @@
         "trods",
         "trots",
         "dittos",
-        "distort"
+        "distort",
+        "droits"
       ],
       [
         "fine",
@@ -13116,7 +14064,8 @@
         "invent",
         "invite",
         "infinite",
-        "infinitive"
+        "infinitive",
+        "vint"
       ],
       [
         "four",
@@ -13142,22 +14091,28 @@
       [
         "clime",
         "clove",
+        "elemi",
         "ileum",
+        "locum",
+        "louie",
         "movie",
         "oculi",
+        "oleic",
         "olive",
         "ovule",
         "velum",
         "voice",
         "coulee",
         "volume",
-        "euvolemic"
+        "euvolemic",
+        "voile"
       ],
       [
         "ally",
         "dial",
         "dill",
         "idly",
+        "illy",
         "lady",
         "laid",
         "lily",
@@ -13172,7 +14127,8 @@
         "idyll",
         "plaid",
         "pallid",
-        "pallidly"
+        "pallidly",
+        "lall"
       ],
       [
         "dulia",
@@ -13185,31 +14141,40 @@
         "impala",
         "lumpia",
         "pallid",
-        "palladium"
+        "palladium",
+        "alula"
       ],
       [
+        "druse",
         "dunes",
         "nerds",
         "nuder",
         "nudes",
         "nurse",
         "rends",
+        "runed",
         "runes",
         "under",
         "nursed",
-        "sunder"
+        "sunder",
+        "urned"
       ],
       [
         "acuter",
+        "arrect",
         "carter",
         "crater",
+        "curare",
+        "curate",
+        "curter",
         "frater",
         "rafter",
         "tracer",
         "crafter",
         "furcate",
         "refract",
-        "fracture"
+        "fracture",
+        "faucet"
       ],
       [
         "ablates",
@@ -13221,10 +14186,12 @@
         "bolters",
         "borates",
         "lobster",
+        "oestral",
         "stabler",
         "sortable",
         "storable",
-        "astrolabe"
+        "astrolabe",
+        "olestra"
       ],
       [
         "enamor",
@@ -13237,7 +14204,8 @@
         "orange",
         "marengo",
         "overman",
-        "mangrove"
+        "mangrove",
+        "onager"
       ],
       [
         "esprit",
@@ -13307,7 +14275,8 @@
         "tread",
         "triad",
         "tried",
-        "tirade"
+        "tirade",
+        "dater"
       ],
       [
         "afire",
@@ -13324,7 +14293,8 @@
         "tragi",
         "gaiter",
         "triage",
-        "frigate"
+        "frigate",
+        "regift"
       ],
       [
         "adult",
@@ -13338,7 +14308,8 @@
         "veldt",
         "valued",
         "veiled",
-        "vaulted"
+        "vaulted",
+        "lutea"
       ],
       [
         "merer",
@@ -13354,7 +14325,8 @@
         "metier",
         "reemit",
         "retire",
-        "trireme"
+        "trireme",
+        "etrier"
       ],
       [
         "bacon",
@@ -13386,12 +14358,15 @@
         "hoarse",
         "horses",
         "rashes",
+        "serosa",
         "shares",
         "shears",
         "shores",
         "hearses",
+        "serosae",
         "seahorse",
-        "seashore"
+        "seashore",
+        "sheers"
       ],
       [
         "fishnet",
@@ -13425,7 +14400,8 @@
         "continuo",
         "unctions",
         "continuos",
-        "contusion"
+        "contusion",
+        "tocsin"
       ],
       [
         "depots",
@@ -13437,7 +14413,8 @@
         "deposit",
         "dopiest",
         "posited",
-        "topside"
+        "topside",
+        "postie"
       ],
       [
         "listel",
@@ -13456,15 +14433,19 @@
       [
         "acuter",
         "baiter",
+        "biface",
+        "cabrie",
         "curate",
         "curiae",
         "fabric",
         "faucet",
         "rubati",
         "furcate",
-        "bifurcate"
+        "bifurcate",
+        "caribe"
       ],
       [
+        "coempt",
         "copter",
         "croupe",
         "pouter",
@@ -13474,7 +14455,8 @@
         "troupe",
         "compute",
         "crumpet",
-        "computer"
+        "computer",
+        "trompe"
       ],
       [
         "amity",
@@ -13509,7 +14491,8 @@
         "snake",
         "sneak",
         "kneads",
-        "snaked"
+        "snaked",
+        "keas"
       ],
       [
         "biers",
@@ -13520,7 +14503,8 @@
         "bruise",
         "buries",
         "busier",
-        "rubies"
+        "rubies",
+        "suber"
       ],
       [
         "riots",
@@ -13535,9 +14519,13 @@
       ],
       [
         "eight",
+        "enlit",
+        "gilet",
         "glint",
         "hinge",
+        "ingle",
         "inlet",
+        "intel",
         "legit",
         "light",
         "lithe",
@@ -13546,13 +14534,16 @@
         "thine",
         "thing",
         "tinge",
+        "engilt",
         "length",
         "tingle",
-        "lighten"
+        "lighten",
+        "thein"
       ],
       [
         "acing",
         "actin",
+        "aight",
         "aitch",
         "antic",
         "awing",
@@ -13570,8 +14561,11 @@
         "acting",
         "cawing",
         "hating",
+        "chawing",
+        "chinwag",
         "thawing",
-        "watching"
+        "watching",
+        "natch"
       ],
       [
         "among",
@@ -13579,10 +14573,12 @@
         "groan",
         "mango",
         "manor",
+        "nagor",
         "orang",
         "organ",
         "roman",
-        "frogman"
+        "frogman",
+        "ngoma"
       ],
       [
         "airy",
@@ -13617,7 +14613,8 @@
         "trade",
         "tread",
         "depart",
-        "parted"
+        "parted",
+        "dater"
       ],
       [
         "bingo",
@@ -13629,7 +14626,8 @@
         "goblin",
         "lowing",
         "blowing",
-        "bowling"
+        "bowling",
+        "login"
       ],
       [
         "ares",
@@ -13643,10 +14641,12 @@
         "revs",
         "save",
         "sear",
+        "sera",
         "vase",
         "avers",
         "raves",
-        "saver"
+        "saver",
+        "vare"
       ],
       [
         "actin",
@@ -13655,6 +14655,8 @@
         "canon",
         "canto",
         "coati",
+        "cotan",
+        "octan",
         "tonic",
         "action",
         "anoint",
@@ -13664,7 +14666,8 @@
         "cation",
         "incant",
         "nation",
-        "contain"
+        "contain",
+        "ontic"
       ],
       [
         "bits",
@@ -13707,7 +14710,8 @@
         "cerise",
         "excise",
         "sexier",
-        "exercise"
+        "exercise",
+        "sexer"
       ],
       [
         "awed",
@@ -13726,7 +14730,8 @@
         "laded",
         "waded",
         "dawdle",
-        "waddle"
+        "waddle",
+        "waled"
       ],
       [
         "deli",
@@ -13744,7 +14749,8 @@
         "elide",
         "lived",
         "levied",
-        "veiled"
+        "veiled",
+        "diel"
       ],
       [
         "denies",
@@ -13761,7 +14767,9 @@
       ],
       [
         "aptest",
+        "paster",
         "pastry",
+        "paters",
         "patter",
         "payers",
         "pretty",
@@ -13775,11 +14783,14 @@
         "treaty",
         "patters",
         "spatter",
-        "tapestry"
+        "tapestry",
+        "prates"
       ],
       [
+        "carpel",
         "carpet",
         "cartel",
+        "citral",
         "eclair",
         "lacier",
         "parcel",
@@ -13797,7 +14808,8 @@
         "plectra",
         "recital",
         "replica",
-        "particle"
+        "particle",
+        "placit"
       ],
       [
         "demean",
@@ -13821,19 +14833,27 @@
         "acrid",
         "adorn",
         "cairn",
+        "canid",
+        "caron",
         "circa",
+        "cnida",
         "conic",
+        "danio",
         "dinar",
         "drain",
         "nadir",
+        "nicad",
+        "racon",
         "radio",
         "radon",
         "accord",
         "candor",
+        "cardio",
         "inroad",
         "ordain",
         "rancid",
-        "draconic"
+        "draconic",
+        "ranid"
       ],
       [
         "final",
@@ -13846,7 +14866,8 @@
         "liana",
         "naira",
         "farina",
-        "rainfall"
+        "rainfall",
+        "infall"
       ],
       [
         "angler",
@@ -13892,14 +14913,17 @@
         "loom",
         "moly",
         "yoyo",
+        "colog",
         "coyly",
         "gloom",
         "ology",
         "gloomy",
         "myology",
-        "mycology"
+        "mycology",
+        "coly"
       ],
       [
+        "aphis",
         "apish",
         "hails",
         "lapis",
@@ -13914,7 +14938,8 @@
         "whips",
         "palish",
         "phials",
-        "whiplash"
+        "whiplash",
+        "pawls"
       ],
       [
         "aide",
@@ -13943,6 +14968,7 @@
       ],
       [
         "calk",
+        "calp",
         "capo",
         "clad",
         "clap",
@@ -13962,12 +14988,16 @@
         "pock",
         "cloak",
         "polka",
-        "padlock"
+        "padlock",
+        "copal"
       ],
       [
         "agent",
+        "agone",
         "anent",
         "atone",
+        "genoa",
+        "nonet",
         "oaten",
         "panto",
         "paten",
@@ -13976,7 +15006,8 @@
         "tonne",
         "gannet",
         "nonage",
-        "pentagon"
+        "pentagon",
+        "paeon"
       ],
       [
         "quiets",
@@ -13993,6 +15024,7 @@
         "question"
       ],
       [
+        "abled",
         "alder",
         "baled",
         "baler",
@@ -14012,12 +15044,14 @@
         "blared",
         "herald",
         "herbal",
-        "halberd"
+        "halberd",
+        "abler"
       ],
       [
         "gents",
         "genus",
         "guest",
+        "negus",
         "netts",
         "stent",
         "stung",
@@ -14026,7 +15060,8 @@
         "tunes",
         "unset",
         "unsent",
-        "tungsten"
+        "tungsten",
+        "unnest"
       ],
       [
         "emos",
@@ -14045,6 +15080,7 @@
       ],
       [
         "islet",
+        "stile",
         "stilt",
         "stole",
         "telos",
@@ -14057,7 +15093,8 @@
         "tittle",
         "toilet",
         "toilets",
-        "stiletto"
+        "stiletto",
+        "toles"
       ],
       [
         "ingest",
@@ -14130,7 +15167,8 @@
         "rodeoed",
         "overdoes",
         "overdose",
-        "overdosed"
+        "overdosed",
+        "devore"
       ],
       [
         "beep",
@@ -14152,7 +15190,8 @@
         "peeks",
         "pokes",
         "spoke",
-        "bespoke"
+        "bespoke",
+        "soke"
       ],
       [
         "hons",
@@ -14215,10 +15254,15 @@
       ],
       [
         "aspire",
+        "esprit",
+        "paries",
+        "paster",
         "paters",
         "pirate",
         "praise",
+        "prates",
         "priest",
+        "ripest",
         "satire",
         "sprite",
         "stripe",
@@ -14228,7 +15272,8 @@
         "parties",
         "pastier",
         "pirates",
-        "traipse"
+        "traipse",
+        "spirea"
       ],
       [
         "ates",
@@ -14264,7 +15309,8 @@
         "behold",
         "blonde",
         "debone",
-        "beholden"
+        "beholden",
+        "leone"
       ],
       [
         "beds",
@@ -14284,9 +15330,11 @@
         "beseeched"
       ],
       [
+        "ceil",
         "clip",
         "epic",
         "lice",
+        "lire",
         "pier",
         "pile",
         "pipe",
@@ -14296,17 +15344,21 @@
         "ripe",
         "peril",
         "piper",
+        "plier",
         "price",
         "relic",
         "ripple",
         "clipper",
-        "cripple"
+        "cripple",
+        "riel"
       ],
       [
         "liter",
         "litre",
         "peril",
+        "petri",
         "piper",
+        "pipet",
         "relit",
         "tiler",
         "tripe",
@@ -14314,7 +15366,8 @@
         "tipper",
         "tipple",
         "triple",
-        "tippler"
+        "tippler",
+        "plier"
       ],
       [
         "aisle",
@@ -14328,7 +15381,9 @@
         "slate",
         "stale",
         "steal",
+        "stile",
         "stole",
+        "tails",
         "tales",
         "teals",
         "telos",
@@ -14337,7 +15392,8 @@
         "toles",
         "osteal",
         "solate",
-        "isolate"
+        "isolate",
+        "toils"
       ],
       [
         "afros",
@@ -14345,6 +15401,7 @@
         "fairs",
         "faros",
         "frons",
+        "infos",
         "infra",
         "irons",
         "naifs",
@@ -14355,7 +15412,8 @@
         "sarin",
         "snarf",
         "sonar",
-        "insofar"
+        "insofar",
+        "noris"
       ],
       [
         "horn",
@@ -14373,8 +15431,10 @@
         "assay",
         "cowry",
         "crass",
+        "craws",
         "cross",
         "crows",
+        "oracy",
         "orcas",
         "oscar",
         "sacra",
@@ -14386,19 +15446,22 @@
         "across",
         "oscars",
         "crossway",
-        "cassowary"
+        "cassowary",
+        "waacs"
       ],
       [
         "caste",
         "cease",
         "setae",
         "state",
+        "tacet",
         "tacts",
         "taste",
         "tease",
         "teats",
         "estate",
-        "casette"
+        "casette",
+        "tecta"
       ],
       [
         "cafe",
@@ -14446,7 +15509,8 @@
         "corbel",
         "lobber",
         "clobber",
-        "cobbler"
+        "cobbler",
+        "roble"
       ],
       [
         "aplenty",
@@ -14463,6 +15527,7 @@
         "cache",
         "camel",
         "cecal",
+        "chela",
         "chime",
         "claim",
         "clime",
@@ -14477,7 +15542,8 @@
         "caliche",
         "chalice",
         "alchemic",
-        "chemical"
+        "chemical",
+        "mache"
       ],
       [
         "cine",
@@ -14518,7 +15584,8 @@
         "rondo",
         "round",
         "wound",
-        "downpour"
+        "downpour",
+        "porno"
       ],
       [
         "afros",
@@ -14545,10 +15612,12 @@
         "skier",
         "inkers",
         "reskin",
-        "sinker"
+        "sinker",
+        "serin"
       ],
       [
         "eight",
+        "gilet",
         "gilts",
         "heils",
         "heist",
@@ -14557,13 +15626,15 @@
         "legit",
         "light",
         "lithe",
+        "shite",
         "sight",
         "tiles",
         "eights",
         "lights",
         "sleigh",
         "slight",
-        "sleight"
+        "sleight",
+        "stile"
       ],
       [
         "bides",
@@ -14615,6 +15686,7 @@
         "clean",
         "clear",
         "crane",
+        "crena",
         "cruel",
         "lacer",
         "lance",
@@ -14631,12 +15703,14 @@
         "neural",
         "unreal",
         "nuclear",
-        "unclear"
+        "unclear",
+        "ureal"
       ],
       [
         "gage",
         "gain",
         "gang",
+        "gean",
         "giga",
         "nine",
         "aging",
@@ -14647,7 +15721,8 @@
         "innage",
         "ganging",
         "nagging",
-        "engaging"
+        "engaging",
+        "gena"
       ],
       [
         "aleph",
@@ -14687,7 +15762,8 @@
         "comply",
         "myopic",
         "policy",
-        "olympic"
+        "olympic",
+        "coly"
       ],
       [
         "cloned",
@@ -14730,6 +15806,8 @@
         "grenade"
       ],
       [
+        "ampler",
+        "merlot",
         "morale",
         "mortal",
         "parole",
@@ -14742,11 +15820,13 @@
         "trompe",
         "templar",
         "trample",
-        "temporal"
+        "temporal",
+        "plater"
       ],
       [
         "elites",
         "enlist",
+        "ensile",
         "inlets",
         "lenten",
         "linens",
@@ -14761,7 +15841,8 @@
         "lenient",
         "setline",
         "tensile",
-        "sentinel"
+        "sentinel",
+        "silent"
       ],
       [
         "cadres",
@@ -14789,7 +15870,8 @@
         "enraging",
         "deranging",
         "gandering",
-        "gardening"
+        "gardening",
+        "niggard"
       ],
       [
         "aging",
@@ -14802,7 +15884,8 @@
         "ambling",
         "blaming",
         "lambing",
-        "gambling"
+        "gambling",
+        "liman"
       ],
       [
         "exes",
@@ -14823,7 +15906,8 @@
         "teems",
         "temps",
         "exempt",
-        "exempts"
+        "exempts",
+        "pees"
       ],
       [
         "aper",
@@ -14889,7 +15973,8 @@
         "nodal",
         "onlay",
         "dangly",
-        "daylong"
+        "daylong",
+        "longa"
       ],
       [
         "anted",
@@ -14944,7 +16029,8 @@
         "jaunce",
         "juiced",
         "jaunced",
-        "jaundice"
+        "jaundice",
+        "nicad"
       ],
       [
         "client",
@@ -14959,7 +16045,8 @@
         "tinsel",
         "clients",
         "lectins",
-        "stencil"
+        "stencil",
+        "lentic"
       ],
       [
         "closer",
@@ -14980,7 +16067,8 @@
         "lectors",
         "tercels",
         "electors",
-        "selector"
+        "selector",
+        "resect"
       ],
       [
         "dire",
@@ -15029,9 +16117,11 @@
         "illude",
         "pilled",
         "pulled",
-        "pellucid"
+        "pellucid",
+        "picul"
       ],
       [
+        "aight",
         "girth",
         "glair",
         "grail",
@@ -15041,7 +16131,9 @@
         "trail",
         "trial",
         "alight",
-        "alright"
+        "aright",
+        "alright",
+        "thali"
       ],
       [
         "bony",
@@ -15103,7 +16195,8 @@
         "realm",
         "blamer",
         "marble",
-        "ramble"
+        "ramble",
+        "abler"
       ],
       [
         "aisles",
@@ -15125,6 +16218,7 @@
         "closet",
         "collet",
         "costae",
+        "costal",
         "locale",
         "locals",
         "locate",
@@ -15137,9 +16231,11 @@
         "lactose",
         "locales",
         "locates",
-        "collates"
+        "collates",
+        "solate"
       ],
       [
+        "douser",
         "holder",
         "hordes",
         "housed",
@@ -15159,7 +16255,8 @@
         "soured",
         "holders",
         "hurdles",
-        "shoulder"
+        "shoulder",
+        "houser"
       ],
       [
         "emails",
@@ -15219,6 +16316,7 @@
         "torque"
       ],
       [
+        "enol",
         "fief",
         "fife",
         "file",
@@ -15226,6 +16324,7 @@
         "fine",
         "floe",
         "foil",
+        "info",
         "lief",
         "lien",
         "life",
@@ -15238,10 +16337,12 @@
         "elfin",
         "felon",
         "olein",
-        "offline"
+        "offline",
+        "leno"
       ],
       [
         "ghost",
+        "goths",
         "gouts",
         "gusto",
         "ought",
@@ -15250,9 +16351,11 @@
         "thugs",
         "tough",
         "sought",
-        "toughs"
+        "toughs",
+        "oughts"
       ],
       [
+        "caky",
         "cyan",
         "narc",
         "nary",
@@ -15264,7 +16367,8 @@
         "yarn",
         "carny",
         "crank",
-        "cranky"
+        "cranky",
+        "cran"
       ],
       [
         "beery",
@@ -15280,10 +16384,12 @@
         "rebel",
         "rekey",
         "belier",
+        "bilker",
         "eerily",
         "relier",
         "ribeye",
-        "berrylike"
+        "berrylike",
+        "eyrie"
       ],
       [
         "astern",
@@ -15369,6 +16475,8 @@
       [
         "barb",
         "bars",
+        "bras",
+        "burb",
         "burs",
         "rubs",
         "sura",
@@ -15376,10 +16484,12 @@
         "barbs",
         "burbs",
         "bursa",
-        "busbar"
+        "busbar",
+        "urbs"
       ],
       [
         "bard",
+        "baud",
         "brad",
         "buzz",
         "daub",
@@ -15387,7 +16497,8 @@
         "drub",
         "razz",
         "abuzz",
-        "buzzard"
+        "buzzard",
+        "dura"
       ],
       [
         "ball",
@@ -15408,9 +16519,11 @@
         "mane",
         "maze",
         "mean",
+        "meze",
         "mien",
         "mine",
         "name",
+        "neem",
         "nine",
         "zine",
         "amine",
@@ -15420,15 +16533,18 @@
         "inane",
         "maize",
         "meanie",
-        "mezzanine"
+        "mezzanine",
+        "zein"
       ],
       [
         "argons",
+        "garron",
         "girons",
         "grains",
         "grison",
         "groans",
         "groins",
+        "ngaios",
         "oaring",
         "orangs",
         "organs",
@@ -15440,7 +16556,8 @@
         "roaring",
         "signora",
         "soaring",
-        "garrison"
+        "garrison",
+        "sagoin"
       ],
       [
         "coirs",
@@ -15464,7 +16581,8 @@
         "nacres",
         "arcsine",
         "arsenic",
-        "carnies"
+        "carnies",
+        "carnie"
       ],
       [
         "chest",
@@ -15472,7 +16590,9 @@
         "chits",
         "cites",
         "ethic",
+        "etics",
         "heist",
+        "shite",
         "thews",
         "twice",
         "whets",
@@ -15485,12 +16605,15 @@
         "switch",
         "whites",
         "withes",
-        "witches"
+        "witches",
+        "techs"
       ],
       [
         "coins",
         "icons",
+        "incog",
         "ingot",
+        "ontic",
         "scion",
         "sonic",
         "sting",
@@ -15502,7 +16625,8 @@
         "tocsin",
         "tonics",
         "costing",
-        "gnostic"
+        "gnostic",
+        "tonic"
       ],
       [
         "airers",
@@ -15514,9 +16638,11 @@
         "scarer",
         "sierra",
         "carries",
-        "scarier"
+        "scarier",
+        "raiser"
       ],
       [
+        "enol",
         "lien",
         "line",
         "lino",
@@ -15529,7 +16655,8 @@
         "none",
         "linen",
         "olein",
-        "online"
+        "online",
+        "leno"
       ],
       [
         "cads",
@@ -15544,9 +16671,11 @@
         "jacks",
         "waacs",
         "jackdaw",
-        "jackdaws"
+        "jackdaws",
+        "casa"
       ],
       [
+        "abler",
         "baler",
         "blare",
         "blear",
@@ -15559,7 +16688,8 @@
         "baller",
         "liable",
         "braille",
-        "liberal"
+        "liberal",
+        "brail"
       ],
       [
         "jots",
@@ -15598,7 +16728,8 @@
         "worship",
         "whippers",
         "whoppers",
-        "worshipper"
+        "worshipper",
+        "preship"
       ],
       [
         "chum",
@@ -15609,20 +16740,23 @@
         "much",
         "ouch",
         "hokum",
-        "hummock"
+        "hummock",
+        "muck"
       ],
       [
         "gait",
         "gaur",
         "giga",
         "girt",
+        "grig",
         "grit",
         "trig",
         "trug",
         "tzar",
         "tragi",
         "guitar",
-        "ziggurat"
+        "ziggurat",
+        "izar"
       ],
       [
         "news",
@@ -15647,13 +16781,15 @@
         "oxide",
         "toyed",
         "toxify",
-        "detoxify"
+        "detoxify",
+        "detox"
       ],
       [
         "gain",
         "gang",
         "giga",
         "gran",
+        "grig",
         "grin",
         "rain",
         "rang",
@@ -15661,11 +16797,13 @@
         "ring",
         "zing",
         "aging",
+        "agrin",
         "grain",
         "gazing",
         "raging",
         "razing",
-        "grazing"
+        "grazing",
+        "izar"
       ],
       [
         "bail",
@@ -15685,6 +16823,9 @@
       [
         "alone",
         "amble",
+        "amole",
+        "anole",
+        "azole",
         "blame",
         "blaze",
         "lemon",
@@ -15694,7 +16835,8 @@
         "bemoan",
         "benzol",
         "blazon",
-        "emblazon"
+        "emblazon",
+        "lozen"
       ],
       [
         "dines",
@@ -15713,7 +16855,8 @@
         "seisin",
         "dizzies",
         "insides",
-        "dizziness"
+        "dizziness",
+        "seizin"
       ],
       [
         "dudes",
@@ -15752,7 +16895,8 @@
         "derust",
         "duster",
         "rudest",
-        "rusted"
+        "rusted",
+        "turds"
       ],
       [
         "abuts",
@@ -15764,12 +16908,15 @@
         "burst",
         "darts",
         "daubs",
+        "drabs",
         "drats",
         "drubs",
+        "duras",
         "durst",
         "tubas",
         "absurd",
-        "bustard"
+        "bustard",
+        "turds"
       ],
       [
         "arums",
@@ -15778,6 +16925,7 @@
         "drams",
         "drats",
         "drums",
+        "duras",
         "durst",
         "marts",
         "ramus",
@@ -15786,20 +16934,25 @@
         "trams",
         "datums",
         "durmast",
-        "mustard"
+        "mustard",
+        "turds"
       ],
       [
+        "arcus",
         "cards",
         "carts",
+        "cruds",
         "crust",
         "curds",
         "darts",
         "drats",
         "ducat",
         "ducts",
+        "duras",
         "durst",
         "ducats",
-        "custard"
+        "custard",
+        "turds"
       ],
       [
         "abide",
@@ -15837,10 +16990,12 @@
         "nailed",
         "nimble",
         "minable",
-        "mandible"
+        "mandible",
+        "beldam"
       ],
       [
         "bleats",
+        "bloats",
         "cables",
         "castle",
         "cleats",
@@ -15850,13 +17005,15 @@
         "costal",
         "locate",
         "oblast",
+        "osteal",
         "solace",
         "stable",
         "tables",
         "cobalts",
         "lactose",
         "locates",
-        "obstacle"
+        "obstacle",
+        "solate"
       ],
       [
         "hither",
@@ -15874,6 +17031,7 @@
       ],
       [
         "abased",
+        "abaser",
         "aboard",
         "abodes",
         "abroad",
@@ -15893,7 +17051,8 @@
         "sobbed",
         "dabbers",
         "absorbed",
-        "baseboard"
+        "baseboard",
+        "boreas"
       ],
       [
         "copses",
@@ -15921,7 +17080,8 @@
         "barrel",
         "warble",
         "brawler",
-        "warbler"
+        "warbler",
+        "waler"
       ],
       [
         "alder",
@@ -15949,7 +17109,8 @@
         "nada",
         "nana",
         "nano",
-        "abandon"
+        "abandon",
+        "doab"
       ],
       [
         "bagel",
@@ -15982,7 +17143,8 @@
         "aback",
         "chana",
         "dacha",
-        "backhand"
+        "backhand",
+        "abac"
       ],
       [
         "crust",
@@ -16005,7 +17167,8 @@
         "rustic",
         "strict",
         "tunics",
-        "instruct"
+        "instruct",
+        "cursi"
       ],
       [
         "acme",
@@ -16024,7 +17187,8 @@
         "cream",
         "macer",
         "mercy",
-        "creamy"
+        "creamy",
+        "acer"
       ],
       [
         "coven",
@@ -16041,10 +17205,12 @@
         "congee",
         "encore",
         "govern",
-        "converge"
+        "converge",
+        "ergon"
       ],
       [
         "actor",
+        "artic",
         "carpi",
         "coati",
         "copra",
@@ -16058,8 +17224,13 @@
         "aortic",
         "atopic",
         "captor",
+        "cartop",
+        "copita",
         "tropic",
-        "apricot"
+        "apricot",
+        "aprotic",
+        "parotic",
+        "toric"
       ],
       [
         "bevy",
@@ -16082,7 +17253,8 @@
         "rivet",
         "tribe",
         "verity",
-        "brevity"
+        "brevity",
+        "trie"
       ],
       [
         "miry",
@@ -16095,28 +17267,34 @@
         "yurt",
         "trump",
         "purity",
-        "impurity"
+        "impurity",
+        "rimu"
       ],
       [
         "emery",
         "exert",
+        "eyrie",
         "merit",
         "meter",
         "metre",
         "miter",
         "mitre",
         "mixer",
+        "mixte",
         "remit",
         "remix",
         "retie",
+        "tetri",
         "timer",
         "titre",
         "trite",
         "metier",
+        "reemit",
         "texter",
         "emitter",
         "termite",
-        "extremity"
+        "extremity",
+        "titer"
       ],
       [
         "bios",
@@ -16171,7 +17349,8 @@
         "cobra",
         "curia",
         "curio",
-        "caribou"
+        "caribou",
+        "biro"
       ],
       [
         "agios",
@@ -16188,6 +17367,7 @@
         "agoutis"
       ],
       [
+        "abled",
         "abler",
         "alder",
         "baled",
@@ -16200,15 +17380,18 @@
         "blued",
         "bluer",
         "bread",
+        "daube",
         "debar",
         "lured",
+        "redub",
         "ruble",
         "ruled",
         "balder",
         "blared",
         "burled",
         "earbud",
-        "durable"
+        "durable",
+        "ureal"
       ],
       [
         "dries",
@@ -16249,12 +17432,14 @@
       [
         "corgis",
         "coring",
+        "cosign",
         "cousin",
         "curing",
         "curios",
         "girons",
         "grison",
         "groins",
+        "guiros",
         "incurs",
         "signor",
         "cursing",
@@ -16263,7 +17448,8 @@
         "souring",
         "coursing",
         "scouring",
-        "sourcing"
+        "sourcing",
+        "unrigs"
       ],
       [
         "aligns",
@@ -16289,6 +17475,7 @@
         "drapes",
         "padres",
         "paired",
+        "paries",
         "parsed",
         "praise",
         "prides",
@@ -16303,7 +17490,8 @@
         "aspired",
         "despair",
         "diapers",
-        "praised"
+        "praised",
+        "spirea"
       ],
       [
         "belied",
@@ -16329,30 +17517,36 @@
         "bivouacked"
       ],
       [
+        "agrin",
         "align",
         "glair",
         "gnarl",
         "grail",
         "grain",
+        "inula",
         "lunar",
         "ruing",
         "ulnar",
+        "airgun",
         "lingua",
         "luring",
         "ruling",
         "urinal",
-        "railgun"
+        "railgun",
+        "unrig"
       ],
       [
         "alee",
         "aril",
         "earl",
         "ilea",
+        "izar",
         "lair",
         "laze",
         "leer",
         "liar",
         "lira",
+        "lire",
         "rail",
         "raze",
         "real",
@@ -16362,13 +17556,19 @@
         "zeal",
         "aerie",
         "lazier",
-        "realize"
+        "realize",
+        "riel"
       ],
       [
         "alien",
+        "aloin",
         "alone",
+        "anole",
         "atone",
+        "enlit",
+        "entia",
         "inlet",
+        "intel",
         "leant",
         "lento",
         "liane",
@@ -16376,15 +17576,21 @@
         "oaten",
         "olein",
         "talon",
+        "tenia",
+        "tinea",
         "entail",
         "latino",
+        "tineal",
         "elation",
-        "toenail"
+        "toenail",
+        "tonal"
       ],
       [
         "agar",
         "alga",
         "anal",
+        "anga",
+        "aula",
         "aura",
         "gala",
         "gaur",
@@ -16396,12 +17602,15 @@
         "rang",
         "rung",
         "ulna",
+        "anura",
         "aural",
         "gnarl",
+        "grana",
         "lunar",
         "ulnar",
         "raglan",
-        "angular"
+        "angular",
+        "ranula"
       ],
       [
         "deniers",
@@ -16441,7 +17650,8 @@
         "racks",
         "rucks",
         "cracks",
-        "rucksack"
+        "rucksack",
+        "arcus"
       ],
       [
         "castle",
@@ -16460,7 +17670,9 @@
       [
         "cans",
         "caps",
+        "casa",
         "cask",
+        "kaka",
         "kana",
         "naps",
         "pack",
@@ -16472,16 +17684,21 @@
         "span",
         "kanas",
         "knack",
+        "napas",
+        "paans",
+        "pacas",
         "packs",
         "snack",
         "spank",
         "knacks",
-        "knapsack"
+        "knapsack",
+        "sapan"
       ],
       [
         "abort",
         "biota",
         "bloat",
+        "brail",
         "broil",
         "labor",
         "libra",
@@ -16492,7 +17709,8 @@
         "trial",
         "tailor",
         "tribal",
-        "orbital"
+        "orbital",
+        "triol"
       ],
       [
         "ails",
@@ -16521,7 +17739,8 @@
         "naked",
         "ankled",
         "banked",
-        "blanked"
+        "blanked",
+        "abled"
       ],
       [
         "acted",
@@ -16548,14 +17767,19 @@
         "cater",
         "crane",
         "crate",
+        "crena",
         "enact",
         "nacre",
         "react",
         "trace",
         "canter",
+        "carnet",
+        "centra",
+        "creant",
         "nectar",
         "recant",
-        "trance"
+        "trance",
+        "recta"
       ],
       [
         "eight",
@@ -16568,7 +17792,8 @@
         "yetis",
         "eights",
         "eighty",
-        "eyesight"
+        "eyesight",
+        "shite"
       ],
       [
         "adman",
@@ -16583,7 +17808,8 @@
         "inland",
         "lamina",
         "manila",
-        "mainland"
+        "mainland",
+        "liman"
       ],
       [
         "emir",
@@ -16595,6 +17821,7 @@
         "grim",
         "grue",
         "guru",
+        "meri",
         "mire",
         "muir",
         "rife",
@@ -16606,7 +17833,8 @@
         "grime",
         "grume",
         "figure",
-        "refugium"
+        "refugium",
+        "rimu"
       ],
       [
         "adult",
@@ -16616,6 +17844,7 @@
         "dowel",
         "dwale",
         "dwelt",
+        "lutea",
         "outed",
         "owled",
         "owlet",
@@ -16624,7 +17853,8 @@
         "waled",
         "would",
         "outlaw",
-        "outlawed"
+        "outlawed",
+        "tawed"
       ],
       [
         "churn",
@@ -16632,6 +17862,9 @@
         "crush",
         "cures",
         "curse",
+        "ecrus",
+        "erhus",
+        "huers",
         "nurse",
         "runes",
         "usher",
@@ -16640,7 +17873,8 @@
         "ruches",
         "crushes",
         "scrunch",
-        "crunches"
+        "crunches",
+        "ruche"
       ],
       [
         "gins",
@@ -16681,22 +17915,29 @@
         "refire",
         "ferried",
         "refired",
-        "refried"
+        "refried",
+        "firer"
       ],
       [
         "agent",
+        "agone",
+        "ament",
         "among",
         "atone",
+        "genoa",
         "gnome",
         "mange",
         "mango",
         "meant",
+        "mento",
+        "monte",
         "oaten",
         "omega",
         "tango",
         "magnet",
         "megaton",
-        "montage"
+        "montage",
+        "ngoma"
       ],
       [
         "binder",
@@ -16709,7 +17950,8 @@
         "rebind",
         "vendor",
         "overbid",
-        "ovenbird"
+        "ovenbird",
+        "inbred"
       ],
       [
         "accent",
@@ -16720,8 +17962,10 @@
         "lactic",
         "lancet",
         "lectin",
+        "lentic",
         "calcite",
-        "canticle"
+        "canticle",
+        "tineal"
       ],
       [
         "briefs",
@@ -16736,7 +17980,8 @@
         "rubies",
         "bushier",
         "furbish",
-        "bushfire"
+        "bushfire",
+        "busher"
       ],
       [
         "easter",
@@ -16802,11 +18047,13 @@
         "retail",
         "retain",
         "retina",
+        "entrail",
         "latrine",
         "ratline",
         "reliant",
         "retinal",
-        "trenail"
+        "trenail",
+        "tineal"
       ],
       [
         "ding",
@@ -16823,8 +18070,10 @@
         "dying",
         "guild",
         "lying",
+        "ungild",
         "undying",
-        "undyingly"
+        "undyingly",
+        "unlid"
       ],
       [
         "dawn",
@@ -16853,21 +18102,27 @@
         "volte",
         "gelato",
         "lovage",
-        "voltage"
+        "voltage",
+        "loave"
       ],
       [
         "dingo",
         "doing",
         "fling",
+        "flong",
         "flood",
+        "folio",
         "igloo",
         "lingo",
+        "login",
+        "logon",
         "doling",
         "infold",
         "logion",
         "folding",
         "fooling",
-        "flooding"
+        "flooding",
+        "olingo"
       ],
       [
         "achy",
@@ -16927,7 +18182,8 @@
         "tarsi",
         "tiara",
         "tiaras",
-        "barista"
+        "barista",
+        "arabis"
       ],
       [
         "dowel",
@@ -16935,6 +18191,8 @@
         "loped",
         "oiled",
         "oldie",
+        "ollie",
+        "owled",
         "piled",
         "plied",
         "poled",
@@ -16946,7 +18204,8 @@
         "plowed",
         "polled",
         "willed",
-        "pillowed"
+        "pillowed",
+        "wiled"
       ],
       [
         "gosh",
@@ -16980,7 +18239,8 @@
         "macer",
         "mecca",
         "ramie",
-        "ceramic"
+        "ceramic",
+        "racemic"
       ],
       [
         "bell",
@@ -17025,6 +18285,7 @@
       [
         "alarm",
         "amaze",
+        "amole",
         "areal",
         "azole",
         "lamer",
@@ -17037,10 +18298,12 @@
         "moral",
         "morel",
         "realm",
+        "amoral",
         "areola",
         "morale",
         "razzle",
-        "mozzarella"
+        "mozzarella",
+        "aroma"
       ],
       [
         "birch",
@@ -17072,8 +18335,10 @@
       ],
       [
         "actor",
+        "artic",
         "attic",
         "coati",
+        "cotta",
         "ratio",
         "tacit",
         "tarot",
@@ -17084,7 +18349,8 @@
         "aortic",
         "cottar",
         "tricot",
-        "ricotta"
+        "ricotta",
+        "toric"
       ],
       [
         "chimp",
@@ -17113,7 +18379,8 @@
         "weer",
         "were",
         "weber",
-        "beware"
+        "beware",
+        "awee"
       ],
       [
         "aligns",
@@ -17146,7 +18413,8 @@
         "obtain",
         "bandito",
         "dominant",
-        "badminton"
+        "badminton",
+        "domain"
       ],
       [
         "capers",
@@ -17178,9 +18446,11 @@
         "camber",
         "create",
         "member",
+        "raceme",
         "cremate",
         "embrace",
-        "camembert"
+        "camembert",
+        "rebate"
       ],
       [
         "dames",
@@ -17201,6 +18471,7 @@
         "coin",
         "coir",
         "corn",
+        "cran",
         "icon",
         "iron",
         "narc",
@@ -17213,12 +18484,15 @@
         "roar",
         "acorn",
         "cairn",
+        "caron",
         "rancor",
-        "carrion"
+        "carrion",
+        "racon"
       ],
       [
         "acorn",
         "adorn",
+        "caron",
         "codon",
         "condo",
         "croon",
@@ -17230,33 +18504,44 @@
         "cordon",
         "corona",
         "racoon",
-        "cardoon"
+        "cardoon",
+        "racon"
       ],
       [
         "agate",
         "agile",
         "aglet",
+        "alate",
         "algae",
         "atilt",
         "galea",
+        "gilet",
         "latte",
         "legit",
         "taiga",
+        "talea",
         "title",
         "agitate",
-        "tailgate"
+        "tailgate",
+        "tatie"
       ],
       [
         "atilt",
         "attic",
         "cleat",
         "eclat",
+        "ileac",
         "latte",
+        "tacet",
         "tacit",
+        "tatie",
+        "tecta",
+        "telic",
         "title",
         "cattle",
         "lattice",
-        "tactile"
+        "tactile",
+        "tietac"
       ],
       [
         "into",
@@ -17282,7 +18567,8 @@
         "pizza",
         "prize",
         "piazze",
-        "pizzeria"
+        "pizzeria",
+        "aper"
       ],
       [
         "diner",
@@ -17292,6 +18578,8 @@
         "niter",
         "nitid",
         "nitre",
+        "teiid",
+        "tined",
         "tired",
         "trend",
         "tried",
@@ -17301,7 +18589,8 @@
         "tinder",
         "tinier",
         "inditer",
-        "nitride"
+        "nitride",
+        "trined"
       ],
       [
         "inned",
@@ -17313,7 +18602,8 @@
         "intend",
         "tinned",
         "twined",
-        "twinned"
+        "twinned",
+        "tined"
       ],
       [
         "cries",
@@ -17335,7 +18625,8 @@
         "nieces",
         "screen",
         "serine",
-        "sincere"
+        "sincere",
+        "serin"
       ],
       [
         "acing",
@@ -17354,7 +18645,8 @@
         "racing",
         "raring",
         "raying",
-        "carrying"
+        "carrying",
+        "agrin"
       ],
       [
         "awed",
@@ -17370,7 +18662,8 @@
         "woad",
         "mawed",
         "mowed",
-        "meadow"
+        "meadow",
+        "odea"
       ],
       [
         "about",
@@ -17399,15 +18692,18 @@
         "sandbur",
         "bushland",
         "brushland",
-        "shrubland"
+        "shrubland",
+        "ablush"
       ],
       [
         "elating",
+        "entrail",
         "gelatin",
         "genital",
         "granite",
         "ingrate",
         "latrine",
+        "ratline",
         "realign",
         "reginal",
         "reliant",
@@ -17421,11 +18717,14 @@
         "altering",
         "integral",
         "relating",
-        "triangle"
+        "triangle",
+        "trenail"
       ],
       [
         "canter",
+        "carnet",
         "carnie",
+        "centra",
         "cretin",
         "nectar",
         "recant",
@@ -17433,7 +18732,8 @@
         "retina",
         "trance",
         "certain",
-        "tacrine"
+        "tacrine",
+        "creant"
       ],
       [
         "acne",
@@ -17443,6 +18743,9 @@
         "clan",
         "elan",
         "gale",
+        "geal",
+        "gean",
+        "gena",
         "glen",
         "lace",
         "lane",
@@ -17453,16 +18756,20 @@
         "clean",
         "glace",
         "lance",
-        "glance"
+        "glance",
+        "glean"
       ],
       [
         "abate",
+        "ablet",
+        "alate",
         "beaut",
         "betta",
         "bleat",
         "bluet",
         "butte",
         "latte",
+        "lutea",
         "tabla",
         "table",
         "ablate",
@@ -17471,12 +18778,14 @@
         "tablet",
         "abuttal",
         "tableau",
-        "tabulate"
+        "tabulate",
+        "talea"
       ],
       [
         "otiose",
         "otters",
         "sitter",
+        "titers",
         "titres",
         "tooter",
         "tortes",
@@ -17484,7 +18793,8 @@
         "risotto",
         "sootier",
         "tooters",
-        "tortoise"
+        "tortoise",
+        "triose"
       ],
       [
         "anura",
@@ -17496,7 +18806,8 @@
         "raglan",
         "ranula",
         "angular",
-        "granular"
+        "granular",
+        "grana"
       ],
       [
         "agent",
@@ -17504,14 +18815,18 @@
         "entia",
         "giant",
         "inane",
+        "tenia",
         "tinge",
+        "anting",
         "eating",
         "gannet",
         "ingate",
+        "innage",
         "innate",
         "tagine",
         "antigen",
-        "gentian"
+        "gentian",
+        "tinea"
       ],
       [
         "desert",
@@ -17550,12 +18865,15 @@
       [
         "kiter",
         "kites",
+        "resit",
         "rites",
         "skier",
         "skirt",
+        "tetri",
         "tiers",
         "tikes",
         "tires",
+        "titer",
         "titre",
         "treks",
         "tries",
@@ -17566,7 +18884,8 @@
         "strike",
         "titres",
         "trikes",
-        "skitter"
+        "skitter",
+        "titers"
       ],
       [
         "abed",
@@ -17575,10 +18894,13 @@
         "bode",
         "dado",
         "dead",
+        "doab",
+        "eddo",
         "abode",
         "adobe",
         "boded",
-        "aboded"
+        "aboded",
+        "odea"
       ],
       [
         "coins",
@@ -17601,7 +18923,8 @@
         "micros",
         "minors",
         "crimson",
-        "microns"
+        "microns",
+        "noris"
       ],
       [
         "asci",
@@ -17613,7 +18936,8 @@
         "soca",
         "sofa",
         "coifs",
-        "fiasco"
+        "fiasco",
+        "ocas"
       ],
       [
         "abodes",
@@ -17641,7 +18965,8 @@
         "vales",
         "veals",
         "voles",
-        "loaves"
+        "loaves",
+        "loave"
       ],
       [
         "bond",
@@ -17659,7 +18984,8 @@
         "donut",
         "doubt",
         "outdo",
-        "outbound"
+        "outbound",
+        "budo"
       ],
       [
         "giron",
@@ -17673,7 +18999,8 @@
         "girons",
         "grison",
         "groins",
-        "signor"
+        "signor",
+        "noris"
       ],
       [
         "gist",
@@ -17709,7 +19036,8 @@
         "collard",
         "cordial",
         "lyrical",
-        "cordially"
+        "cordially",
+        "lacily"
       ],
       [
         "amps",
@@ -17739,6 +19067,7 @@
         "coal",
         "cola",
         "gale",
+        "gall",
         "gaol",
         "goal",
         "lace",
@@ -17749,7 +19078,8 @@
         "legal",
         "local",
         "locale",
-        "collage"
+        "collage",
+        "geal"
       ],
       [
         "bakery",
@@ -17786,6 +19116,7 @@
         "hope",
         "node",
         "nope",
+        "ohed",
         "oped",
         "open",
         "pend",
@@ -17795,7 +19126,8 @@
         "honed",
         "hoped",
         "phone",
-        "phoned"
+        "phoned",
+        "pheon"
       ],
       [
         "duel",
@@ -17816,7 +19148,8 @@
         "gulped",
         "lugged",
         "puggle",
-        "plugged"
+        "plugged",
+        "degu"
       ],
       [
         "clue",
@@ -17832,7 +19165,8 @@
         "clues",
         "slice",
         "sulci",
-        "sluice"
+        "sluice",
+        "ceil"
       ],
       [
         "elms",
@@ -17851,7 +19185,8 @@
         "slime",
         "slimy",
         "smile",
-        "smiley"
+        "smiley",
+        "limy"
       ],
       [
         "abates",
@@ -17874,7 +19209,8 @@
         "takers",
         "abreast",
         "taskbar",
-        "breakfast"
+        "breakfast",
+        "abaser"
       ],
       [
         "awry",
@@ -17908,13 +19244,17 @@
         "iota",
         "mica",
         "moat",
+        "octa",
         "omit",
         "otic",
         "taco",
         "coati",
-        "atomic"
+        "atomic",
+        "matico",
+        "tomia"
       ],
       [
+        "abled",
         "amble",
         "baled",
         "blade",
@@ -17925,7 +19265,8 @@
         "bedlam",
         "beldam",
         "blamed",
-        "lambed"
+        "lambed",
+        "balmed"
       ],
       [
         "ates",
@@ -17941,6 +19282,7 @@
       [
         "doyen",
         "drone",
+        "ergon",
         "goner",
         "gored",
         "henry",
@@ -17952,9 +19294,13 @@
         "horny",
         "hydro",
         "nerdy",
+        "eryngo",
+        "gorhen",
+        "groyne",
         "horned",
         "yonder",
-        "hydrogen"
+        "hydrogen",
+        "gyron"
       ],
       [
         "fakes",
@@ -17980,9 +19326,11 @@
         "calling",
         "scaling",
         "callings",
-        "callsign"
+        "callsign",
+        "aligns"
       ],
       [
+        "army",
         "arty",
         "away",
         "awry",
@@ -17995,7 +19343,8 @@
         "wary",
         "tayra",
         "warty",
-        "tramway"
+        "tramway",
+        "mara"
       ],
       [
         "banal",
@@ -18020,9 +19369,11 @@
         "amnia",
         "antra",
         "atria",
+        "manat",
         "mania",
         "manta",
         "maria",
+        "matai",
         "naira",
         "tiara",
         "train",
@@ -18032,7 +19383,8 @@
         "martin",
         "tamari",
         "martian",
-        "tamarin"
+        "tamarin",
+        "matin"
       ],
       [
         "censer",
@@ -18069,6 +19421,7 @@
       ],
       [
         "bone",
+        "bong",
         "bony",
         "goby",
         "gone",
@@ -18076,25 +19429,36 @@
         "bogey",
         "boney",
         "ebony",
-        "bygone"
+        "bygone",
+        "ebon"
       ],
       [
+        "acer",
+        "acne",
+        "acre",
         "cafe",
         "cane",
         "care",
+        "cran",
         "cure",
+        "earn",
+        "ecru",
         "face",
         "fare",
         "fear",
         "narc",
+        "nare",
         "race",
         "rune",
         "urea",
+        "caner",
         "crane",
+        "crena",
         "facer",
         "farce",
         "nacre",
-        "furnace"
+        "furnace",
+        "near"
       ],
       [
         "also",
@@ -18134,15 +19498,21 @@
         "xenial"
       ],
       [
+        "aloin",
+        "anils",
         "anvil",
+        "inula",
         "linos",
         "lions",
         "loans",
         "loins",
         "lunas",
         "nails",
+        "noils",
         "ovals",
+        "salon",
         "salvo",
+        "silva",
         "slain",
         "snail",
         "ulnas",
@@ -18150,11 +19520,14 @@
         "vinos",
         "viola",
         "voila",
+        "aloins",
         "anvils",
         "insula",
+        "sialon",
         "violas",
         "visual",
-        "avulsion"
+        "avulsion",
+        "viols"
       ],
       [
         "direst",
@@ -18224,6 +19597,7 @@
         "stellar"
       ],
       [
+        "enol",
         "lone",
         "lope",
         "noel",
@@ -18239,11 +19613,15 @@
         "yelp",
         "peony",
         "pylon",
-        "openly"
+        "openly",
+        "leno"
       ],
       [
+        "enol",
+        "glei",
         "glen",
         "gone",
+        "leno",
         "lien",
         "line",
         "ling",
@@ -18255,13 +19633,17 @@
         "long",
         "noel",
         "ogle",
+        "ingle",
         "lingo",
+        "login",
         "olein",
-        "legion"
+        "legion",
+        "longe"
       ],
       [
         "elope",
         "helio",
+        "leone",
         "olein",
         "opine",
         "phone",
@@ -18269,24 +19651,29 @@
         "phenol",
         "piehole",
         "pinhole",
-        "enophile"
+        "enophile",
+        "pheon"
       ],
       [
         "into",
         "pint",
         "pion",
         "topi",
+        "inion",
+        "innit",
         "pinot",
         "pinto",
         "pipit",
         "piton",
         "point",
         "pinion",
-        "pinpoint"
+        "pinpoint",
+        "pont"
       ],
       [
         "lamas",
         "lamps",
+        "napas",
         "nasal",
         "paans",
         "palms",
@@ -18295,7 +19682,8 @@
         "napalm",
         "plasma",
         "sampan",
-        "napalms"
+        "napalms",
+        "sapan"
       ],
       [
         "doors",
@@ -18316,7 +19704,8 @@
         "roughs",
         "rugous",
         "shroud",
-        "sourdough"
+        "sourdough",
+        "sorgo"
       ],
       [
         "meme",
@@ -18333,7 +19722,8 @@
         "mimes",
         "mines",
         "seine",
-        "immense"
+        "immense",
+        "neem"
       ],
       [
         "alas",
@@ -18367,6 +19757,7 @@
         "brux",
         "bums",
         "burs",
+        "muir",
         "ribs",
         "rims",
         "rubs",
@@ -18374,7 +19765,8 @@
         "sumi",
         "urbs",
         "brims",
-        "bruxism"
+        "bruxism",
+        "rimu"
       ],
       [
         "gluer",
@@ -18393,7 +19785,8 @@
         "rouge",
         "gulper",
         "prolog",
-        "prologue"
+        "prologue",
+        "gloop"
       ],
       [
         "chest",
@@ -18402,9 +19795,11 @@
         "cites",
         "epics",
         "ethic",
+        "etics",
         "heist",
         "piste",
         "pitch",
+        "sepic",
         "spice",
         "spite",
         "techs",
@@ -18412,9 +19807,11 @@
         "itches",
         "septic",
         "chipset",
-        "pitches"
+        "pitches",
+        "shite"
       ],
       [
+        "biro",
         "born",
         "brio",
         "burn",
@@ -18432,10 +19829,12 @@
         "bruin",
         "curio",
         "incur",
+        "inorb",
         "robin",
         "runic",
         "bicorn",
-        "rubicon"
+        "rubicon",
+        "ruin"
       ],
       [
         "aims",
@@ -18448,7 +19847,8 @@
         "ammos",
         "imams",
         "maims",
-        "mimosa"
+        "mimosa",
+        "mams"
       ],
       [
         "coir",
@@ -18467,11 +19867,14 @@
         "trip",
         "optic",
         "picot",
+        "topic",
         "topoi",
+        "toric",
         "troop",
         "octopi",
         "tropic",
-        "portico"
+        "portico",
+        "toro"
       ],
       [
         "dipole",
@@ -18493,11 +19896,14 @@
         "poodles",
         "spoiled",
         "spooled",
-        "poolside"
+        "poolside",
+        "oopsie"
       ],
       [
+        "lenis",
         "liens",
         "lines",
+        "nelis",
         "piles",
         "pines",
         "plies",
@@ -18505,7 +19911,8 @@
         "spiel",
         "spine",
         "spinel",
-        "spline"
+        "spline",
+        "penis"
       ],
       [
         "hilted",
@@ -18534,6 +19941,7 @@
         "booth",
         "boots",
         "hoots",
+        "howso",
         "oaths",
         "shoot",
         "sooth",
@@ -18546,7 +19954,8 @@
         "taboos",
         "whatso",
         "bowshot",
-        "showboat"
+        "showboat",
+        "woahs"
       ],
       [
         "boos",
@@ -18559,11 +19968,13 @@
         "shoo",
         "boxes",
         "oboes",
-        "shoebox"
+        "shoebox",
+        "hobo"
       ],
       [
         "ashore",
         "earths",
+        "ergots",
         "gasher",
         "gather",
         "gators",
@@ -18581,7 +19992,8 @@
         "gathers",
         "hostage",
         "storage",
-        "shortage"
+        "shortage",
+        "gaters"
       ],
       [
         "dosser",
@@ -18613,6 +20025,7 @@
         "blare",
         "blear",
         "brace",
+        "brail",
         "caber",
         "cable",
         "clear",
@@ -18622,10 +20035,13 @@
         "relic",
         "bailer",
         "cabler",
+        "cabrie",
+        "caribe",
         "eclair",
         "lacier",
         "caliber",
-        "calibre"
+        "calibre",
+        "ceria"
       ],
       [
         "areole",
@@ -18657,6 +20073,7 @@
         "earn",
         "exon",
         "iron",
+        "nare",
         "near",
         "noir",
         "oxen",
@@ -18665,12 +20082,14 @@
         "rein",
         "roan",
         "arena",
+        "axion",
         "ixora",
         "naira",
         "xenia",
         "anoxia",
         "orexin",
-        "anorexia"
+        "anorexia",
+        "nori"
       ],
       [
         "ciphers",
@@ -18699,6 +20118,7 @@
       [
         "kelter",
         "kilter",
+        "kirtle",
         "loiter",
         "melter",
         "merlot",
@@ -18714,15 +20134,18 @@
         "toelike",
         "lorikeet",
         "kilometer",
-        "kilometre"
+        "kilometre",
+        "reemit"
       ],
       [
         "lewis",
         "resew",
+        "riels",
         "riles",
         "sewer",
         "sires",
         "slier",
+        "weirs",
         "wiles",
         "wires",
         "lesser",
@@ -18732,19 +20155,22 @@
         "sewers",
         "swirls",
         "lewises",
-        "wireless"
+        "wireless",
+        "wiser"
       ],
       [
         "deify",
         "deity",
         "delft",
         "edify",
+        "felid",
         "fetid",
         "field",
         "filed",
         "filet",
         "fitly",
         "flied",
+        "flite",
         "lefty",
         "tilde",
         "tiled",
@@ -18753,7 +20179,8 @@
         "lifted",
         "tidily",
         "fetidly",
-        "fidelity"
+        "fidelity",
+        "teiid"
       ],
       [
         "aloft",
@@ -18777,7 +20204,8 @@
         "joking",
         "kingly",
         "yoking",
-        "jokingly"
+        "jokingly",
+        "login"
       ],
       [
         "enokis",
@@ -18801,9 +20229,11 @@
         "haloid",
         "holiday",
         "hyaloid",
-        "hyoidal"
+        "hyoidal",
+        "haily"
       ],
       [
+        "bused",
         "debts",
         "debut",
         "duets",
@@ -18815,7 +20245,8 @@
         "upset",
         "busted",
         "debuts",
-        "dubstep"
+        "dubstep",
+        "debus"
       ],
       [
         "bode",
@@ -18842,7 +20273,8 @@
         "hawed",
         "hewed",
         "heehaw",
-        "heehawed"
+        "heehawed",
+        "hade"
       ],
       [
         "ferret",
@@ -18872,7 +20304,10 @@
         "ensure",
         "manure",
         "meaner",
+        "namers",
+        "ramens",
         "ranees",
+        "rename",
         "resume",
         "rumens",
         "seamen",
@@ -18885,7 +20320,8 @@
         "measure",
         "renames",
         "surname",
-        "username"
+        "username",
+        "urenas"
       ],
       [
         "astray",
@@ -18922,7 +20358,8 @@
         "knish",
         "pinks",
         "kinship",
-        "pinkish"
+        "pinkish",
+        "spink"
       ],
       [
         "airy",
@@ -18943,8 +20380,10 @@
         "barren",
         "barter",
         "bather",
+        "bertha",
         "breath",
         "burner",
+        "burnet",
         "butane",
         "errant",
         "hunter",
@@ -18958,13 +20397,16 @@
         "turner",
         "haunter",
         "unearth",
-        "heartburn"
+        "heartburn",
+        "urbane"
       ],
       [
         "demur",
         "dimer",
         "idler",
         "ileum",
+        "ilium",
+        "imide",
         "lemur",
         "limed",
         "lured",
@@ -18976,7 +20418,8 @@
         "limier",
         "milder",
         "milieu",
-        "delirium"
+        "delirium",
+        "medii"
       ],
       [
         "disown",
@@ -19049,7 +20492,8 @@
         "reap",
         "rhea",
         "remap",
-        "hamper"
+        "hamper",
+        "aper"
       ],
       [
         "artily",
@@ -19116,25 +20560,31 @@
         "stoic",
         "yetis",
         "coyest",
-        "society"
+        "society",
+        "cosie"
       ],
       [
+        "agone",
         "alone",
         "along",
         "angel",
         "angle",
         "anole",
+        "genoa",
         "glean",
         "legal",
         "llano",
+        "longa",
         "gallon",
-        "galleon"
+        "galleon",
+        "longe"
       ],
       [
         "daft",
         "dart",
         "drat",
         "dura",
+        "fart",
         "frat",
         "part",
         "prat",
@@ -19146,7 +20596,8 @@
         "turf",
         "draft",
         "fraud",
-        "updraft"
+        "updraft",
+        "turd"
       ],
       [
         "aloin",
@@ -19199,6 +20650,7 @@
         "airers",
         "aspire",
         "parers",
+        "paries",
         "parser",
         "praise",
         "priers",
@@ -19213,7 +20665,8 @@
         "praiser",
         "rapiers",
         "raspier",
-        "repairs"
+        "repairs",
+        "spirea"
       ],
       [
         "acne",
@@ -19287,10 +20740,13 @@
         "logo",
         "ogle",
         "oleo",
+        "coley",
+        "colog",
         "cooey",
         "gooey",
         "ology",
-        "ecology"
+        "ecology",
+        "coly"
       ],
       [
         "aerobes",
@@ -19329,7 +20785,8 @@
         "tithes",
         "titles",
         "lithest",
-        "thistle"
+        "thistle",
+        "shite"
       ],
       [
         "alpines",
@@ -19375,7 +20832,8 @@
         "ovular",
         "valour",
         "velour",
-        "overhaul"
+        "overhaul",
+        "loave"
       ],
       [
         "abaser",
@@ -19401,9 +20859,11 @@
         "voter",
         "goiter",
         "goitre",
-        "vertigo"
+        "vertigo",
+        "ogive"
       ],
       [
+        "abac",
         "bray",
         "carp",
         "crab",
@@ -19412,7 +20872,8 @@
         "pray",
         "racy",
         "abaca",
-        "capybara"
+        "capybara",
+        "crap"
       ],
       [
         "anti",
@@ -19432,7 +20893,8 @@
         "taxon",
         "toxin",
         "finito",
-        "fixation"
+        "fixation",
+        "tian"
       ],
       [
         "born",
@@ -19486,25 +20948,36 @@
         "mystical"
       ]
     ],
-    "1006373310126362624": [],
     "509826164190216233": [
       [
         "arose",
         "babes",
         "barbs",
+        "bares",
+        "bears",
+        "boars",
+        "bores",
+        "bower",
+        "braes",
+        "brose",
+        "brows",
         "resaw",
         "resow",
+        "robes",
+        "saber",
         "sabre",
         "sober",
         "swear",
         "swore",
+        "wares",
         "worse",
         "absorb",
         "boreas",
         "bowser",
         "browse",
         "swabber",
-        "barebows"
+        "barebows",
+        "wears"
       ]
     ],
     "444734227112787968": [
