@@ -344,19 +344,23 @@ class OnMessageCog(Cog):
                 await message.reply(f"{self.emotes.get('uhmdude', '')} My freund, grow up some hair on your broom and man up to say ALBIE WEEKES!")
                 return
 
-        # "Re" prefix joke handling
-        if message.channel.type == ChannelType.text and message.channel.name == "d3mantle":
-            return
+        if message.channel.type == ChannelType.text:
+            # "Re" prefix joke handling
+            if message.channel.name == "d3mantle":
+                return
+            
+            if "@everyone" in message.content:
+                await message.reply("https://cdn.discordapp.com/attachments/1431747225519915150/1474764227762983082/image-9.png")
 
-        re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
+            re_words = [word for word in words if word.lower().startswith("re") and len(word) > 2]
 
-        if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
-            await message.add_reaction("🤡")
-            word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
-            await message.reply(f"To:\n{word_list}")
-        elif len(words) == 1 and len(re_words) == 1:
-            word_without_re = words[0][2:]
-            await message.reply(f"To {word_without_re} again 🤡")
+            if (len(re_words) == len(words) and len(words) > 1) or len(re_words) > 7:
+                await message.add_reaction("🤡")
+                word_list = "\n".join(f"- {word[2:]} again" for word in re_words)
+                await message.reply(f"To:\n{word_list}")
+            elif len(words) == 1 and len(re_words) == 1:
+                word_without_re = words[0][2:]
+                await message.reply(f"To {word_without_re} again 🤡")
 
     @Cog.listener()
     async def on_message(self, message: Message):
