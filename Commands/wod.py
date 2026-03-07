@@ -32,6 +32,8 @@ def split_words_into_columns(words: list[str]) -> tuple[list[str], list[str], li
             split_index = math.ceil((array_length - 4) / 2)
         else:
             split_index = math.ceil(array_length / 3)
+    elif array_length > 21:
+        split_index = 9
     else:
         split_index = 8
     
