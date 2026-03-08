@@ -1,7 +1,8 @@
 import os
 import json
 import random
-import math
+import sys
+from pathlib import Path
 from disnake.ext import commands
 from disnake import (
     Activity,
@@ -15,34 +16,8 @@ from disnake import (
     Status
 )
 
-def split_words_into_columns(words: list[str]) -> tuple[list[str], list[str], list[str]]:
-    """Split a flat list of words into 3 columns based on array length.
-    
-    Args:
-        words: Flat list of words sorted by length then alphabetically
-        
-    Returns:
-        Tuple of (column1, column2, column3) lists
-    """
-    array_length = len(words)
-    
-    # Calculate split index based on array length
-    if array_length < 21:
-        if array_length > 14:
-            split_index = math.ceil((array_length - 4) / 2)
-        else:
-            split_index = math.ceil(array_length / 3)
-    elif array_length > 21:
-        split_index = 9
-    else:
-        split_index = 8
-    
-    # Split into 3 columns
-    column1 = words[0:split_index]
-    column2 = words[split_index:2 * split_index]
-    column3 = words[2 * split_index:]
-    
-    return column1, column2, column3
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from Utils.wod_utils import split_words_into_columns
 
 def get_author_choices():
     """Dynamically load author choices from custom_levels.json"""
@@ -79,10 +54,16 @@ class WODCog(commands.Cog):
                 required=False,
                 type=OptionType.string,
                 choices=get_author_choices()
+            ),
+            Option(
+                name="query",
+                description="Search for a level by its longest word",
+                required=False,
+                type=OptionType.string
             )
         ]
     )
-    async def custom(self, interaction: ApplicationCommandInteraction, author: str | None = None):
+    async def custom(self, interaction: ApplicationCommandInteraction, author: str | None = None, query: str | None = None):
         await interaction.response.defer()
 
         with open(os.path.join("Config", "custom_levels.json"), 'r', encoding='utf-8') as f:
@@ -91,8 +72,43 @@ class WODCog(commands.Cog):
         usernames: dict[str, str] = data.get('usernames', {})
         raw: dict[str, list] = data.get('levels', {})
 
-        # If author is specified, validate it's a real author
-        if author:
+        # If query is provided, search through levels by longest word
+        if query:
+            query_lower = query.lower()
+            matching_levels = []
+            matching_author = None
+            
+            if author:
+                if author in raw:
+                    for level in raw[author]:
+                        longest_word = max(level, key=len, default="")
+                        if longest_word.lower() == query_lower:
+                            matching_levels.append(level)
+                    matching_author = author
+
+            else:
+                for author_id, author_levels in raw.items():
+                    for level in author_levels:
+                        longest_word = max(level, key=len, default="")
+                        if longest_word.lower() == query_lower:
+                            matching_levels.append(level)
+                            if matching_author is None:
+                                matching_author = author_id
+            
+            if not matching_levels:
+                await interaction.edit_original_response(
+                    embed=Embed(
+                        title="WOD Error",
+                        description=f"No levels found with longest word matching '{query}'.",
+                        colour=Colour.red()
+                    )
+                )
+                return
+            
+            random_level: list[str] = random.choice(matching_levels)
+            creator_id = matching_author
+
+        elif author:
             if author not in raw:
                 await interaction.edit_original_response(
                     embed=Embed(
@@ -117,7 +133,6 @@ class WODCog(commands.Cog):
             creator_id = author
             random_level: list[str] = random.choice(levels)
         else:
-            # Otherwise, use all levels
             levels: list = []
             creator_map: dict = {}
             for creator_id_key, creator_levels in raw.items():
@@ -362,7 +377,7 @@ class WODCog(commands.Cog):
         await self.bot.change_presence(
             status=Status.online,
             activity=Activity(
-                name='WOD',
+                name='Words on Discord',
                 state="Words on Discord",
                 type=ActivityType.playing
             )
